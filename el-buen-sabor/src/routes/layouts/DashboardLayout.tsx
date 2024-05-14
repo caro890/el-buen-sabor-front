@@ -4,7 +4,7 @@ import '../../styles/AdminDashboard.css'
 
 export const DashboardLayout = () => {
   return (
-    <div className="help-layout">
+    <div>
         <BasicSidebar/>    
 
         <div className="page-wrapper">
