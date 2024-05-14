@@ -1,6 +1,6 @@
-import { 
+import {
   createBrowserRouter,
-  Route, 
+  Route,
   createRoutesFromElements,
   RouterProvider
 } from "react-router-dom"
@@ -14,20 +14,20 @@ import { InsumosForm } from "../components/AdminDashboard/InsumosCrud/InsumosFor
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout/>}>
-      <Route path="dashboard" element={<DashboardLayout/>}>
+    <Route path="/" element={<RootLayout />}>
+      <Route path="dashboard" element={<DashboardLayout />}>
         <Route path="productos">
-          <Route index element={<ProductosCrud/>} loader={productosLoader} />
-          <Route path="form/:id?" element={<ProductoForm/>}/>
+          <Route index element={<ProductosCrud />} loader={productosLoader} />
+          <Route path="form/:id?" element={<ProductoForm />} />
         </Route>
         <Route path="categorias">
-          <Route index element={<CategoriasCrud/>} loader={categoriasLoader} />
-          <Route path="form/:id?" element={<ProductoForm/>}/>
+          <Route index element={<CategoriasCrud />} loader={categoriasLoader} />
+          <Route path="form/:id?" element={<ProductoForm />} />
         </Route>
         <Route path="insumos">
-          <Route index element={<InsumosCrud/>} loader={insumosLoader} />
-          <Route path="form/:id?" element={<InsumosForm/>}/>    
-        </Route>  
+          <Route index element={<InsumosCrud />} loader={insumosLoader} />
+          <Route path="form/:id?" element={<InsumosForm />} />
+        </Route>
       </Route>
     </Route>
   )

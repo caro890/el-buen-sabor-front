@@ -61,7 +61,7 @@ export const GenericTable = <T extends Base>({
                 </TableHead>
 
                 <TableBody>
-                    {rows
+                {Array.isArray(rows) && rows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index: number) => {
                         return(
