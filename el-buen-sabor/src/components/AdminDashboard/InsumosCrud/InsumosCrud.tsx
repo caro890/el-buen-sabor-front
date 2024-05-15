@@ -24,6 +24,9 @@ export const InsumosCrud = () => {
     dispatch(setDataTable(insumos));
   }, []);
 
+
+  
+
   const columnsTableInsumos = [
     {
       label: "Denominacion",
@@ -166,4 +169,17 @@ export const InsumosCrud = () => {
 export const insumosLoader = async () => {
   const service: ArticuloInsumoService = new ArticuloInsumoService();
   return service.getAll();
+}
+
+export async function getInsumoPorId(id:string){
+  let urlServer = 'http://localhost:8080/articulos/insumos/'+ id;
+  let response = await fetch(urlServer, {
+    method: 'GET',
+        headers: {
+      'Content-type': 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    },
+        mode: 'cors'
+  });
+    return await response.json() as ArticuloInsumo;    
 }

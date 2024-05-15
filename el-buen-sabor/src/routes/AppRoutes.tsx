@@ -11,6 +11,7 @@ import { CategoriasCrud, categoriasLoader } from "../components/AdminDashboard/C
 import { InsumosCrud, insumosLoader } from "../components/AdminDashboard/InsumosCrud/InsumosCrud"
 import { ProductoForm } from "../components/AdminDashboard/ProductosCrud/ProductoForm/ProductoForm"
 import { InsumosForm } from "../components/AdminDashboard/InsumosCrud/InsumosForm.tsx/InsumosForm"
+import { UnidadesMedidaCrud, unidadesMedidaLoader } from "../components/AdminDashboard/UnidadesMedidaCrud/UnidadesMedidaCrud"
 
 const router = createBrowserRouter(
   createRoutesFromElements(

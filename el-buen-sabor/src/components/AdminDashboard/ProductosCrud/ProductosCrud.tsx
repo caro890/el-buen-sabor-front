@@ -34,17 +34,17 @@ export const ProductosCrud = () => {
         return formatPrice(producto.precioVenta);
       }
     },
-    {
-      label: "Imagenes",
-      key: "imagenes",
-      render: (producto: ArticuloManufacturado) => {
-        if(producto.imagenes){
-          return formatImage(producto.imagenes[0].url);
-        } else {
-          return "";
-        }
-      }
-    },
+    // {
+    //   label: "Imagenes",
+    //   key: "imagenes",
+    //   render: (producto: ArticuloManufacturado) => {
+    //     if(producto.imagenes){
+    //       return formatImage(producto.imagenes[0].url);
+    //     } else {
+    //       return "";
+    //     }
+    //   }
+    // },
     {
       label: "Unidad de Medida",
       key: "unidadMedida",
@@ -162,4 +162,33 @@ export const ProductosCrud = () => {
 export const productosLoader = async () => {
   const service: ArticuloManufacturadoService = new ArticuloManufacturadoService();
   return service.getAll();
+}
+
+export async function getProductoPorId(id:string){
+  let urlServer = 'http://localhost:8080/articulos/manufacturados/'+ id;
+  let response = await fetch(urlServer, {
+    method: 'GET',
+        headers: {
+      'Content-type': 'application/json',
+      'Access-Control-Allow-Origin':'*'
+    },
+        mode: 'cors'
+  });
+    return await response.json() as ArticuloManufacturado;    
+}
+
+export async function saveProducto(producto?: ArticuloManufacturado) {
+	let urlServer = 'http://localhost:8080/articulos/manufacturados';
+	let method:string = "POST";
+	if(producto && producto.id > 0){
+		urlServer = 'http://localhost:8080/articulos/manufacturados/' + producto.id;
+		method = "PUT";
+	}
+	await fetch(urlServer, {
+	  "method": method,
+	  "body": JSON.stringify(producto),
+	  "headers": {
+		"Content-Type": 'application/json'
+	  }
+	});
 }
