@@ -37,6 +37,10 @@ export const ProductoForm = () => {
   let [idInsumo, setIdInsumo] = useState<string>("");
   let [cantidadInsumo, setCantidadInsumo] = useState<number>(0);
 
+  const [unidadMedidaSelected, setUnidadMedidaSelected] = useState('');
+  const [categoriaSelected, setCategoriaSelected] = useState('');
+  const [precioVentaSelected, setPrecioVentaSelected] = useState(0);
+  const [tiempoEstimadoSelected, setTiempoEstimadoSelected] = useState(0);
 
 
   useEffect(() => {
@@ -44,6 +48,10 @@ export const ProductoForm = () => {
       service.getById(Number(id)).then((data) => {
         var p = data as ArticuloManufacturado;
         setProducto(p);
+        setUnidadMedidaSelected(p.unidadMedida.id.toString());
+        setCategoriaSelected(p.categoria.id.toString());
+        setPrecioVentaSelected(p.precioVenta);
+        setTiempoEstimadoSelected(p.tiempoEstimadoMinutos);
       });
     } else {
       setProducto(new ArticuloManufacturado());
@@ -98,7 +106,10 @@ export const ProductoForm = () => {
     const selectedCategoria = categorias.find((cat) => cat.id == selectedCategoriaId);
     if (selectedCategoria && selectedCategoria.denominacion) {
       producto.categoria = selectedCategoria;
+    } else {
+      producto.categoria = new Categoria();
     };
+    setCategoriaSelected(producto.categoria.id.toString());
   }
 
   const handleUnidadMedidaChange = (event: { target: { value: any; }; }) => {
@@ -106,12 +117,29 @@ export const ProductoForm = () => {
     const selectedUnidadMedida = unidadesMedida.find((um) => um.id == selectedUnidadMedidaId);
     if (selectedUnidadMedida && selectedUnidadMedida.denominacion) {
       producto.unidadMedida = selectedUnidadMedida;
+    } else {
+      producto.unidadMedida = new UnidadMedida();
     };
+    setUnidadMedidaSelected(producto.unidadMedida.id.toString());
   }
 
+  const handlePrecioVentaChange = (event: { target: { value: any; }; }) => {
+    producto.precioVenta = event.target.value;
+    setPrecioVentaSelected(event.target.value);
+  }
+
+  const handleTiempoEstimadoChange = (event: { target: { value: any; }; }) => {
+    producto.tiempoEstimadoMinutos = event.target.value;
+    setTiempoEstimadoSelected(event.target.value);
+  }
 
   //formulario
   const save = async () => {
+    if (producto.denominacion == "" || producto.descripcion == "" || producto.precioVenta == 0 || producto.categoria.id == 0 || producto.unidadMedida.id == 0 || producto.preparacion == "" || producto.tiempoEstimadoMinutos == 0 || producto.articuloManufacturadoDetalles.length == 0) {
+      alert("Falta completar campos");
+      return;
+    }
+
     console.log(producto.denominacion);
     console.log(producto.descripcion);
     console.log(producto.precioVenta);
@@ -120,8 +148,11 @@ export const ProductoForm = () => {
     console.log(producto.preparacion);
     console.log(producto.tiempoEstimadoMinutos);
     console.log(producto.articuloManufacturadoDetalles);
+    
 
     await saveProducto(producto);
+    navigate('/dashboard/productos');
+
   }
 
 
@@ -130,11 +161,11 @@ export const ProductoForm = () => {
     let ingrediente: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
     ingrediente.articuloInsumo = await getInsumoPorId(idInsumo);
     ingrediente.cantidad = cantidadInsumo;
-    const productoAux:ArticuloManufacturado = producto;
+    const productoAux: ArticuloManufacturado = producto;
     productoAux.articuloManufacturadoDetalles.push(ingrediente);
     // setCantidadInsumo(0);
     setProducto(productoAux);
-    
+
 
   }
 
@@ -163,7 +194,7 @@ export const ProductoForm = () => {
                 Denominación
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="text" placeholder="Denominación" defaultValue={producto?.denominacion} onChange={e => producto.denominacion = String(e.target.value)} />
+                <Form.Control required type="text" placeholder="Denominación" defaultValue={producto?.denominacion} onChange={e => producto.denominacion = String(e.target.value)} />
               </Col>
             </Form.Group>
 
@@ -181,7 +212,7 @@ export const ProductoForm = () => {
                 Precio de Venta
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="number" placeholder="Precio de venta" defaultValue={producto?.precioVenta} onChange={e => producto.precioVenta = parseFloat(e.target.value)} />
+                <Form.Control type="number" placeholder="Precio de venta" value={precioVentaSelected} onChange={handlePrecioVentaChange} />
               </Col>
             </Form.Group>
 
@@ -191,7 +222,7 @@ export const ProductoForm = () => {
               </Form.Label>
               <Col sm={10}>
 
-                <Form.Select defaultValue={producto?.categoria.id} onChange={handleCategoriaChange}>
+                <Form.Select value={categoriaSelected} onChange={handleCategoriaChange}>
                   <option value="0">Elija una categoría</option>
                   {categorias.map((categoria) => (
                     <option key={categoria.id} value={categoria.id}>
@@ -207,7 +238,7 @@ export const ProductoForm = () => {
                 Unidad de Medida
               </Form.Label>
               <Col sm={10}>
-                <Form.Select defaultValue={producto?.unidadMedida.id} onChange={handleUnidadMedidaChange}>
+                <Form.Select value={unidadMedidaSelected} onChange={handleUnidadMedidaChange}>
                   <option value="0">Elija una unidad de medida</option>
                   {unidadesMedida.map((unidadMedida) => (
                     <option key={unidadMedida.id} value={unidadMedida.id}>
@@ -249,7 +280,7 @@ export const ProductoForm = () => {
                 Tiempo estimado de preparación
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="number" placeholder="Tiempo estimado de preparación" defaultValue={producto?.tiempoEstimadoMinutos} onChange={e => producto.tiempoEstimadoMinutos = parseFloat(e.target.value)} />
+                <Form.Control type="number" placeholder="Tiempo estimado de preparación" value={tiempoEstimadoSelected} onChange={handleTiempoEstimadoChange} />
               </Col>
             </Form.Group>
 
