@@ -9,4 +9,5 @@ export class Articulo extends Base {
     imagenes?: ImagenArticulo[];
     unidadMedida: UnidadMedida = new UnidadMedida();
     categoria: Categoria = new Categoria();
+    codigo: string = "";
 }

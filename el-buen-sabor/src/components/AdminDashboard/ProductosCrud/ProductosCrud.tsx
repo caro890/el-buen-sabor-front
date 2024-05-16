@@ -28,6 +28,10 @@ export const ProductosCrud = () => {
       key: "denominacion"
     },
     {
+      label: "Código",
+      key: "codigo"
+    },
+    {
       label: "Precio de Venta",
       key: "precioVenta",
       render: (producto: ArticuloManufacturado) => {

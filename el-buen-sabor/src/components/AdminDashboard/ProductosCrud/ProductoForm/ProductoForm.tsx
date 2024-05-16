@@ -41,6 +41,7 @@ export const ProductoForm = () => {
   const [categoriaSelected, setCategoriaSelected] = useState('');
   const [precioVentaSelected, setPrecioVentaSelected] = useState(0);
   const [tiempoEstimadoSelected, setTiempoEstimadoSelected] = useState(0);
+  const [codigoSelected, setCodigoSelected] = useState('');
 
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export const ProductoForm = () => {
         setCategoriaSelected(p.categoria.id.toString());
         setPrecioVentaSelected(p.precioVenta);
         setTiempoEstimadoSelected(p.tiempoEstimadoMinutos);
+        setCodigoSelected(p.codigo.replace(/\D/g, ""));
       });
     } else {
       setProducto(new ArticuloManufacturado());
@@ -133,14 +135,20 @@ export const ProductoForm = () => {
     setTiempoEstimadoSelected(event.target.value);
   }
 
+  const handleCodigoChange = (event: { target: { value: any; }; }) => {
+    producto.codigo = event.target.value.toString();
+    setCodigoSelected(producto.codigo);
+  }
+
   //formulario
   const save = async () => {
-    if (producto.denominacion == "" || producto.descripcion == "" || producto.precioVenta == 0 || producto.categoria.id == 0 || producto.unidadMedida.id == 0 || producto.preparacion == "" || producto.tiempoEstimadoMinutos == 0 || producto.articuloManufacturadoDetalles.length == 0) {
+    if (producto.denominacion == "" || producto.codigo == "" || producto.descripcion == "" || producto.precioVenta == 0 || producto.categoria.id == 0 || producto.unidadMedida.id == 0 || producto.preparacion == "" || producto.tiempoEstimadoMinutos == 0 || producto.articuloManufacturadoDetalles.length == 0) {
       alert("Falta completar campos");
       return;
     }
 
     console.log(producto.denominacion);
+    console.log(producto.codigo);
     console.log(producto.descripcion);
     console.log(producto.precioVenta);
     console.log(producto.categoria.denominacion);
@@ -148,7 +156,8 @@ export const ProductoForm = () => {
     console.log(producto.preparacion);
     console.log(producto.tiempoEstimadoMinutos);
     console.log(producto.articuloManufacturadoDetalles);
-    
+
+    producto.codigo = "M" + producto.codigo;
 
     await saveProducto(producto);
     navigate('/dashboard/productos');
@@ -195,6 +204,15 @@ export const ProductoForm = () => {
               </Form.Label>
               <Col sm={10}>
                 <Form.Control required type="text" placeholder="Denominación" defaultValue={producto?.denominacion} onChange={e => producto.denominacion = String(e.target.value)} />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3" controlId="codigo">
+              <Form.Label column sm={2}>
+                Código
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control required type="number" placeholder="Código" value={codigoSelected} onChange={handleCodigoChange} />
               </Col>
             </Form.Group>
 
