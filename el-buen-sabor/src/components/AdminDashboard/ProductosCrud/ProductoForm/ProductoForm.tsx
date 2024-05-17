@@ -159,20 +159,20 @@ export const ProductoForm = () => {
 
   //formulario
   const save = async () => {
-    if (producto.denominacion == "" || producto.codigo == "" || producto.descripcion == "" || producto.precioVenta == 0 || producto.categoria.id == 0 || producto.unidadMedida.id == 0 || producto.preparacion == "" || producto.tiempoEstimadoMinutos == 0 || producto.articuloManufacturadoDetalles.length == 0) {
-      alert("Falta completar campos");
-      return;
-    }
+    // console.log(producto.denominacion);
+    // console.log(producto.codigo);
+    // console.log(producto.descripcion);
+    // console.log(producto.precioVenta);
+    // console.log(producto.categoria.denominacion);
+    // console.log(producto.unidadMedida.denominacion);
+    // console.log(producto.preparacion);
+    // console.log(producto.tiempoEstimadoMinutos);
+    // console.log(producto.articuloManufacturadoDetalles);
+    // alert();
 
-    /*console.log(producto.denominacion);
-    console.log(producto.codigo);
-    console.log(producto.descripcion);
-    console.log(producto.precioVenta);
-    console.log(producto.categoria.denominacion);
-    console.log(producto.unidadMedida.denominacion);
-    console.log(producto.preparacion);
-    console.log(producto.tiempoEstimadoMinutos);
-    console.log(producto.articuloManufacturadoDetalles);*/
+
+    
+
 
     var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
     var f: number = 0;
@@ -188,6 +188,12 @@ export const ProductoForm = () => {
     //logica guardado detalles
     producto.articuloManufacturadoDetalles = details; 
     console.log(producto.articuloManufacturadoDetalles);
+
+
+    if (producto.denominacion == "" || producto.codigo == "" || producto.descripcion == "" || producto.precioVenta == 0 || producto.categoria.id == 0 || producto.unidadMedida.id == 0 || producto.preparacion == "" || producto.tiempoEstimadoMinutos == 0 || producto.articuloManufacturadoDetalles.length == 0) {
+      alert("Falta completar campos");
+      return;
+    }
 
     producto.codigo = "M" + producto.codigo;
 
