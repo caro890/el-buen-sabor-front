@@ -10,12 +10,12 @@ interface IPropsGenericModalSearch {
     options: any[]; //arreglo que contiene las opciones para agregar a los detalles que se mostraran en la grilla
     setSelectedData: (array: any[]) => void;    //funcion para actualizar el estado en el componente padre
     list: any[]    //arreglo con los detalles existentes
-    titulo: string;
+    titulo: string; //titulo de la ventana se concatena a Agregar + titulo
 }
 
 export const GenericModalSearch : FC<IPropsGenericModalSearch> = ({open, handleClose, options, setSelectedData, list, titulo}) => {
   const [detalle, setDetalle] = useState<any[]>([]); //estado para almacenar los detalles
-  const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<any[]>([]);  //estado para filtrar las opciones
 
   //cuando cargo el componente, inicia la data a mostrar con las options que recibe por parametro
   useEffect(() => {
@@ -47,7 +47,14 @@ export const GenericModalSearch : FC<IPropsGenericModalSearch> = ({open, handleC
 
   //función para agregar los detalles al maestro
   const handleAdd = () => {
-    if(detalle.length != 0) {   //si el array de detalles tiene elementos
+    if(detalle === list) {   //si el array de detalles es distinto al inicial
+        //le digo al usuario que no ha añadido nada nuevo
+        Swal.fire({
+            title: "Atención",
+            text: "No ha añadido ningún elemento nuevo",
+            icon: "warning",
+        })
+    } else { //sino
         //utilizo la funcion del componente padre para setear el estado en el mismo
         setSelectedData(detalle);
 
@@ -55,13 +62,6 @@ export const GenericModalSearch : FC<IPropsGenericModalSearch> = ({open, handleC
         Swal.fire({
             title: "Realizado",
             icon: "success",
-        })
-    } else {
-        //Si no hay opciones en detalle le digo al usuario que no ha añadido nada
-        Swal.fire({
-            title: "Atención",
-            text: "No ha añadido ningún elemento nuevo",
-            icon: "warning",
         })
     }
   };

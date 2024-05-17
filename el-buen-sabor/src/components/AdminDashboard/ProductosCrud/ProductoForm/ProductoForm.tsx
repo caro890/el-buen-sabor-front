@@ -1,11 +1,11 @@
 import { useParams } from "react-router"
-import { Box, Container, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ArticuloManufacturado } from "../../../../types/ArticuloManufacturado";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
 import { useAppDispatch } from "../../../../hooks/redux";
 import { useNavigate } from "react-router";
-import { Form, Col, Row, Button } from "react-bootstrap";
+import { Form, Col, Row, Button, Container } from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
 import { categoriasLoader } from "../../CategoriasCrud/CategoriasCrud";
@@ -24,6 +24,7 @@ export const ProductoForm = () => {
   const serviceInsumo: ArticuloInsumoService = new ArticuloInsumoService();
 
   const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
+  const [detalles, setDetalles] = useState<ArticuloManufacturadoDetalle[]>([]);
   const [producto, setProducto] = useState<ArticuloManufacturado>(new ArticuloManufacturado());
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [unidadesMedida, setUnidadesMedida] = useState<UnidadMedida[]>([]);
@@ -35,19 +36,47 @@ export const ProductoForm = () => {
   let [cantidadInsumo, setCantidadInsumo] = useState<number>(0);
 
   //Estado  para controlar la ventana modals
+<<<<<<< Updated upstream
   const [openModal, setOpenModal] = useState<boolean>(false);
+=======
+  const [openModal, setOpenModal] = useState<boolean>(false);  const [unidadMedidaSelected, setUnidadMedidaSelected] = useState('');
+
+  const [categoriaSelected, setCategoriaSelected] = useState('');
+  const [precioVentaSelected, setPrecioVentaSelected] = useState(0);
+  const [tiempoEstimadoSelected, setTiempoEstimadoSelected] = useState(0);
+  const [codigoSelected, setCodigoSelected] = useState('');
+>>>>>>> Stashed changes
 
   useEffect(() => {
     if (id) {
       service.getById(Number(id)).then((data) => {
         var p = data as ArticuloManufacturado;
         setProducto(p);
+<<<<<<< Updated upstream
+=======
+        setUnidadMedidaSelected(p.unidadMedida.id.toString());
+        setCategoriaSelected(p.categoria.id.toString());
+        setPrecioVentaSelected(p.precioVenta);
+        setTiempoEstimadoSelected(p.tiempoEstimadoMinutos);
+        setCodigoSelected(p.codigo.replace(/\D/g, ""));
+        setDetalles(p.articuloManufacturadoDetalles);
+>>>>>>> Stashed changes
       });
     } else {
       setProducto(new ArticuloManufacturado());
     }
   }, []);
 
+  //ingredientes
+  useEffect(() => {
+    var auxArray: ArticuloInsumo[] = [];
+    producto.articuloManufacturadoDetalles.forEach((detalle: ArticuloManufacturadoDetalle) => {
+      var aux: ArticuloInsumo = new ArticuloInsumo();
+      aux = detalle.articuloInsumo;
+      auxArray.push(aux);
+    });
+    setIngredientes(auxArray);
+  }, []);
 
   //categorias
   useEffect(() => {
@@ -57,7 +86,6 @@ export const ProductoForm = () => {
     };
     loadCategorias();
   }, []);
-
 
   //unidades Medida
   useEffect(() => {
@@ -75,19 +103,24 @@ export const ProductoForm = () => {
     });
   }, []);
 
+  //useEffect para atender los cambios en ingredientes
+  useEffect(() => {
+    var arrayAux = detalles.slice(); //copio el array de detalles
+    ingredientes.forEach( (ingrediente, index) => { //para cada insumo en ingredientes
+      //lo busco en el array de detalles
+      var f = 0;
+      var found = arrayAux.some(function(element, index) { f = index; return element.articuloInsumo.id == ingrediente.id; });
 
-  const [unidadMedidaSeleccionada, setUnidadMedidaSeleccionada] = useState('');
-
-  const handleInsumoSelectChange = (event: { target: { value: any; }; }) => {
-    const selectedInsumoId = event.target.value;
-    setIdInsumo(selectedInsumoId);
-    const selectedInsumo = insumos.find((insumo) => insumo.id == selectedInsumoId);
-    if (selectedInsumo && selectedInsumo.unidadMedida) {
-      setUnidadMedidaSeleccionada(selectedInsumo.unidadMedida.denominacion.toString());
-    } else {
-      setUnidadMedidaSeleccionada('');
-    }
-  };
+      if(!found){ //si no existe, lo voy a agregar
+        //creo un nuevo detalle de articulo manufacturado
+        var aux: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle(); 
+        aux.articuloInsumo = ingrediente; //seteo el articulo insumo
+        arrayAux.push(aux); //lo agrego al array auxiliar
+      }
+    });
+    producto.articuloManufacturadoDetalles = arrayAux; //defino el array de detalles de producto
+    setDetalles(arrayAux);  //seteo el estado de detalles con el array auxiliar
+  }, [ingredientes])
 
   const handleCategoriaChange = (event: { target: { value: any; }; }) => {
     const selectedCategoriaId = event.target.value;
@@ -107,26 +140,93 @@ export const ProductoForm = () => {
 
   //formulario
   const save = async () => {
+<<<<<<< Updated upstream
     console.log(producto.denominacion);
+=======
+    if (producto.denominacion == "" || producto.codigo == "" || producto.descripcion == "" || producto.precioVenta == 0 || producto.categoria.id == 0 || producto.unidadMedida.id == 0 || producto.preparacion == "" || producto.tiempoEstimadoMinutos == 0 || producto.articuloManufacturadoDetalles.length == 0) {
+      alert("Falta completar campos");
+      return;
+    }
+
+    /*console.log(producto.denominacion);
+    console.log(producto.codigo);
+>>>>>>> Stashed changes
     console.log(producto.descripcion);
     console.log(producto.precioVenta);
     console.log(producto.categoria.denominacion);
     console.log(producto.unidadMedida.denominacion);
     console.log(producto.preparacion);
     console.log(producto.tiempoEstimadoMinutos);
-    console.log(producto.articuloManufacturadoDetalles);
+    console.log(producto.articuloManufacturadoDetalles);*/
+
 
     await service.post(producto);
+<<<<<<< Updated upstream
+=======
+    navigate('/dashboard/productos');
+
   }
 
-  const deleteIngrediente = async (art: ArticuloManufacturadoDetalle) => {
+  //funcion para borrar un detalle
+  const deleteDetalle = (art: ArticuloManufacturadoDetalle) => {
+    console.log("Oprimí eliminar")
+    var auxArray = detalles.slice();  //hago una copia del estado detalles
+    console.log("Arreglo Inicial");
+    console.log(auxArray);
+    //busco el detalle en el array
+    var f: number = 0;
+    var found = auxArray.some(function(element, index) { f = index; return element.articuloInsumo.id == art.articuloInsumo.id; });
+    
+    if(found){
+      var eliminados = auxArray.splice(f, 1);
+      console.log("Arreglo despues de eliminar");
+      console.log(auxArray);
+      console.log("Eliminados");
+      console.log(eliminados);
+      setDetalles(auxArray);
+      console.log("Arreglo final");
+      console.log(detalles);
+      producto.articuloManufacturadoDetalles = auxArray;
+      //deleteIngrediente(art);
+>>>>>>> Stashed changes
+  }
 
-    if (producto.articuloManufacturadoDetalles) {
-      let ings: ArticuloManufacturadoDetalle[] = await producto.articuloManufacturadoDetalles.filter(ing => ing.articuloInsumo.id != art.articuloInsumo.id);
-      producto.articuloManufacturadoDetalles = await ings;
+  //manejar el cambio en el input de cantidad
+  const handleChangeAmount = (e: any, art: ArticuloManufacturadoDetalle) => {
+    var amount = e.target.value;  //obtengo el valor ingresado
+    var auxArray = detalles.slice();  //hago una copia del estado detalles
+    //busco en la copia si el detalle ya existe, debería existir
+    var f: number = 0;
+    var found = auxArray.some(function(element, index) { f = index; return element === art; });
+    
+    if(found){
+      //si lo encuentro, lo elimino con la nueva cantidad
+      auxArray.splice(f, 1);
+      art.cantidad = amount;
+      auxArray.push(art) ;
+
+      //vuelvo a setear el estado detalles
+      setDetalles(auxArray);
+      deleteIngrediente(art);
     }
-    await setProducto(producto);
-  }
+  };
+
+  const deleteIngrediente = (a: ArticuloManufacturadoDetalle) => {
+    var auxArray = ingredientes.slice();  //hago una copia del estado ingredientes
+    //busco al ingrediente
+    var f: number = 0;
+    var found = auxArray.some(function(element, index) { f = index; return element === a.articuloInsumo; });
+    
+    if(found){
+      //si lo encuentro, lo elimino
+      auxArray.splice(f, 1);
+
+      console.log(auxArray);
+      //vuelvo a setear el estado detalles
+      setIngredientes(auxArray);
+      console.log(ingredientes);
+    }
+  };
 
   return (
     <Box component="main" sx={{flexGrow: 1, my: 2}}>
@@ -234,28 +334,35 @@ export const ProductoForm = () => {
               </Col>
             </Form.Group>
 
-            {/*Articulo Manufacturado detalle*/}
-            <Form.Group as={Row} className="mb-4" controlId="articuloManufacturadoDetalles">
+            <Form.Group as={Row} className="mb-4">
               <Form.Label column sm={2}>
                 Ingredientes
               </Form.Label>
               <Col sm={3}>
-                <Button type="button" onClick={() => {setOpenModal(true)}}>AÑADIR</Button>
+                <Button type="button" className="btnAdd" onClick={() => {setOpenModal(true)}} >Agregar</Button>
               </Col>
-              {producto.articuloManufacturadoDetalles?.map((art: ArticuloManufacturadoDetalle, index: number) =>
-                <div className="row" key={index}>
-                  <div className="col">
-                    {art.articuloInsumo.denominacion}
-                  </div>
-                  <div className="col">
-                    {art.cantidad}
-                  </div>
-                  <div className="col">
-                    <button style={{ marginBottom: 10 }} className="btn btn-danger" onClick={(e) => deleteIngrediente(art)}>Eliminar</button>
-                  </div>
-                </div>
-              )}
             </Form.Group>
+
+            <Container>
+              {detalles?.map((art: ArticuloManufacturadoDetalle, index: number) =>
+                <Row key={index} className="mb-3">
+                  <Col>
+                    {art.articuloInsumo.denominacion}
+                  </Col>
+                  <Col>
+                     <Form.Control type="number" onChange={(e) => {handleChangeAmount(e, art)}}></Form.Control>
+                  </Col>
+                  <Col>
+                    {art.cantidad} {art.articuloInsumo.unidadMedida.denominacion}
+                  </Col>
+                  <Col>
+                    <Button  className="btn btn-danger" onClick={(e) => deleteDetalle(art)}>Eliminar</Button>
+                  </Col>
+                  <span></span>
+                </Row>
+                
+              )}
+            </Container>
 
             <Form.Group as={Row} className="mb-3">
               <Col sm={{ span: 10, offset: 2 }}>
@@ -266,11 +373,21 @@ export const ProductoForm = () => {
         </Box>
         <GenericModalSearch 
           open={openModal} 
+<<<<<<< Updated upstream
           handleClose={async () => {setOpenModal(false)}} options={insumos} 
           setSelectedData={setIngredientes} list={ingredientes} 
           titulo={"Ingredientes"}></GenericModalSearch>
       </Container>
     </Box>
+=======
+          handleClose={async () => {setOpenModal(false)}} 
+          options={insumos} 
+          setSelectedData={setIngredientes} 
+          list={ingredientes} 
+          titulo={"Ingredientes"}>
+        </GenericModalSearch>
+    </div>
+>>>>>>> Stashed changes
   )
 }
-
+}

@@ -1,5 +1,18 @@
-.grid-container {
-    font-size:larger;
+.main-box {
+    width: 100%;
+    margin: 0;
+}
+
+.header-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1;
+    margin-bottom: 1;
+}
+
+.form-box {
+    text-align: left;
 }
 
 .search {
@@ -12,30 +25,6 @@
 
 .search:hover {
     background-color: rgb(247, 246, 246);
-}
-
-.search-container{
-    display: flex;
-    justify-content:space-between;
-    row-gap: 2;
-}
-
-.btnClose {
-    background-color: darkseagreen;
-    border-color: darkseagreen;
-    color: darkslategray;
-}
-
-.btnClose:hover {
-    background-color: white;
-    border-color: darkslategray;
-    color: darkslategray;
-}
-
-.btnClose:active {
-    background-color: darkseagreen;
-    border-color: darkseagreen;
-    color: darkslategray;
 }
 
 .btnAdd {
@@ -55,3 +44,13 @@
     border-color: darksalmon;
     color: rgb(126, 52, 65);
 }
+
+.detalle-row {
+    border-bottom: 1px lightslategray;
+}
+
+span{
+    display:block;
+    width:100% /*or whatever width you want the effect of <hr>*/;
+    border-top: 1px solid #ccc
+ }
