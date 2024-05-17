@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../../hooks/redux";
 import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
 import { UnidadMedida } from "../../../types/UnidadMedida";
 import { useLoaderData, useNavigate } from "react-router";
-import { setDataTable } from "../../../redux/slices/ProductosReducer";
+import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import Swal from "sweetalert2";
 import { Form, Col, Row, Button, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
 

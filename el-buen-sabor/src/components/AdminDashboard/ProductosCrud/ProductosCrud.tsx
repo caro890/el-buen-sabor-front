@@ -4,13 +4,13 @@ import { GenericTable } from "../../GenericTable/GenericTable"
 import { ArticuloManufacturado } from "../../../types/ArticuloManufacturado"
 import { useEffect } from "react"
 import { useAppDispatch } from "../../../hooks/redux"
-import { setDataTable, setElementActive } from "../../../redux/slices/ProductosReducer"
+import { setDataTable } from "../../../redux/slices/TablaDataReducer"
 import Swal from "sweetalert2"
 import formatPrice from "../../../types/formats/priceFormat"
 import { Box, Typography, Button, Container} from "@mui/material";
 import CIcon from "@coreui/icons-react"
 import { cilPlus } from "@coreui/icons"
-//import formatImage from "../../../types/formats/imageFormat"
+import formatImage from "../../../types/formats/imageFormat"
 
 export const ProductosCrud = () => {
   const productos = useLoaderData() as ArticuloManufacturado[];
@@ -34,17 +34,17 @@ export const ProductosCrud = () => {
         return formatPrice(producto.precioVenta);
       }
     },
-    // {
-    //   label: "Imagenes",
-    //   key: "imagenes",
-    //   render: (producto: ArticuloManufacturado) => {
-    //     if(producto.imagenes){
-    //       return formatImage(producto.imagenes[0].url);
-    //     } else {
-    //       return "";
-    //     }
-    //   }
-    // },
+    {
+       label: "Imagenes",
+       key: "imagenes",
+       render: (producto: ArticuloManufacturado) => {
+         if(producto.imagenes){
+           return formatImage(producto.imagenes[0].url);
+         } else {
+           return "";
+         }
+       }
+     },
     {
       label: "Unidad de Medida",
       key: "unidadMedida",
@@ -124,11 +124,6 @@ export const ProductosCrud = () => {
     });
   };
 
-  const handleCreate = () => {
-    var el: ArticuloManufacturado = new ArticuloManufacturado();
-    navigate("form");
-  };
-
   return (
     <Box component="main" sx={{ flexGrow: 1, my: 2}}>
       <Container>
@@ -145,7 +140,7 @@ export const ProductosCrud = () => {
             }}
             variant="contained"
             startIcon={<CIcon icon={cilPlus} size="lg"></CIcon>}
-            onClick={handleCreate}
+            onClick={() => navigate("form")}
           >
             NUEVO
           </Button>
@@ -168,32 +163,3 @@ export const productosLoader = async () => {
   const service: ArticuloManufacturadoService = new ArticuloManufacturadoService();
   return service.getAll();
 }
-/*
-export async function getProductoPorId(id:string){
-  let urlServer = 'http://localhost:8080/articulos/manufacturados/'+ id;
-  let response = await fetch(urlServer, {
-    method: 'GET',
-        headers: {
-      'Content-type': 'application/json',
-      'Access-Control-Allow-Origin':'*'
-    },
-        mode: 'cors'
-  });
-    return await response.json() as ArticuloManufacturado;    
-}
-
-export async function saveProducto(producto?: ArticuloManufacturado) {
-	let urlServer = 'http://localhost:8080/articulos/manufacturados';
-	let method:string = "POST";
-	if(producto && producto.id > 0){
-		urlServer = 'http://localhost:8080/articulos/manufacturados/' + producto.id;
-		method = "PUT";
-	}
-	await fetch(urlServer, {
-	  "method": method,
-	  "body": JSON.stringify(producto),
-	  "headers": {
-		"Content-Type": 'application/json'
-	  }
-	});
-}*/

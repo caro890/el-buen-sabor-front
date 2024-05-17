@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import TableDataReducer from "./slices/ProductosReducer"
+import TableDataReducer from "./slices/TablaDataReducer"
+import IngredientesReducer from "./slices/IngredientesReducer";
 
 export const store = configureStore({
     reducer: {
         tableDataReducer: TableDataReducer,
+        ingredientesReducer: IngredientesReducer,
     }
 })
 

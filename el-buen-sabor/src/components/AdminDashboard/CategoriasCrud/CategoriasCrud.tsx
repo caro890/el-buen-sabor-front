@@ -5,7 +5,7 @@ import { CategoriaService } from "../../../services/CatogoriaService";
 import { Categoria } from "../../../types/Categoria";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useEffect } from "react";
-import { setDataTable } from "../../../redux/slices/ProductosReducer";
+import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import Swal from "sweetalert2";
 import { Form, Col, Row, Button, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
 
