@@ -38,17 +38,17 @@ export const ProductosCrud = () => {
         return formatPrice(producto.precioVenta);
       }
     },
-    {
-       label: "Imagenes",
-       key: "imagenes",
-       render: (producto: ArticuloManufacturado) => {
-         if(producto.imagenes){
-           return formatImage(producto.imagenes[0].url);
-         } else {
-           return "";
-         }
-       }
-     },
+    // {
+    //    label: "Imagenes",
+    //    key: "imagenes",
+    //    render: (producto: ArticuloManufacturado) => {
+    //      if(producto.imagenes){
+    //        return formatImage(producto.imagenes[0].url);
+    //      } else {
+    //        return "";
+    //      }
+    //    }
+    //  },
     {
       label: "Unidad de Medida",
       key: "unidadMedida",
