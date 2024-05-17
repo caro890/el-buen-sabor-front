@@ -1,0 +1,16 @@
+.main-box {
+    width: 100%;
+    margin: 0;
+}
+
+.header-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1;
+    margin-bottom: 1;
+}
+
+.form-box {
+    text-align: left;
+}

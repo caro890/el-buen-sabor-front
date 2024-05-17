@@ -3,7 +3,6 @@ import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ArticuloManufacturado } from "../../../../types/ArticuloManufacturado";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
-import { useAppDispatch } from "../../../../hooks/redux";
 import { useNavigate } from "react-router";
 import { Form, Col, Row, Button } from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
@@ -16,6 +15,7 @@ import { ArticuloInsumo } from "../../../../types/ArticuloInsumo";
 import { ArticuloManufacturadoDetalle } from "../../../../types/ArticuloManufacturadoDetalle";
 import { GenericModalSearch } from "../../GenericModalSearch/GenericModalSearch";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
+import "../../../../styles/ProductForm.css"
 
 export const ProductoForm = () => {
   const { id } = useParams();
@@ -28,14 +28,13 @@ export const ProductoForm = () => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [unidadesMedida, setUnidadesMedida] = useState<UnidadMedida[]>([]);
   const [insumos, setInsumos] = useState<ArticuloInsumo[]>([]);
-  const [txtValidacion, setTxtValidacion] = useState<string>("");
-
 
   let [idInsumo, setIdInsumo] = useState<string>("");
   let [cantidadInsumo, setCantidadInsumo] = useState<number>(0);
 
   //Estado  para controlar la ventana modals
   const [openModal, setOpenModal] = useState<boolean>(false);  const [unidadMedidaSelected, setUnidadMedidaSelected] = useState('');
+
   const [categoriaSelected, setCategoriaSelected] = useState('');
   const [precioVentaSelected, setPrecioVentaSelected] = useState(0);
   const [tiempoEstimadoSelected, setTiempoEstimadoSelected] = useState(0);
@@ -155,7 +154,7 @@ export const ProductoForm = () => {
 
     producto.codigo = "M" + producto.codigo;
 
-    await saveProducto(producto);
+    await service.post(producto);
     navigate('/dashboard/productos');
 
   }
@@ -164,7 +163,9 @@ export const ProductoForm = () => {
   //grilla ingredientes
   const handleAgregarIngrediente = async () => {
     let ingrediente: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
-    ingrediente.articuloInsumo = await getInsumoPorId(idInsumo);
+    await serviceInsumo.getById(Number(idInsumo)).then( (data) =>
+      {if(data) ingrediente.articuloInsumo = data;}
+    );
     ingrediente.cantidad = cantidadInsumo;
     const productoAux: ArticuloManufacturado = producto;
     productoAux.articuloManufacturadoDetalles.push(ingrediente);
@@ -184,15 +185,14 @@ export const ProductoForm = () => {
   }
 
   return (
-    <Box component="main" sx={{flexGrow: 1, my: 2}}>
-      <Container>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
+    <div className="main-box">
+        <div className="header-box mb-3">
           <Typography variant="h5" gutterBottom>
             {`${id ? "Editar" : "Crear"} un producto`}
           </Typography>
           <Button type="button" onClick={() => { navigate("..") }} style={{ color: "black", backgroundColor: "var(--itemsColor)", border: "var(--itemsColor)" }}><CIcon icon={cilArrowLeft} size="lg"></CIcon> VOLVER</Button>
-        </Box>
-        <Box sx={{ textAlign: "left" }}>
+        </div>
+        <div className="form-box">
           <Form>
             <Form.Group as={Row} className="mb-3" controlId="denominacion">
               <Form.Label column sm={2}>
@@ -327,14 +327,13 @@ export const ProductoForm = () => {
               </Col>
             </Form.Group>
           </Form>
-        </Box>
+        </div>
         <GenericModalSearch 
           open={openModal} 
           handleClose={async () => {setOpenModal(false)}} options={insumos} 
           setSelectedData={setIngredientes} list={ingredientes} 
           titulo={"Ingredientes"}></GenericModalSearch>
-      </Container>
-    </Box>
+    </div>
   )
 }
 
