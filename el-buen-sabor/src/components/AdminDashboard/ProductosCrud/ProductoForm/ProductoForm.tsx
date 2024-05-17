@@ -1,11 +1,11 @@
-import { useLoaderData, useParams } from "react-router"
+import { useParams } from "react-router"
 import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ArticuloManufacturado } from "../../../../types/ArticuloManufacturado";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/redux";
+import { useAppDispatch } from "../../../../hooks/redux";
 import { useNavigate } from "react-router";
-import { Form, Col, Row, Button, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
+import { Form, Col, Row, Button } from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
 import { categoriasLoader } from "../../CategoriasCrud/CategoriasCrud";
@@ -13,20 +13,17 @@ import { Categoria } from "../../../../types/Categoria";
 import { unidadesMedidaLoader } from "../../UnidadesMedidaCrud/UnidadesMedidaCrud";
 import { UnidadMedida } from "../../../../types/UnidadMedida";
 import { ArticuloInsumo } from "../../../../types/ArticuloInsumo";
-import { getInsumoPorId, insumosLoader } from "../../InsumosCrud/InsumosCrud";
 import { ArticuloManufacturadoDetalle } from "../../../../types/ArticuloManufacturadoDetalle";
-import { Provider } from "react-redux";
-import { getProductoPorId, saveProducto } from "../ProductosCrud";
-
-
+import { GenericModalSearch } from "../../GenericModalSearch/GenericModalSearch";
+import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 
 export const ProductoForm = () => {
   const { id } = useParams();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const service: ArticuloManufacturadoService = new ArticuloManufacturadoService();
+  const serviceInsumo: ArticuloInsumoService = new ArticuloInsumoService();
 
-
+  const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
   const [producto, setProducto] = useState<ArticuloManufacturado>(new ArticuloManufacturado());
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [unidadesMedida, setUnidadesMedida] = useState<UnidadMedida[]>([]);
@@ -37,7 +34,8 @@ export const ProductoForm = () => {
   let [idInsumo, setIdInsumo] = useState<string>("");
   let [cantidadInsumo, setCantidadInsumo] = useState<number>(0);
 
-  const [unidadMedidaSelected, setUnidadMedidaSelected] = useState('');
+  //Estado  para controlar la ventana modals
+  const [openModal, setOpenModal] = useState<boolean>(false);  const [unidadMedidaSelected, setUnidadMedidaSelected] = useState('');
   const [categoriaSelected, setCategoriaSelected] = useState('');
   const [precioVentaSelected, setPrecioVentaSelected] = useState(0);
   const [tiempoEstimadoSelected, setTiempoEstimadoSelected] = useState(0);
@@ -82,11 +80,9 @@ export const ProductoForm = () => {
 
   //insumos
   useEffect(() => {
-    const loadInsumos = async () => {
-      const insumos = await insumosLoader();
-      setInsumos(insumos);
-    };
-    loadInsumos();
+    serviceInsumo.getInsumosParaElaborar().then((data) => {
+      if(data) setInsumos(data);
+    });
   }, []);
 
 
@@ -188,7 +184,7 @@ export const ProductoForm = () => {
   }
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, my: 2 }}>
+    <Box component="main" sx={{flexGrow: 1, my: 2}}>
       <Container>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
           <Typography variant="h5" gutterBottom>
@@ -307,25 +303,8 @@ export const ProductoForm = () => {
               <Form.Label column sm={2}>
                 Ingredientes
               </Form.Label>
-              <Col sm={5}>
-                <InputGroup>
-
-                  <Form.Select onChange={handleInsumoSelectChange}>
-                    <option>Elija un ingrediente</option>
-                    {insumos.filter((insumo) => insumo.esParaElaborar).map((insumo) => (
-                      <option key={insumo.id} value={insumo.id}>
-                        {insumo.denominacion}
-                      </option>
-                    ))}
-
-                  </Form.Select>
-
-                  <Form.Control defaultValue={cantidadInsumo} type="number" placeholder="Cantidad" onChange={e => cantidadInsumo = Number(e.target.value)} />
-                  <InputGroup.Text id="basic-addon2">{unidadMedidaSeleccionada}</InputGroup.Text>
-                </InputGroup>
-              </Col>
               <Col sm={3}>
-                <Button type="button" onClick={handleAgregarIngrediente}>AÑADIR</Button>
+                <Button type="button" onClick={() => {setOpenModal(true)}}>AÑADIR</Button>
               </Col>
               {producto.articuloManufacturadoDetalles?.map((art: ArticuloManufacturadoDetalle, index: number) =>
                 <div className="row" key={index}>
@@ -349,7 +328,11 @@ export const ProductoForm = () => {
             </Form.Group>
           </Form>
         </Box>
-
+        <GenericModalSearch 
+          open={openModal} 
+          handleClose={async () => {setOpenModal(false)}} options={insumos} 
+          setSelectedData={setIngredientes} list={ingredientes} 
+          titulo={"Ingredientes"}></GenericModalSearch>
       </Container>
     </Box>
   )

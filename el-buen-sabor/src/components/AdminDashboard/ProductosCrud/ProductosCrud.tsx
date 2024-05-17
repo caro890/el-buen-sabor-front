@@ -4,13 +4,13 @@ import { GenericTable } from "../../GenericTable/GenericTable"
 import { ArticuloManufacturado } from "../../../types/ArticuloManufacturado"
 import { useEffect } from "react"
 import { useAppDispatch } from "../../../hooks/redux"
-import { setDataTable } from "../../../redux/slices/ProductosReducer"
+import { setDataTable, setElementActive } from "../../../redux/slices/ProductosReducer"
 import Swal from "sweetalert2"
 import formatPrice from "../../../types/formats/priceFormat"
 import { Box, Typography, Button, Container} from "@mui/material";
 import CIcon from "@coreui/icons-react"
 import { cilPlus } from "@coreui/icons"
-import formatImage from "../../../types/formats/imageFormat"
+//import formatImage from "../../../types/formats/imageFormat"
 
 export const ProductosCrud = () => {
   const productos = useLoaderData() as ArticuloManufacturado[];
@@ -128,6 +128,11 @@ export const ProductosCrud = () => {
     });
   };
 
+  const handleCreate = () => {
+    var el: ArticuloManufacturado = new ArticuloManufacturado();
+    navigate("form");
+  };
+
   return (
     <Box component="main" sx={{ flexGrow: 1, my: 2}}>
       <Container>
@@ -144,7 +149,7 @@ export const ProductosCrud = () => {
             }}
             variant="contained"
             startIcon={<CIcon icon={cilPlus} size="lg"></CIcon>}
-            onClick={() => {navigate("form")}}
+            onClick={handleCreate}
           >
             NUEVO
           </Button>
@@ -167,7 +172,7 @@ export const productosLoader = async () => {
   const service: ArticuloManufacturadoService = new ArticuloManufacturadoService();
   return service.getAll();
 }
-
+/*
 export async function getProductoPorId(id:string){
   let urlServer = 'http://localhost:8080/articulos/manufacturados/'+ id;
   let response = await fetch(urlServer, {
@@ -195,4 +200,4 @@ export async function saveProducto(producto?: ArticuloManufacturado) {
 		"Content-Type": 'application/json'
 	  }
 	});
-}
+}*/
