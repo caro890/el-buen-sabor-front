@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../../hooks/redux"
 import { setDataTable } from "../../../redux/slices/TablaDataReducer"
 import Swal from "sweetalert2"
 import formatPrice from "../../../types/formats/priceFormat"
-import { Box, Typography, Button, Container} from "@mui/material";
+import { Box, Typography, Button} from "@mui/material";
 import CIcon from "@coreui/icons-react"
 import { cilPlus } from "@coreui/icons"
 import formatImage from "../../../types/formats/imageFormat"
@@ -38,7 +38,7 @@ export const ProductosCrud = () => {
         return formatPrice(producto.precioVenta);
       }
     },
-    {
+    /*{
        label: "Imagenes",
        key: "imagenes",
        render: (producto: ArticuloManufacturado) => {
@@ -48,7 +48,7 @@ export const ProductosCrud = () => {
            return "";
          }
        }
-     },
+     },*/
     {
       label: "Unidad de Medida",
       key: "unidadMedida",
