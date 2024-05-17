@@ -1,11 +1,11 @@
-import { useLoaderData, useParams } from "react-router"
+import { useParams } from "react-router"
 import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ArticuloManufacturado } from "../../../../types/ArticuloManufacturado";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/redux";
+import { useAppDispatch } from "../../../../hooks/redux";
 import { useNavigate } from "react-router";
-import { Form, Col, Row, Button, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
+import { Form, Col, Row, Button } from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
 import { categoriasLoader } from "../../CategoriasCrud/CategoriasCrud";
@@ -13,17 +13,12 @@ import { Categoria } from "../../../../types/Categoria";
 import { unidadesMedidaLoader } from "../../UnidadesMedidaCrud/UnidadesMedidaCrud";
 import { UnidadMedida } from "../../../../types/UnidadMedida";
 import { ArticuloInsumo } from "../../../../types/ArticuloInsumo";
-import { getInsumoPorId, insumosLoader } from "../../InsumosCrud/InsumosCrud";
 import { ArticuloManufacturadoDetalle } from "../../../../types/ArticuloManufacturadoDetalle";
-import { Provider } from "react-redux";
 import { GenericModalSearch } from "../../GenericModalSearch/GenericModalSearch";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 
-
-
 export const ProductoForm = () => {
   const { id } = useParams();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const service: ArticuloManufacturadoService = new ArticuloManufacturadoService();
   const serviceInsumo: ArticuloInsumoService = new ArticuloInsumoService();
@@ -269,7 +264,11 @@ export const ProductoForm = () => {
             </Form.Group>
           </Form>
         </Box>
-        <GenericModalSearch open={openModal} handleClose={async () => {setOpenModal(false)}} options={insumos} setSelectedData={setIngredientes}></GenericModalSearch>
+        <GenericModalSearch 
+          open={openModal} 
+          handleClose={async () => {setOpenModal(false)}} options={insumos} 
+          setSelectedData={setIngredientes} list={ingredientes} 
+          titulo={"Ingredientes"}></GenericModalSearch>
       </Container>
     </Box>
   )

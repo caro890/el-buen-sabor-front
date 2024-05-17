@@ -1,99 +1,113 @@
-import { Button, Col, Modal, Row, Form, Container, InputGroup } from "react-bootstrap"
+import { Button, Col, Modal, Row, Form, Container } from "react-bootstrap"
 import { FC, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { Box, } from "@mui/material";
 import Swal from "sweetalert2";
 import "../../../styles/GenericModalSearch.css"
-import { ArticuloManufacturado } from "../../../types/ArticuloManufacturado";
-import { ArticuloInsumo } from "../../../types/ArticuloInsumo";
-import { ArticuloManufacturadoDetalle } from "../../../types/ArticuloManufacturadoDetalle";
-import { setElementActive } from "../../../redux/slices/ProductosReducer";
-import { Base } from "../../../types/Base";
 
 //valores que recibe el componente
 interface IPropsGenericModalSearch {
     open: boolean;  //valor que indica la apertura o cierre de la ventana modal
     handleClose: () => {}; //funcion para manejar el cierre de la ventana modal
     options: any[]; //arreglo que contiene las opciones para agregar a los detalles que se mostraran en la grilla
-    setSelectedData: (array: any[]) => void;
+    setSelectedData: (array: any[]) => void;    //funcion para actualizar el estado en el componente padre
+    list: any[]    //arreglo con los detalles existentes
+    titulo: string;
 }
 
-export const GenericModalSearch : FC<IPropsGenericModalSearch> = ({open, handleClose, options, setSelectedData}) => {
-  const [detalle, setDetalles] = useState<any[]>([]); //estado para almacenar los detalles
-  const [maestro, setMaestro] = useState<any>(); //estado para almacenar el maestro de detalles
-  
-  const dispatch = useAppDispatch(); //importo el hook para cambiar el estado global
+export const GenericModalSearch : FC<IPropsGenericModalSearch> = ({open, handleClose, options, setSelectedData, list, titulo}) => {
+  const [detalle, setDetalle] = useState<any[]>([]); //estado para almacenar los detalles
+  const [filteredData, setFilteredData] = useState<any[]>([]);
 
-  const elemento = useAppSelector((state) => (state.tableDataReducer.elementActive)); //obtener el elemento activo del estado global
-
+  //cuando cargo el componente, inicia la data a mostrar con las options que recibe por parametro
   useEffect(() => {
-    if(elemento) { //si existe un elemento en el estado global
-        setMaestro(elemento); //seteo el estado local con el valor del elemento seleccionado globalmente
-    } else { //sino
-        //setMaestro();    //creo un nuevo elemento
-    }
-  }, [elemento]); 
+    setFilteredData(options);
+  }, [options]);
+
+  //cuando cargo el componente, inicio los detalles con los existentes que recibi por parametro
+  useEffect(() => {
+    setDetalle(list);
+  }, []);
 
   //funcion para cuando se marca o desmarca el checkbox de una opcion
   //recibo por parametro la opcion del checkbox que cambió y su propiedad checked
   const handleCheckButtonChange = (item: any, checked: boolean) => {
-    if(checked) { //si está marcado
-        detalle.push(item); //añado la opcion al detalle
-    } else { //sino busco la opción en el detalle, si la encuentro la borro
-        var f = 0;
-        var found = detalle.some(function(element, index) { f = index; return element.id == item.id; });
+    var aux: any[] = detalle.slice();   //copio el estado de detalle
+    //busco el item en el array auxiliar
+    var f = 0;
+    var found = aux.some(function(element, index) { f = index; return element.id == item.id; });
 
-        if (found) {
-           detalle.splice(f, 1);
-        }
+    if(checked) { //si está marcado el checkbox,
+        if(!found) //y no se encuentra el item en el array (para evitar repetidos)
+            aux.push(item); //lo añado array auxiliar
+    } else {  //si no está marcado el checkbox
+        if (found) //y encuentro el item en el array
+           aux.splice(f, 1);    //lo elimino del array auxiliar
     }
+    setDetalle(aux);    //seteo el estado detalle con el array auxiliar
   };
 
   //función para agregar los detalles al maestro
   const handleAdd = () => {
-    /*if(maestro.articuloManufacturadoDetalles){  //si tiene detalles de articulo manufacturado estoy trabajando con un producto
-        console.log(maestro);
-        //creo un nuevo producto
-        var articuloManufacturado: ArticuloManufacturado = new ArticuloManufacturado(); 
-        //copio maestro en el nuevo producto para poder modificarlo sin afectar el estado global
-        var r = Object.assign(articuloManufacturado, maestro);
-        //copio el arreglo del estado global
-        var array = maestro.articuloManufacturadoDetalles.slice();
-        detalle?.forEach((item: ArticuloInsumo, index: number) => {  // recorro los articulos insumos guardados y los agrego al array nuevo
-            var aux: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle; //creo un nuevo detalle
-            aux.articuloInsumo = item; //le asigno el insumo
-            array.push(item); //agrego el detalle al arreglo que copie
-            r.articuloManufacturadoDetalles = array; //seteo el arreglo de detalles del objeto copiado
-            setMaestro(r); //seteo el estado con el nuevo objeto con las modificaciones
-            console.log(r);
-        });
-    }*/
+    if(detalle.length != 0) {   //si el array de detalles tiene elementos
+        //utilizo la funcion del componente padre para setear el estado en el mismo
+        setSelectedData(detalle);
 
-    //dispatch(setElementActive({element: maestro})); //seteo a maestro como el elemento activo
+        //Muestro un mensaje de éxito si guarde opciones en detalles
+        Swal.fire({
+            title: "Realizado",
+            icon: "success",
+        })
+    } else {
+        //Si no hay opciones en detalle le digo al usuario que no ha añadido nada
+        Swal.fire({
+            title: "Atención",
+            text: "No ha añadido ningún elemento nuevo",
+            icon: "warning",
+        })
+    }
+  };
 
-    setSelectedData(detalle);
+  //función para realizar la búsqueda de opciones por código
+  const handleChangeCodigo = (value: string) => {
+    //filtramos las opciones segun el valor ingresado
+    const results = options.filter(
+        option => (option.codigo.toUpperCase().includes(value.toUpperCase()))
+    );
+    setFilteredData(results);
+  };
 
-    //Muestro un mensaje de éxito
-    Swal.fire({
-        title: "Realizado",
-        text: "Los ingredientes han sido agregados",
-        icon: "success",
-    })
+  //función para realizar la búsqueda de opciones por denominacion
+  const handleChangeDenominacion = (value: string) => {
+    //filtramos las opciones segun el valor ingresado
+    const results = options.filter(
+        option => (option.denominacion.toUpperCase().includes(value.toUpperCase()))
+    );
+    setFilteredData(results);
   };
     
   return (
     <Modal show={open} onHide={handleClose} centered size="lg">
         <Modal.Header>
-          <Modal.Title>Agregar</Modal.Title>
+          <Modal.Title>Agregar {titulo}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+            {filteredData? //al abrir el modal solo muestro los filtros si tengo datos
             <Container className="search-container mb-3">
-                <Form.Control className="search" aria-label="codigo" placeholder="Código" />
-                <Form.Control className="search" aria-label="denominacion" placeholder="Denominación"/>
+                {/*Input para las búsquedas por código y denominación */}
+                <Form.Control 
+                    className="search" 
+                    aria-label="codigo" 
+                    placeholder="Código" 
+                    onChange={(e) => {handleChangeCodigo(e.target.value)}} /> 
+                <Form.Control 
+                    className="search"
+                    aria-label="denominacion" 
+                    placeholder="Denominación" 
+                    onChange={(e) => {handleChangeDenominacion(e.target.value)}}/>
             </Container>
+            : null}
             <Container className="grid-container">  {/*Creo una grilla para mapear las opciones dentro */}
                 {/* Mapeo las opciones mostrando un check button, el codigo y la denominacion */}
-                {options? options.map((option:any, index:number) => (
+                {filteredData? filteredData.map((option:any, index:number) => (
                     <Row key={index}>
                         <Col md="auto">
                             <Form.Check radioGroup="seleccionados" aria-label={option.denominacion} name={option.id} onChange={(e) => handleCheckButtonChange(option, e.target.checked)}/>
@@ -108,14 +122,16 @@ export const GenericModalSearch : FC<IPropsGenericModalSearch> = ({open, handleC
                 )):
                 <Row>
                     {/*Si no hay opciones muestro un mensaje */}
-                    <Col>No hay elementos guardados</Col>
+                    <Col>
+                        {options? <p>Ningún elemento concuerda con la búsqueda</p> : <p>No hay elementos para agregar</p>}
+                    </Col>
                 </Row>
                 }
             </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button type="button" onClick={handleClose}>CERRAR</Button>
-          <Button type="button" onClick={handleAdd}>AGREGAR</Button>
+          <Button className="btnClose" type="button" onClick={handleClose}>CERRAR</Button> {/*Boton para cerrar la ventana */}
+          <Button className="btnAdd" type="button" onClick={handleAdd}>AGREGAR</Button> {/*Boton para agregar los detalles elegidos*/}
         </Modal.Footer>
       </Modal>
   )
