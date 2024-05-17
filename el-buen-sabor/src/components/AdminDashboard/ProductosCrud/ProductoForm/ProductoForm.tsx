@@ -16,7 +16,8 @@ import { ArticuloInsumo } from "../../../../types/ArticuloInsumo";
 import { getInsumoPorId, insumosLoader } from "../../InsumosCrud/InsumosCrud";
 import { ArticuloManufacturadoDetalle } from "../../../../types/ArticuloManufacturadoDetalle";
 import { Provider } from "react-redux";
-import { getProductoPorId, saveProducto } from "../ProductosCrud";
+import { GenericModalSearch } from "../../GenericModalSearch/GenericModalSearch";
+import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 
 
 
@@ -25,8 +26,9 @@ export const ProductoForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const service: ArticuloManufacturadoService = new ArticuloManufacturadoService();
+  const serviceInsumo: ArticuloInsumoService = new ArticuloInsumoService();
 
-
+  const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
   const [producto, setProducto] = useState<ArticuloManufacturado>(new ArticuloManufacturado());
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [unidadesMedida, setUnidadesMedida] = useState<UnidadMedida[]>([]);
@@ -37,7 +39,8 @@ export const ProductoForm = () => {
   let [idInsumo, setIdInsumo] = useState<string>("");
   let [cantidadInsumo, setCantidadInsumo] = useState<number>(0);
 
-
+  //Estado  para controlar la ventana modals
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (id) {
@@ -72,11 +75,9 @@ export const ProductoForm = () => {
 
   //insumos
   useEffect(() => {
-    const loadInsumos = async () => {
-      const insumos = await insumosLoader();
-      setInsumos(insumos);
-    };
-    loadInsumos();
+    serviceInsumo.getInsumosParaElaborar().then((data) => {
+      if(data) setInsumos(data);
+    });
   }, []);
 
 
@@ -109,7 +110,6 @@ export const ProductoForm = () => {
     };
   }
 
-
   //formulario
   const save = async () => {
     console.log(producto.denominacion);
@@ -121,21 +121,7 @@ export const ProductoForm = () => {
     console.log(producto.tiempoEstimadoMinutos);
     console.log(producto.articuloManufacturadoDetalles);
 
-    await saveProducto(producto);
-  }
-
-
-  //grilla ingredientes
-  const handleAgregarIngrediente = async () => {
-    let ingrediente: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
-    ingrediente.articuloInsumo = await getInsumoPorId(idInsumo);
-    ingrediente.cantidad = cantidadInsumo;
-    const productoAux:ArticuloManufacturado = producto;
-    productoAux.articuloManufacturadoDetalles.push(ingrediente);
-    // setCantidadInsumo(0);
-    setProducto(productoAux);
-    
-
+    await service.post(producto);
   }
 
   const deleteIngrediente = async (art: ArticuloManufacturadoDetalle) => {
@@ -148,7 +134,7 @@ export const ProductoForm = () => {
   }
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, my: 2 }}>
+    <Box component="main" sx={{flexGrow: 1, my: 2}}>
       <Container>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
           <Typography variant="h5" gutterBottom>
@@ -258,25 +244,8 @@ export const ProductoForm = () => {
               <Form.Label column sm={2}>
                 Ingredientes
               </Form.Label>
-              <Col sm={5}>
-                <InputGroup>
-
-                  <Form.Select onChange={handleInsumoSelectChange}>
-                    <option>Elija un ingrediente</option>
-                    {insumos.filter((insumo) => insumo.esParaElaborar).map((insumo) => (
-                      <option key={insumo.id} value={insumo.id}>
-                        {insumo.denominacion}
-                      </option>
-                    ))}
-
-                  </Form.Select>
-
-                  <Form.Control defaultValue={cantidadInsumo} type="number" placeholder="Cantidad" onChange={e => cantidadInsumo = Number(e.target.value)} />
-                  <InputGroup.Text id="basic-addon2">{unidadMedidaSeleccionada}</InputGroup.Text>
-                </InputGroup>
-              </Col>
               <Col sm={3}>
-                <Button type="button" onClick={handleAgregarIngrediente}>AÑADIR</Button>
+                <Button type="button" onClick={() => {setOpenModal(true)}}>AÑADIR</Button>
               </Col>
               {producto.articuloManufacturadoDetalles?.map((art: ArticuloManufacturadoDetalle, index: number) =>
                 <div className="row" key={index}>
@@ -300,7 +269,7 @@ export const ProductoForm = () => {
             </Form.Group>
           </Form>
         </Box>
-
+        <GenericModalSearch open={openModal} handleClose={async () => {setOpenModal(false)}} options={insumos} setSelectedData={setIngredientes}></GenericModalSearch>
       </Container>
     </Box>
   )

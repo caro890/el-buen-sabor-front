@@ -3,8 +3,10 @@ import { Base } from "../../../types/Base";
 import { IconButton } from "@mui/material";
 import CIcon from "@coreui/icons-react";
 import { cilPencil, cilTrash, } from "@coreui/icons";
+import { useAppDispatch } from "../../../hooks/redux";
+import { setElementActive } from "../../../redux/slices/ProductosReducer";
 
-interface IPropsButtonTable<T> {
+interface IPropsButtonTable<T extends Base> {
     item: T;
     handleDelete: (id: number) => void;
 }
@@ -14,9 +16,15 @@ export const GenericTableButtons = <T extends Base>({
     handleDelete
 }: IPropsButtonTable<T>) => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const handleDeleteItem = () => {
-        handleDelete(item.id);
+      handleDelete(item.id);
+    };
+
+    const handleEdit = () => {
+      dispatch(setElementActive({element: item}));
+      navigate(`form/${item.id}`);
     };
 
   return (
@@ -26,7 +34,7 @@ export const GenericTableButtons = <T extends Base>({
       justifyContent: "space-around",
       gap: 2,
     }}>
-      <IconButton aria-label="editar" style={{backgroundColor: "var(--itemsColor)"}} onClick={() => {navigate(`form/${item.id}`)}}>
+      <IconButton aria-label="editar" style={{backgroundColor: "var(--itemsColor)"}} onClick={handleEdit}>
         <CIcon icon={cilPencil} size="lg" />
       </IconButton>
       <IconButton aria-label="eliminar" style={{backgroundColor: "var(--itemsColor)"}} onClick={handleDeleteItem}>
