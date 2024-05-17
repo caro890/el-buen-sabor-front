@@ -1,10 +1,10 @@
 import { useParams } from "react-router"
-import { Box, Container, Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ArticuloManufacturado } from "../../../../types/ArticuloManufacturado";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
 import { useNavigate } from "react-router";
-import { Form, Col, Row, Button } from "react-bootstrap";
+import { Form, Col, Row, Button, Container } from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
 import { categoriasLoader } from "../../CategoriasCrud/CategoriasCrud";
@@ -13,33 +13,35 @@ import { unidadesMedidaLoader } from "../../UnidadesMedidaCrud/UnidadesMedidaCru
 import { UnidadMedida } from "../../../../types/UnidadMedida";
 import { ArticuloInsumo } from "../../../../types/ArticuloInsumo";
 import { ArticuloManufacturadoDetalle } from "../../../../types/ArticuloManufacturadoDetalle";
-import { GenericModalSearch } from "../../GenericModalSearch/GenericModalSearch";
+import { ProductModalSearch } from "../../ProductModalSearch/ProductModalSearch";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 import "../../../../styles/ProductForm.css"
+import { setIngredientes } from "../../../../redux/slices/IngredientesReducer";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/redux";
 
 export const ProductoForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const service: ArticuloManufacturadoService = new ArticuloManufacturadoService();
   const serviceInsumo: ArticuloInsumoService = new ArticuloInsumoService();
 
-  const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
   const [producto, setProducto] = useState<ArticuloManufacturado>(new ArticuloManufacturado());
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [unidadesMedida, setUnidadesMedida] = useState<UnidadMedida[]>([]);
   const [insumos, setInsumos] = useState<ArticuloInsumo[]>([]);
 
-  let [idInsumo, setIdInsumo] = useState<string>("");
-  let [cantidadInsumo, setCantidadInsumo] = useState<number>(0);
-
   //Estado  para controlar la ventana modals
-  const [openModal, setOpenModal] = useState<boolean>(false);  const [unidadMedidaSelected, setUnidadMedidaSelected] = useState('');
+  const [openModal, setOpenModal] = useState<boolean>(false);  
+  const [unidadMedidaSelected, setUnidadMedidaSelected] = useState('');
 
   const [categoriaSelected, setCategoriaSelected] = useState('');
   const [precioVentaSelected, setPrecioVentaSelected] = useState(0);
   const [tiempoEstimadoSelected, setTiempoEstimadoSelected] = useState(0);
   const [codigoSelected, setCodigoSelected] = useState('');
 
+  const ingredientes = useAppSelector((state) => (state.ingredientesReducer.ingredientes));
+  const [details, setDetails] = useState<ArticuloManufacturadoDetalle[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -51,12 +53,47 @@ export const ProductoForm = () => {
         setPrecioVentaSelected(p.precioVenta);
         setTiempoEstimadoSelected(p.tiempoEstimadoMinutos);
         setCodigoSelected(p.codigo.replace(/\D/g, ""));
-      });
+        setDetails(p.articuloManufacturadoDetalles);
+      }).catch((error) => console.log(error));
     } else {
       setProducto(new ArticuloManufacturado());
     }
   }, []);
 
+  //cargar los ingredientes en el estado global
+  useEffect(() => {
+    var arrayI: ArticuloInsumo[] = [];
+
+    producto.articuloManufacturadoDetalles.forEach((item, i) => {
+      arrayI.push(item.articuloInsumo);
+    });
+
+    dispatch(setIngredientes(arrayI));
+  },[]);
+
+  //cargar los insumos como detalles
+  useEffect(() => {
+      var array: ArticuloManufacturadoDetalle[] = details.slice();
+      var f: number = 0;
+      ingredientes.forEach((item, i) => {
+        var found = array.some(function(element, index) { 
+          f = index; return element.articuloInsumo.id === item.id; 
+        });
+
+        if(!found){
+          var detalle: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
+          detalle.articuloInsumo = item;
+          array.push(detalle);
+        }
+      });
+      
+    /*ingredientes.forEach((item, index)=>{
+      var detalle: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
+      detalle.articuloInsumo = item;
+      array.push(detalle);
+    });*/
+    setDetails(array);
+  }, [ingredientes]);
 
   //categorias
   useEffect(() => {
@@ -66,7 +103,6 @@ export const ProductoForm = () => {
     };
     loadCategorias();
   }, []);
-
 
   //unidades Medida
   useEffect(() => {
@@ -83,20 +119,6 @@ export const ProductoForm = () => {
       if(data) setInsumos(data);
     });
   }, []);
-
-
-  const [unidadMedidaSeleccionada, setUnidadMedidaSeleccionada] = useState('');
-
-  const handleInsumoSelectChange = (event: { target: { value: any; }; }) => {
-    const selectedInsumoId = event.target.value;
-    setIdInsumo(selectedInsumoId);
-    const selectedInsumo = insumos.find((insumo) => insumo.id == selectedInsumoId);
-    if (selectedInsumo && selectedInsumo.unidadMedida) {
-      setUnidadMedidaSeleccionada(selectedInsumo.unidadMedida.denominacion.toString());
-    } else {
-      setUnidadMedidaSeleccionada('');
-    }
-  };
 
   const handleCategoriaChange = (event: { target: { value: any; }; }) => {
     const selectedCategoriaId = event.target.value;
@@ -142,7 +164,7 @@ export const ProductoForm = () => {
       return;
     }
 
-    console.log(producto.denominacion);
+    /*console.log(producto.denominacion);
     console.log(producto.codigo);
     console.log(producto.descripcion);
     console.log(producto.precioVenta);
@@ -150,6 +172,21 @@ export const ProductoForm = () => {
     console.log(producto.unidadMedida.denominacion);
     console.log(producto.preparacion);
     console.log(producto.tiempoEstimadoMinutos);
+    console.log(producto.articuloManufacturadoDetalles);*/
+
+    var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
+    var f: number = 0;
+    var found = arrayAux.some(function(element, index) { 
+      f = index; return element.cantidad === 0; 
+    });
+
+    if(found){
+      alert("Los ingredientes no pueden tener cantidad cero");
+      return;
+    }
+
+    //logica guardado detalles
+    producto.articuloManufacturadoDetalles = details; 
     console.log(producto.articuloManufacturadoDetalles);
 
     producto.codigo = "M" + producto.codigo;
@@ -159,30 +196,50 @@ export const ProductoForm = () => {
 
   }
 
+  //manejar el cambio en el input de cantidad
+  const handleChangeAmount = (e: any, art: ArticuloManufacturadoDetalle) => {
+    try {
+      var amount = e.target.value;
+      if(amount > 0) {
+      //busco el detalle en el arreglo
+      var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
+      var f: number = 0;
+      var found = arrayAux.some(function(element, index) { 
+        f = index; return element.articuloInsumo === art.articuloInsumo; 
+      });
+      //lo  obtengo del arreglo
+      if(found){
+        var aux: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
+        var detalle = arrayAux.splice(f, 1);
+        detalle.forEach(( item, i)=>{
+          aux.createFrom(item);
+        });
+        aux.cantidad = amount;
 
-  //grilla ingredientes
-  const handleAgregarIngrediente = async () => {
-    let ingrediente: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
-    await serviceInsumo.getById(Number(idInsumo)).then( (data) =>
-      {if(data) ingrediente.articuloInsumo = data;}
-    );
-    ingrediente.cantidad = cantidadInsumo;
-    const productoAux: ArticuloManufacturado = producto;
-    productoAux.articuloManufacturadoDetalles.push(ingrediente);
-    // setCantidadInsumo(0);
-    setProducto(productoAux);
-
-
-  }
-
-  const deleteIngrediente = async (art: ArticuloManufacturadoDetalle) => {
-
-    if (producto.articuloManufacturadoDetalles) {
-      let ings: ArticuloManufacturadoDetalle[] = await producto.articuloManufacturadoDetalles.filter(ing => ing.articuloInsumo.id != art.articuloInsumo.id);
-      producto.articuloManufacturadoDetalles = await ings;
+        arrayAux.splice(f, 0, aux);
+        setDetails(arrayAux);
+      }
     }
-    await setProducto(producto);
-  }
+    } catch(error) {
+      console.log(error);
+    }
+  };
+
+  const deleteIngrediente = (a: ArticuloManufacturadoDetalle) => {
+    var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
+    var f: number = 0;
+    var found = arrayAux.some(function(element, index) { 
+      f = index; return element.articuloInsumo === a.articuloInsumo; 
+    });
+
+    if(found){
+      arrayAux.splice(f, 1);
+
+      setDetails(arrayAux);
+      //dispatch(removeIngrediente({element: a.articuloInsumo}));
+    }
+    
+  };
 
   return (
     <div className="w-100">
@@ -298,31 +355,35 @@ export const ProductoForm = () => {
               </Col>
             </Form.Group>
 
-            {/*Articulo Manufacturado detalle*/}
-            <Form.Group as={Row} className="mb-4" controlId="articuloManufacturadoDetalles">
+            <Form.Group as={Row} className="mb-4">
               <Form.Label column sm={2}>
                 Ingredientes
               </Form.Label>
               <Col sm={3}>
-                <Button type="button" onClick={() => {setOpenModal(true)}}>AÑADIR</Button>
+                <Button type="button" className="btnAdd" onClick={() => {setOpenModal(true)}} >Agregar</Button>
               </Col>
-              {producto.articuloManufacturadoDetalles?.map((art: ArticuloManufacturadoDetalle, index: number) =>
-                <div className="row" key={index}>
-                  <div className="col">
-                    {art.articuloInsumo.denominacion}
-                  </div>
-                  <div className="col">
-                    {art.cantidad}
-                  </div>
-                  <div className="col">
-                    {art.articuloInsumo.unidadMedida.denominacion}
-                  </div>
-                  <div className="col">
-                    <button style={{ marginBottom: 10 }} className="btn btn-danger" onClick={(e) => deleteIngrediente(art)}>Eliminar</button>
-                  </div>
-                </div>
-              )}
             </Form.Group>
+
+            <Container>
+              {details?.map((art: ArticuloManufacturadoDetalle, index: number) =>
+                <Row key={index} className="mb-3">
+                  <Col>
+                    {art.articuloInsumo.denominacion}
+                  </Col>
+                  <Col>
+                     <Form.Control className="mb-3" type="number" onChange={(e) => handleChangeAmount(e, art)}></Form.Control>
+                  </Col>
+                  <Col>
+                    {art.cantidad} {art.articuloInsumo.unidadMedida.denominacion}
+                  </Col>
+                  <Col>
+                    <Button className="btn btn-danger mb-3" onClick={() => {deleteIngrediente(art)}}>Eliminar</Button>
+                  </Col>
+                  <span></span>
+                </Row>
+                
+              )}
+            </Container>
 
             <Form.Group as={Row} className="mb-3">
               <Col sm={{ span: 10, offset: 2 }}>
@@ -330,13 +391,11 @@ export const ProductoForm = () => {
               </Col>
             </Form.Group>
           </Form>
-        
-        <GenericModalSearch 
+        <ProductModalSearch 
           open={openModal} 
-          handleClose={async () => {setOpenModal(false)}} options={insumos} 
-          setSelectedData={setIngredientes} list={ingredientes} 
-          titulo={"Ingredientes"}></GenericModalSearch>
-    </div>
+          handleClose={async () => {setOpenModal(false)}} 
+          options={insumos}>
+        </ProductModalSearch>
+    </div>  
   )
 }
-

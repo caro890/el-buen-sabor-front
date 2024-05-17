@@ -11,7 +11,6 @@ import { CategoriasCrud, categoriasLoader } from "../components/AdminDashboard/C
 import { InsumosCrud, insumosLoader } from "../components/AdminDashboard/InsumosCrud/InsumosCrud"
 import { ProductoForm } from "../components/AdminDashboard/ProductosCrud/ProductoForm/ProductoForm"
 import { InsumosForm } from "../components/AdminDashboard/InsumosCrud/InsumosForm.tsx/InsumosForm"
-import { UnidadesMedidaCrud, unidadesMedidaLoader } from "../components/AdminDashboard/UnidadesMedidaCrud/UnidadesMedidaCrud"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,7 +18,7 @@ const router = createBrowserRouter(
       <Route path="dashboard" element={<DashboardLayout />}>
         <Route path="productos">
           <Route index element={<ProductosCrud />} loader={productosLoader} />
-          <Route path="form/:id?" element={<ProductoForm />} />
+          <Route path="form/:id?" element={<ProductoForm/>} />
         </Route>
         <Route path="categorias">
           <Route index element={<CategoriasCrud />} loader={categoriasLoader} />

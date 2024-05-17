@@ -14,3 +14,43 @@
 .form-box {
     text-align: left;
 }
+
+.search {
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    margin-right: 5%;
+}
+
+.search:hover {
+    background-color: rgb(247, 246, 246);
+}
+
+.btnAdd {
+    background-color: darksalmon;
+    border-color: darksalmon;
+    color: rgb(126, 52, 65);
+}
+
+.btnAdd:hover {
+    background-color: white;
+    border-color: rgb(126, 52, 65);
+    color: rgb(126, 52, 65);
+}
+
+.btnAdd:active {
+    background-color: darksalmon;
+    border-color: darksalmon;
+    color: rgb(126, 52, 65);
+}
+
+.detalle-row {
+    border-bottom: 1px lightslategray;
+}
+
+span{
+    display:block;
+    width:100% /*or whatever width you want the effect of <hr>*/;
+    border-top: 1px solid #ccc
+ }

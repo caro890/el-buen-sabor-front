@@ -4,7 +4,7 @@ import { IconButton } from "@mui/material";
 import CIcon from "@coreui/icons-react";
 import { cilPencil, cilTrash, } from "@coreui/icons";
 import { useAppDispatch } from "../../../hooks/redux";
-import { setElementActive } from "../../../redux/slices/ProductosReducer";
+import { setElementActive } from "../../../redux/slices/TablaDataReducer";
 
 interface IPropsButtonTable<T extends Base> {
     item: T;

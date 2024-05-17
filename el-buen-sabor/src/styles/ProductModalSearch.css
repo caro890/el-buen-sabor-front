@@ -32,6 +32,12 @@
     color: darkslategray;
 }
 
+.btnClose:active {
+    background-color: darkseagreen;
+    border-color: darkseagreen;
+    color: darkslategray;
+}
+
 .btnAdd {
     background-color: darksalmon;
     border-color: darksalmon;
@@ -41,5 +47,11 @@
 .btnAdd:hover {
     background-color: white;
     border-color: rgb(126, 52, 65);
+    color: rgb(126, 52, 65);
+}
+
+.btnAdd:active {
+    background-color: darksalmon;
+    border-color: darksalmon;
     color: rgb(126, 52, 65);
 }
