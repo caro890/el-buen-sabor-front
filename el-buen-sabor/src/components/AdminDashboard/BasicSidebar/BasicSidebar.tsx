@@ -10,7 +10,7 @@ import { cilDollar } from "@coreui/icons";
 const BasicSidebar: React.FC = () => {
 
     return (
-        <div>
+        
             <CSidebar className="border-end d-flex flex-column" style={{ height: '100vh' }}>
                 <CSidebarNav>
                     <CNavTitle>
@@ -87,7 +87,7 @@ const BasicSidebar: React.FC = () => {
                     </CNavItem>
                 </CSidebarNav>
             </CSidebar>
-        </div>
+        
 
         
     );

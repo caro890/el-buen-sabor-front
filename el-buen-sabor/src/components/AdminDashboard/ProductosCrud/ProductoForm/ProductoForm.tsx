@@ -185,15 +185,15 @@ export const ProductoForm = () => {
   }
 
   return (
-    <div className="main-box">
+    <div className="w-100">
         <div className="header-box mb-3">
           <Typography variant="h5" gutterBottom>
             {`${id ? "Editar" : "Crear"} un producto`}
           </Typography>
           <Button type="button" onClick={() => { navigate("..") }} style={{ color: "black", backgroundColor: "var(--itemsColor)", border: "var(--itemsColor)" }}><CIcon icon={cilArrowLeft} size="lg"></CIcon> VOLVER</Button>
         </div>
-        <div className="form-box">
-          <Form>
+        
+          <Form className="w-100" >
             <Form.Group as={Row} className="mb-3" controlId="denominacion">
               <Form.Label column sm={2}>
                 Denominación
@@ -315,6 +315,9 @@ export const ProductoForm = () => {
                     {art.cantidad}
                   </div>
                   <div className="col">
+                    {art.articuloInsumo.unidadMedida.denominacion}
+                  </div>
+                  <div className="col">
                     <button style={{ marginBottom: 10 }} className="btn btn-danger" onClick={(e) => deleteIngrediente(art)}>Eliminar</button>
                   </div>
                 </div>
@@ -327,7 +330,7 @@ export const ProductoForm = () => {
               </Col>
             </Form.Group>
           </Form>
-        </div>
+        
         <GenericModalSearch 
           open={openModal} 
           handleClose={async () => {setOpenModal(false)}} options={insumos} 

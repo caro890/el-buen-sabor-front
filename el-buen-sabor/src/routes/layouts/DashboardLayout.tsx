@@ -5,11 +5,14 @@ import '../../styles/AdminDashboard.css'
 export const DashboardLayout = () => {
   return (
     <>
+    
+       
         <BasicSidebar/>    
-
-        <div className="page-wrapper">
+        
+        <div className=" page-wrapper">
           <Outlet/>
         </div>
+       
     </>
   )
 }
