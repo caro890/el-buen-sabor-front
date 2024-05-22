@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router"
 import { ArticuloManufacturadoService } from "../../../services/ArticuloManufacturadoService"
 import { GenericTable } from "../../GenericTable/GenericTable"
-import { ArticuloManufacturado } from "../../../types/ArticuloManufacturado"
+import { ArticuloManufacturado } from "../../../types/Articulos/ArticuloManufacturado"
 import { useEffect } from "react"
 import { useAppDispatch } from "../../../hooks/redux"
 import { setDataTable } from "../../../redux/slices/TablaDataReducer"
@@ -10,7 +10,7 @@ import formatPrice from "../../../types/formats/priceFormat"
 import { Box, Typography, Button} from "@mui/material";
 import CIcon from "@coreui/icons-react"
 import { cilPlus } from "@coreui/icons"
-import formatImage from "../../../types/formats/imageFormat"
+//import formatImage from "../../../types/formats/imageFormat"
 
 export const ProductosCrud = () => {
   const productos = useLoaderData() as ArticuloManufacturado[];

@@ -2,7 +2,7 @@ import { useLoaderData, useNavigate } from "react-router"
 import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useEffect } from "react";
-import { ArticuloInsumo } from "../../../types/ArticuloInsumo";
+import { ArticuloInsumo } from "../../../types/Articulos/ArticuloInsumo";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import formatPrice from "../../../types/formats/priceFormat";
 import formatCantidad from "../../../types/formats/stockCantidadFormat";

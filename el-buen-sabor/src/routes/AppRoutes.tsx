@@ -11,11 +11,22 @@ import { CategoriasCrud, categoriasLoader } from "../components/AdminDashboard/C
 import { InsumosCrud, insumosLoader } from "../components/AdminDashboard/InsumosCrud/InsumosCrud"
 import { ProductoForm } from "../components/AdminDashboard/ProductosCrud/ProductoForm/ProductoForm"
 import { InsumosForm } from "../components/AdminDashboard/InsumosCrud/InsumosForm.tsx/InsumosForm"
+import { Sucursales } from "../components/AdminConsole/Sucursales/Sucursales"
+import { Empresas } from "../components/AdminConsole/Empresa/Empresas"
+import { SucursalCrud } from "../components/AdminDashboard/SucursalCrud/SucursalCrud"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
-      <Route path="dashboard" element={<DashboardLayout />}>
+      <Route path="admin-console" >
+        <Route index element={<Empresas />}></Route>
+        <Route path="sucursales/:id" element={<Sucursales/>}></Route>
+      </Route>
+
+      <Route path="dashboard" element={<DashboardLayout />} >
+        <Route path="sucursales">
+          <Route index element={<SucursalCrud />} />
+        </Route>
         <Route path="productos">
           <Route index element={<ProductosCrud />} loader={productosLoader} />
           <Route path="form/:id?" element={<ProductoForm/>} />

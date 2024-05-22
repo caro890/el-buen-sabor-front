@@ -1,4 +1,9 @@
-export class Base{
-    id: number = 0;
-    eliminado: boolean = false;
+export interface IBase{
+    id: number;
+    eliminado: boolean;
+}
+
+export class Base implements IBase{
+    id = 0;
+    eliminado = false;
 }

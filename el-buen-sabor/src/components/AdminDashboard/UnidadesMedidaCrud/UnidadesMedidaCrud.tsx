@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "../../../hooks/redux";
 import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
-import { UnidadMedida } from "../../../types/UnidadMedida";
+import { UnidadMedida } from "../../../types/Articulos/UnidadMedida";
 import { useLoaderData, useNavigate } from "react-router";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import Swal from "sweetalert2";

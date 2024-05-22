@@ -1,4 +1,4 @@
-import { ArticuloManufacturado } from "../types/ArticuloManufacturado";
+import { ArticuloManufacturado } from "../types/Articulos/ArticuloManufacturado";
 import { BackendClient } from "./BackendClient";
 
 export class ArticuloManufacturadoService extends BackendClient<ArticuloManufacturado> {

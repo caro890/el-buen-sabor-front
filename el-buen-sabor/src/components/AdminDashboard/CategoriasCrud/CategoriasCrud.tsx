@@ -2,7 +2,7 @@
 //import { Categoria } from "../../../types/Categoria";
 import { useLoaderData, useNavigate } from "react-router";
 import { CategoriaService } from "../../../services/CatogoriaService";
-import { Categoria } from "../../../types/Categoria";
+import { Categoria } from "../../../types/Articulos/Categoria";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useEffect } from "react";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";

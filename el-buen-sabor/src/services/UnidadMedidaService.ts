@@ -1,4 +1,4 @@
-import { UnidadMedida } from "../types/UnidadMedida";
+import { UnidadMedida } from "../types/Articulos/UnidadMedida";
 import { BackendClient } from "./BackendClient";
 
 export class UnidadMedidaService extends BackendClient<UnidadMedida> {

@@ -1,0 +1,75 @@
+
+.card-container .card {
+    flex-basis: 18rem;
+    flex-shrink: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.card-container {
+    display: flex;
+    overflow-x:auto;
+    overflow-y: hidden;
+    width: 60rem;
+    height: 30rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.filled-card {
+    width: 18rem;
+    height: 28rem;
+}
+
+.filled-card:hover {
+    color: white;
+    background-color: darkgrey;
+    border: darkgray;
+}
+
+.filled-card-body:hover{
+    color: white;
+    background-color: darkgrey;
+    border: darkgray;
+}
+
+.empty-card{
+    width: 18rem;
+    height: 28rem;
+    background-color: rgb(215, 215, 215);
+    border: rgb(215, 215, 215);
+    color: gray;
+}
+
+.empty-card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.empty-card:hover {
+    cursor: pointer;
+    color: white;
+    background-color: darkgrey;
+}
+
+.close-button {
+    background-color: rgb(222, 128, 128);
+    border: rgb(222, 128, 128);
+}
+
+.close-button:hover {
+    background-color: red;
+    border: red;
+}
+
+.save-button {
+    background-color: rgb(106, 207, 106);
+    border: rgb(106, 207, 106);
+}
+
+.save-button:hover {
+    background-color: green;
+    border: green;
+}

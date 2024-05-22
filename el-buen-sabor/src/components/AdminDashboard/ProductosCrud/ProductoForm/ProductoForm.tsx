@@ -1,18 +1,18 @@
 import { useParams } from "react-router"
 import { Typography, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { ArticuloManufacturado } from "../../../../types/ArticuloManufacturado";
+import { ArticuloManufacturado } from "../../../../types/Articulos/ArticuloManufacturado";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
 import { useNavigate } from "react-router";
 import { Form, Col, Row, Button, Container } from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
 import { categoriasLoader } from "../../CategoriasCrud/CategoriasCrud";
-import { Categoria } from "../../../../types/Categoria";
+import { Categoria } from "../../../../types/Articulos/Categoria";
 import { unidadesMedidaLoader } from "../../UnidadesMedidaCrud/UnidadesMedidaCrud";
-import { UnidadMedida } from "../../../../types/UnidadMedida";
-import { ArticuloInsumo } from "../../../../types/ArticuloInsumo";
-import { ArticuloManufacturadoDetalle } from "../../../../types/ArticuloManufacturadoDetalle";
+import { UnidadMedida } from "../../../../types/Articulos/UnidadMedida";
+import { ArticuloInsumo } from "../../../../types/Articulos/ArticuloInsumo";
+import { ArticuloManufacturadoDetalle } from "../../../../types/Articulos/ArticuloManufacturadoDetalle";
 import { ProductModalSearch } from "../../ProductModalSearch/ProductModalSearch";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 import "../../../../styles/ProductForm.css"

@@ -1,4 +1,4 @@
-import { Base } from "./Base";
+import { Base } from "../Base";
 import { Categoria } from "./Categoria";
 import { ImagenArticulo } from "./ImagenArticulo";
 import { UnidadMedida } from "./UnidadMedida";

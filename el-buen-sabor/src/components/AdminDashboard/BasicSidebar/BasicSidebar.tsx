@@ -24,9 +24,9 @@ const BasicSidebar: React.FC = () => {
                     </CNavItem>
 
                     <CNavItem>
-                        <Link to="/dashboard" className="nav-link">
+                        <Link to="sucursales" className="nav-link">
                             <CIcon customClassName="nav-icon" icon={cilBuilding} />
-                            Empresa
+                            Sucursales
                         </Link>
                     </CNavItem>
                     <CNavGroup

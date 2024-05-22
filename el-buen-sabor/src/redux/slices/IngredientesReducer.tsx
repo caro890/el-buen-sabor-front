@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { ArticuloInsumo } from "../../types/ArticuloInsumo";
+import { ArticuloInsumo } from "../../types/Articulos/ArticuloInsumo";
 
 interface IInitialState {
     ingredientes: ArticuloInsumo[];
