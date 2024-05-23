@@ -1,9 +1,19 @@
-{"empresas": [
+{
+  "empresas": [
     {
       "id": 1,
-      "nombre": "Lo de Brown",
+      "eliminado": false,
+      "nombre": "El Matorral",
+      "razonSocial": "Cadena de comida",
+      "cuit": "123456789",
+      "logo": "",
+      "sucursales": []
+    },
+    {
+      "id": "2",
+      "nombre": "Don Pedro Pedro Pedro",
       "razonSocial": "Venta de Alimentos",
-      "cuil": 30503167,
+      "cuit": 30503167,
       "logo": "https://images.adsttc.com/media/images/5da1/c12e/3312/fd49/8d00/01f1/newsletter/210.jpg?1570881829",
       "sucursales": [
         {
@@ -33,93 +43,59 @@
           }
         },
         {
+          "id": 2,
+          "nombre": "LKYT",
+          "horarioApertura": "16:00:00",
+          "horarioCierre": "23:30:00",
+          "domicilio": {
             "id": 2,
-            "nombre": "LKYT",
-            "horarioApertura": "16:00:00",
-            "horarioCierre": "23:30:00",
-            "domicilio": {
+            "calle": "San Martin",
+            "numero": 789,
+            "cp": 5511,
+            "piso": null,
+            "nroDpto": null,
+            "localidad": {
               "id": 2,
-              "calle": "San Martin",
-              "numero": 789,
-              "cp": 5511,
-              "piso": null,
-              "nroDpto": null,
-              "localidad": {
-                "id": 2,
-                "nombre": "Godoy Cruz",
-                "provincia": {
+              "nombre": "Godoy Cruz",
+              "provincia": {
+                "id": 1,
+                "nombre": "Mendoza",
+                "pais": {
                   "id": 1,
-                  "nombre": "Mendoza",
-                  "pais": {
-                    "id": 1,
-                    "nombre": "Argentina"
-                  }
+                  "nombre": "Argentina"
                 }
               }
             }
+          }
         }
       ]
     },
     {
-      "id": 2,
-      "nombre": "Sucursal Dos",
-      "razonSocial": "Venta de Alimentos",
-      "cuil": 30503167,
-      "logo": "https://images.adsttc.com/media/images/5da1/c12e/3312/fd49/8d00/01f1/newsletter/210.jpg?1570881829",
-      "sucursales": [
-        {
-          "id": 1,
-          "nombre": "En chacras",
-          "horarioApertura": "17:00:00",
-          "horarioCierre": "23:00:00",
-          "domicilio": {
-            "id": 1,
-            "calle": "Viamonte",
-            "numero": 500,
-            "cp": 5509,
-            "piso": 2,
-            "nroDpto": 23,
-            "localidad": {
-              "id": 1,
-              "nombre": "Lujan de Cuyo",
-              "provincia": {
-                "id": 1,
-                "nombre": "Mendoza",
-                "pais": {
-                  "id": 1,
-                  "nombre": "Argentina"
-                }
-              }
-            }
-          }
-        },
-        {
-            "id": 2,
-            "nombre": "LKYT",
-            "horarioApertura": "16:00:00",
-            "horarioCierre": "23:30:00",
-            "domicilio": {
-              "id": 2,
-              "calle": "San Martin",
-              "numero": 789,
-              "cp": 5511,
-              "piso": null,
-              "nroDpto": null,
-              "localidad": {
-                "id": 2,
-                "nombre": "Godoy Cruz",
-                "provincia": {
-                  "id": 1,
-                  "nombre": "Mendoza",
-                  "pais": {
-                    "id": 1,
-                    "nombre": "Argentina"
-                  }
-                }
-              }
-            }
-        }
-      ]
+      "id": 3,
+      "eliminado": false,
+      "nombre": "Don Juan III",
+      "razonSocial": "Cadena de comida",
+      "cuit": "123456",
+      "logo": "",
+      "sucursales": []
+    },
+    {
+      "id": 0,
+      "eliminado": false,
+      "nombre": "La Cacerola",
+      "razonSocial": "Comiditas",
+      "cuit": "3456",
+      "logo": "",
+      "sucursales": []
+    },
+    {
+      "id": 4,
+      "eliminado": false,
+      "nombre": "Don Pedro Pedro Pedro",
+      "razonSocial": "Comiditas",
+      "cuit": 0,
+      "logo": "",
+      "sucursales": []
     }
   ]
 }

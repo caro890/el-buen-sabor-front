@@ -8,11 +8,10 @@
 
 .card-container {
     display: flex;
-    overflow-x:auto;
-    overflow-y: hidden;
+    overflow-x: auto;
     width: 60rem;
     height: 30rem;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
 }
 
@@ -54,22 +53,17 @@
     background-color: darkgrey;
 }
 
-.close-button {
-    background-color: rgb(222, 128, 128);
-    border: rgb(222, 128, 128);
-}
-
-.close-button:hover {
-    background-color: red;
-    border: red;
-}
-
 .save-button {
-    background-color: rgb(106, 207, 106);
-    border: rgb(106, 207, 106);
+    background-color: rgb(51, 158, 51);
+    border: rgb(51, 158, 51);
+    
 }
 
 .save-button:hover {
     background-color: green;
     border: green;
+}
+
+.empresa-form {
+    align-content: center;
 }

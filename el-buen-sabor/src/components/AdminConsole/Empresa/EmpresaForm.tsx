@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Empresa } from "../../../types/Empresas/Empresa";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 
 interface IPropsEmpresaForm {
     saveChanges: (emp: Empresa) => void;
@@ -12,7 +12,7 @@ interface IPropsEmpresaForm {
 const  validationSchema = Yup.object({
     nombre: Yup.string().required("Ingrese el nombre de la empresa"),
     razonSocial: Yup.string().required("Ingrese una razon social"),
-    cuil: Yup.number().required("Ingrese el cuil"),
+    cuit: Yup.string().matches(RegExp(/^[0-9]/), "El cuit debe ser un número").required("Ingrese el cuit"),
     logo: Yup.string()
 });
 
@@ -23,14 +23,15 @@ export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
     validationSchema: validationSchema,
 
     onSubmit: (values) => {
-        alert(JSON.stringify(values, null, 2));
+        console.log(values);
+        saveChanges(values);
     }
   });
 
   return (
     <div>
-        <Form onSubmit={formik.handleSubmit}>
-            <Form.Group controlId="nombre">
+        <Form onSubmit={formik.handleSubmit} className="empresa-form">
+            <Form.Group className="mb-2" controlId="nombre">
                 <Form.Label>Nombre: </Form.Label>
                 <Form.Control 
                     type="text" 
@@ -39,8 +40,12 @@ export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
                     onBlur={formik.handleBlur}
                     value={formik.values.nombre}
                 />
+                {formik.touched.nombre && formik.errors.nombre ? 
+                    (<div className="text-danger"> {formik.errors.nombre} </div>)
+                    : null
+                }
             </Form.Group>
-            <Form.Group controlId="razonSocial">
+            <Form.Group className="mb-2" controlId="razonSocial">
                 <Form.Label>Razon Social: </Form.Label>
                 <Form.Control 
                     type="text"
@@ -50,17 +55,25 @@ export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
                     value={formik.values.razonSocial}
                 />
             </Form.Group>
-            <Form.Group controlId="cuit">
+                {formik.touched.razonSocial && formik.errors.razonSocial ? 
+                    (<div className="text-danger"> {formik.errors.razonSocial} </div>)
+                    : null
+                }
+            <Form.Group className="mb-2" controlId="cuit">
                 <Form.Label>Cuit: </Form.Label>
                 <Form.Control 
-                    type="number" 
+                    type="text" 
                     name="cuit"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.cuit}
+                    value={String(formik.values.cuit)}
                 />
+                {formik.touched.cuit && formik.errors.cuit ? 
+                    (<div className="text-danger"> {formik.errors.cuit} </div>)
+                    : null
+                }
             </Form.Group>
-            <Form.Group controlId="logo">
+            <Form.Group className="mb-2" controlId="logo">
                 <Form.Label>Logo: </Form.Label>
                 <Form.Control 
                     type="text" 
@@ -69,7 +82,12 @@ export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
                     onBlur={formik.handleBlur}
                     value={formik.values.logo}
                 />
+                {formik.touched.logo && formik.errors.logo ? 
+                    (<div className="text-danger"> {formik.errors.logo} </div>)
+                    : null
+                }
             </Form.Group>
+            <Button type="submit" className="save-button" >GUARDAR</Button>
         </Form>
     </div>
   )

@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import "../../../styles/AdminConsole.css"
 import { Empresa } from "../../../types/Empresas/Empresa";
-import { Button, Card, Modal } from "react-bootstrap";
+import { Card, Modal } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { IconButton } from "@mui/material";
@@ -40,10 +40,9 @@ export const Empresas = () => {
   useEffect(() => {
     //traigo empresas por servicio
     service.getAll().then((lista) => {
-      console.log(lista);
       setEmpresas(lista);
-    });    
-  }, []);
+    });  
+  }, [empresaForm]);
 
   //funcion para manejar la eliminación de una empresa
   const handleDelete = (id: number) => {
@@ -80,24 +79,43 @@ export const Empresas = () => {
   };
 
   //funcion para guardar la empresa nueva o los cambio hechos en una empresa
-  const save = () => {
-    if(empresaForm) { 
-      service.post(empresaForm);
-
-      //reemplazo la empresa de la lista
-      var auxArray: Empresa[] = empresas.slice();
+  const saveEmpresa = (empresa: Empresa) => {
+    //reemplazo la empresa de la lista
+    var auxArray: Empresa[] = empresas.slice();
+    
+    if(empresa.id != 0) {
       var index = 0;
       auxArray.forEach((emp, i) => {
-        if(emp.id == empresaForm?.id) index = i;
+        if(emp.id == empresa?.id) index = i;
       });
       auxArray.splice(index, 1);
-      auxArray.push(empresaForm);
-      setEmpresas(auxArray);
+
+      service.put(empresa.id, empresa);
+    } else {
+      service.post(empresa);
     }
+
+    auxArray.push(empresa);
+    setEmpresas(auxArray);    
+
+    handleClose();
   }
 
   const hanldeEmpresaSelection = (empresa: Empresa) => {
     dispatch(setEmpresa(empresa));
+  };
+
+  const handleClose = () => {
+    setEmpresaForm({
+      id: 0,
+      eliminado: false,
+      nombre: "",
+      razonSocial: "",
+      cuit: 0,
+      logo: "",
+      sucursales: []
+    });
+    setShowModal(false);
   };
 
   return (
@@ -108,7 +126,8 @@ export const Empresas = () => {
         </Typography>
       </Box>
       <div className="d-flex flex-row card-container">
-      <EmptyCard create={() => setShowModal(true)} item="empresa" />
+        <EmptyCard create={() => setShowModal(true)} item="empresa" />
+        
         {empresas?.map((empresa: Empresa, index: number) => (
         <Card key={index} className="filled-card">
           <Card.Body as={Link} onClick={() => hanldeEmpresaSelection(empresa)} to={"sucursales/"+empresa.id} className="filled-card-body">
@@ -130,19 +149,15 @@ export const Empresas = () => {
         </Card>
         ))}
       </div>
-      <Modal show={showModal}>
-        <Modal.Header>
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
           <Modal.Title>
             Empresa
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EmpresaForm saveChanges={(emp) => setEmpresaForm(emp)} empresa={empresaForm} />
+          <EmpresaForm saveChanges={saveEmpresa} empresa={empresaForm} />
         </Modal.Body>
-        <Modal.Footer>
-          <Button type="button" onClick={() => {setShowModal(false)}} className="close-button" >CERRAR</Button>
-          <Button type="button" onClick={save} className="save-button" >GUARDAR</Button>
-        </Modal.Footer>
       </Modal>
     </div>
   )
