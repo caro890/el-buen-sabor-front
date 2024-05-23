@@ -12,7 +12,7 @@ interface IPropsEmpresaForm {
 const  validationSchema = Yup.object({
     nombre: Yup.string().required("Ingrese el nombre de la empresa"),
     razonSocial: Yup.string().required("Ingrese una razon social"),
-    cuit: Yup.string().matches(RegExp(/^[0-9]/), "El cuit debe ser un número").required("Ingrese el cuit"),
+    cuit: Yup.string().matches(RegExp(/[0-9]/), "El cuit debe ser un número").required("Ingrese el cuit"),
     logo: Yup.string()
 });
 

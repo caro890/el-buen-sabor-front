@@ -1,14 +1,11 @@
 import { Box, Typography } from "@mui/material"
 import { Col, Container, Row, Card } from "react-bootstrap"
 import "../../../styles/Inicio.module.css"
-import { useNavigate } from "react-router"
 import CIcon from "@coreui/icons-react"
 import { cilGroup, cilFastfood, cilBuilding } from "@coreui/icons"
 import { Link } from "react-router-dom"
 
 export const Inicio = () => {
-  const navigate =useNavigate();
-
   return (
     <div>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>

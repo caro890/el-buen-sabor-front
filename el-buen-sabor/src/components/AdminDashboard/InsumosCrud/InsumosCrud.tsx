@@ -24,9 +24,6 @@ export const InsumosCrud = () => {
     dispatch(setDataTable(insumos));
   }, []);
 
-
-  
-
   const columnsTableInsumos = [
     {
       label: "Denominacion",

@@ -162,7 +162,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
             sucursal.domicilio.localidad.provincia.pais = selectedPais;
 
             setPaisSelected(sucursal.domicilio.localidad.provincia.pais.id.toString());
-            const prov = await getProvinciasPorPaisId(selectedPais.id);
+            const prov: Provincia[] = await getProvinciasPorPaisId(selectedPais.id);
             setProvincias(prov);
 
         }

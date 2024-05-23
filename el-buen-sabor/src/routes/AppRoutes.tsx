@@ -10,7 +10,7 @@ import { ProductosCrud, productosLoader } from "../components/AdminDashboard/Pro
 import { CategoriasCrud, categoriasLoader } from "../components/AdminDashboard/CategoriasCrud/CategoriasCrud"
 import { InsumosCrud, insumosLoader } from "../components/AdminDashboard/InsumosCrud/InsumosCrud"
 import { ProductoForm } from "../components/AdminDashboard/ProductosCrud/ProductoForm/ProductoForm"
-import { InsumosForm } from "../components/AdminDashboard/InsumosCrud/InsumosForm.tsx/InsumosForm"
+import { InsumosForm, insumoLoader } from "../components/AdminDashboard/InsumosCrud/InsumosForm.tsx/InsumosForm"
 import { Sucursales } from "../components/AdminConsole/Sucursales/Sucursales"
 import { Empresas } from "../components/AdminConsole/Empresa/Empresas"
 import { SucursalCrud } from "../components/AdminDashboard/SucursalCrud/SucursalCrud"
@@ -40,7 +40,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="insumos">
           <Route index element={<InsumosCrud />} loader={insumosLoader} />
-          <Route path="form/:id?" element={<InsumosForm />} />
+          <Route path="form/:id?" element={<InsumosForm />} loader={insumoLoader} />
         </Route>
         <Route path="empleados" >
           <Route index element={<Empleados />} />
