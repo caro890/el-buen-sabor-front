@@ -39,7 +39,6 @@ export const Empresas = () => {
 
   useEffect(() => {
     //traigo empresas por servicio
-    console.log(service.baseUrl);
     service.getAll().then((lista) => {
       setEmpresas(lista);
     });  
