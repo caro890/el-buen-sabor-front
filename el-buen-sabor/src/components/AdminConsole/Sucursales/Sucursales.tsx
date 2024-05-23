@@ -98,16 +98,13 @@ export const Sucursales = () => {
 
   const dispatch = useAppDispatch();
 
+
   useEffect(() => {
-    if(empresa){
-      setSucursales(empresa.sucursales);
+    if (emp){
+      setEmpresa(emp);
+      setSucursales(emp.sucursales);
+
     } 
-
-
-  }, [sucursalForm]);
-
-  useEffect(() => {
-    if (emp) setEmpresa(emp);
 
   }, [emp]);
 
