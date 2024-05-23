@@ -1,17 +1,17 @@
 .card-container .card {
-    flex-basis: 18rem;
+    flex-basis: 15rem;
     flex-shrink: 0;
     margin-left: 1rem;
     margin-right: 1rem;
-    width: 16rem;
-    height: 26rem;
+    width: 15rem;
+    height: 20rem;
 }
 
 .card-container {
     display: flex;
     overflow-x: auto;
-    width: 58rem;
-    height: 28rem;
+    width: 93%;
+    height: 25rem;
     justify-content: left;
     align-items: center;
 }
@@ -60,4 +60,11 @@
 
 .empresa-form {
     align-content: center;
+}
+
+.sucursales-div {
+    border-radius: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }

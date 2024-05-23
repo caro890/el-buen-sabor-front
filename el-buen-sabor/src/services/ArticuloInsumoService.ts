@@ -2,7 +2,9 @@ import { ArticuloInsumo } from "../types/Articulos/ArticuloInsumo";
 import { BackendClient } from "./BackendClient";
 
 export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
-    baseUrl: string = "http://localhost:8080/articulos/insumos"; 
+    baseUrl: string = "https://buensavorjoined-1.onrender.com/articuloInsumo"; 
+    
+    //baseUrl: string = "http://localhost:8083/articuloInsumo"; 
 
     async getInsumosParaElaborar() {
         let url = this.baseUrl + "/buscar/elaborados";

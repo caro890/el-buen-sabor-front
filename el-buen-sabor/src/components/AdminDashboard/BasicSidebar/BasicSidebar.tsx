@@ -67,7 +67,7 @@ const BasicSidebar: React.FC = () => {
                         }
                     >
                         <CNavItem>
-                            <Link to="/dashboard" className="nav-link" >
+                            <Link to="empleados" className="nav-link" >
                                 <span className="nav-icon"><span className="nav-icon-bullet"></span></span>
                                 Lista de Empleados
                             </Link>

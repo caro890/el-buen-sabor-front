@@ -2,7 +2,9 @@ import { Empresa } from "../types/Empresas/Empresa";
 import { BackendClient } from "./BackendClient";
 
 export class EmpresaService extends BackendClient<Empresa> {
-    baseUrl: string = "http://localhost:8080/empresa"; 
+    baseUrl: string = "https://buensavorjoined-1.onrender.com/empresa"; 
+    
+    //baseUrl: string = "http://localhost:8083/empresa"; 
 
     async getFull(id: number): Promise<Empresa[]>{
         const response = await fetch(`${this.baseUrl}/full/${id}`);

@@ -15,7 +15,7 @@ import { ArticuloInsumo } from "../../../../types/Articulos/ArticuloInsumo";
 import { ArticuloManufacturadoDetalle } from "../../../../types/Articulos/ArticuloManufacturadoDetalle";
 import { ProductModalSearch } from "../../ProductModalSearch/ProductModalSearch";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
-import "../../../../styles/ProductForm.css"
+import "../../../../styles/ProductForm.module.css"
 import { setIngredientes } from "../../../../redux/slices/IngredientesReducer";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/redux";
 
