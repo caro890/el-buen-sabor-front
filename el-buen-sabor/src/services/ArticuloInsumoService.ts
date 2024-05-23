@@ -2,7 +2,7 @@ import { ArticuloInsumo } from "../types/Articulos/ArticuloInsumo";
 import { BackendClient } from "./BackendClient";
 
 export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
-    baseUrl: string = "https://buensavorjoined-1.onrender.com/articuloInsumo"; 
+    baseUrl: string = process.env.BASE_URL + "articuloInsumo"; 
     
     //baseUrl: string = "http://localhost:8083/articuloInsumo"; 
 

@@ -80,10 +80,6 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
 
             values.esCasaMatriz = esCasaMatriz;
 
-            alert(values.domicilio.localidad.id);
-            alert(values.domicilio.localidad.provincia.id);
-            alert(values.domicilio.localidad.provincia.pais.id);
-
             //agregar domicilio
             // createDomicilio(values.domicilio);
 
@@ -189,7 +185,6 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
             sucursal.domicilio.localidad = selectedLocalidad;
 
             setLocalidadSelected(sucursal.domicilio.localidad.id.toString());
-            alert(sucursal.domicilio.localidad.id);
         }
     }
 

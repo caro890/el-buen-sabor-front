@@ -2,7 +2,7 @@ import { Empresa } from "../types/Empresas/Empresa";
 import { BackendClient } from "./BackendClient";
 
 export class EmpresaService extends BackendClient<Empresa> {
-    baseUrl: string = "https://buensavorjoined-1.onrender.com/empresa"; 
+    baseUrl: string = process.env.BASE_URL + "empresa"; 
     
     //baseUrl: string = "http://localhost:8083/empresa"; 
 
