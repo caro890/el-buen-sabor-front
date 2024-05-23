@@ -2,22 +2,22 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../../../hooks/redux";
 import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
 import { UnidadMedida } from "../../../types/Articulos/UnidadMedida";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData/*, useNavigate*/ } from "react-router";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
-import Swal from "sweetalert2";
-import { Form, Col, Row, Button, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
+//import Swal from "sweetalert2";
+import { Form/*, Col, Row, Button, InputGroup, Dropdown, DropdownButton*/ } from "react-bootstrap";
 
 export const UnidadesMedidaCrud = () => {
     const unidadesMedida = useLoaderData() as UnidadMedida[];
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    const service: UnidadMedidaService = new UnidadMedidaService();
+    //const navigate = useNavigate();
+    //const service: UnidadMedidaService = new UnidadMedidaService();
 
     useEffect(() => {
         dispatch(setDataTable(unidadesMedida));
     }, []);
 
-    const getUnidadesMedida = async () => {
+    /*const getUnidadesMedida = async () => {
         await service.getAll().then((data) => {
             dispatch(setDataTable(data));
         });
@@ -40,7 +40,7 @@ export const UnidadesMedidaCrud = () => {
                 });
             }
         });
-    };
+    };*/
 
     return (
         <>

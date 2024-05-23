@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router";
-import { Form } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useLoaderData/*, useNavigate*/ } from "react-router";
+import { Form } from "react-bootstrap";
+//import Swal from "sweetalert2";
 import { useAppDispatch } from "../../../hooks/redux";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import { PaisService } from "../../../services/PaisService";
@@ -11,14 +11,14 @@ import { Pais } from "../../../types/Domicilio/Pais";
 export const PaisesCrud = () => {
   const paises = useLoaderData() as Pais[];
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const service: PaisService = new PaisService();
+  //const navigate = useNavigate();
+  //const service: PaisService = new PaisService();
 
   useEffect(() => {
     dispatch(setDataTable(paises));
   }, []);
 
-  const getPaises = async () => {
+  /*const getPaises = async () => {
     await service.getAll().then((data) => {
       dispatch(setDataTable(data));
     });
@@ -41,7 +41,7 @@ export const PaisesCrud = () => {
         });
       }
     });
-  };
+  };*/
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router";
-import { Form } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useLoaderData/*, useNavigate*/ } from "react-router";
+import { Form } from "react-bootstrap";
+//import Swal from "sweetalert2";
 import { useAppDispatch } from "../../../hooks/redux";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import { LocalidadService } from "../../../services/LocalidadService";
@@ -11,14 +11,14 @@ import { Localidad } from "../../../types/Domicilio/Localidad";
 export const LocalidadesCrud = () => {
   const localidades = useLoaderData() as Localidad[];
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const service: LocalidadService = new LocalidadService();
+  //const navigate = useNavigate();
+  //const service: LocalidadService = new LocalidadService();
 
   useEffect(() => {
     dispatch(setDataTable(localidades));
   }, []);
 
-  const getLocalidades = async () => {
+  /*const getLocalidades = async () => {
     await service.getAll().then((data) => {
       dispatch(setDataTable(data));
     });
@@ -41,7 +41,7 @@ export const LocalidadesCrud = () => {
         });
       }
     });
-  };
+  };*/
 
   return (
     <>

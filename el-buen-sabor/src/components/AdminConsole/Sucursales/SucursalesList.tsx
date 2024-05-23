@@ -25,9 +25,6 @@ export const SucursalesList = () => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  //empresa
-  const [empresa, setEmpresa] = useState<Empresa>();
-
   const emp = useSelector((state: RootState) => state.empresaReducer.empresa);
 
   // Inicializar Pais
@@ -92,9 +89,7 @@ export const SucursalesList = () => {
 
   useEffect(() => {
     if (emp){
-      setEmpresa(emp);
       setSucursales(emp.sucursales);
-
     } 
 
   }, [emp]);

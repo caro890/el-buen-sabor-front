@@ -1,5 +1,5 @@
 import { useParams } from "react-router"
-import { Typography, Box } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ArticuloManufacturado } from "../../../../types/Articulos/ArticuloManufacturado";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
@@ -64,7 +64,7 @@ export const ProductoForm = () => {
   useEffect(() => {
     var arrayI: ArticuloInsumo[] = [];
 
-    producto.articuloManufacturadoDetalles.forEach((item, i) => {
+    producto.articuloManufacturadoDetalles.forEach((item) => {
       arrayI.push(item.articuloInsumo);
     });
 
@@ -74,10 +74,9 @@ export const ProductoForm = () => {
   //cargar los insumos como detalles
   useEffect(() => {
       var array: ArticuloManufacturadoDetalle[] = details.slice();
-      var f: number = 0;
-      ingredientes.forEach((item, i) => {
-        var found = array.some(function(element, index) { 
-          f = index; return element.articuloInsumo.id === item.id; 
+      ingredientes.forEach((item) => {
+        var found = array.some(function(element) { 
+          return element.articuloInsumo.id === item.id; 
         });
 
         if(!found){
@@ -175,9 +174,8 @@ export const ProductoForm = () => {
 
 
     var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
-    var f: number = 0;
-    var found = arrayAux.some(function(element, index) { 
-      f = index; return element.cantidad === 0; 
+    var found = arrayAux.some(function(element) { 
+      return element.cantidad === 0; 
     });
 
     if(found){
@@ -217,7 +215,7 @@ export const ProductoForm = () => {
       if(found){
         var aux: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
         var detalle = arrayAux.splice(f, 1);
-        detalle.forEach(( item, i)=>{
+        detalle.forEach(( item)=>{
           aux.createFrom(item);
         });
         aux.cantidad = amount;

@@ -35,9 +35,8 @@ export const IngredientesReducer = createSlice({
         
         removeIngrediente(state, action: PayloadAction<PayloadElement>) {
             var aux: ArticuloInsumo = action.payload.element;
-            var f = 0;
-            var found = state.ingredientes.some(function(element, index) { 
-                f = index; return element.id == aux.id; 
+            var found = state.ingredientes.some(function(element) { 
+                return element.id == aux.id; 
             });
             if(found){
                 state.ingredientes.push(aux);

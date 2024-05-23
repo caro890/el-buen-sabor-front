@@ -1,7 +1,6 @@
 import { Button, Col, Modal, Row, Form, Container } from "react-bootstrap"
 import { FC, useEffect, useState } from "react";
 import "../../../styles/ProductModalSearch.module.css"
-import { ArticuloManufacturadoDetalle } from "../../../types/Articulos/ArticuloManufacturadoDetalle";
 import { ArticuloInsumo } from "../../../types/Articulos/ArticuloInsumo";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { setIngredientes } from "../../../redux/slices/IngredientesReducer";

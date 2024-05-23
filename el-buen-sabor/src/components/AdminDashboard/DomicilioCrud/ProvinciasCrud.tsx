@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router";
-import { Form } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useLoaderData/*, useNavigate*/ } from "react-router";
+import { Form } from "react-bootstrap";
+//import Swal from "sweetalert2";
 import { useAppDispatch } from "../../../hooks/redux";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import { ProvinciaService } from "../../../services/ProvinciaService";
@@ -11,14 +11,14 @@ import { Provincia } from "../../../types/Domicilio/Provincia";
 export const ProvinciasCrud = () => {
   const provincias = useLoaderData() as Provincia[];
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const service: ProvinciaService = new ProvinciaService();
+  //const navigate = useNavigate();
+  //const service: ProvinciaService = new ProvinciaService();
 
   useEffect(() => {
     dispatch(setDataTable(provincias));
   }, []);
 
-  const getProvincias = async () => {
+  /*const getProvincias = async () => {
     await service.getAll().then((data) => {
       dispatch(setDataTable(data));
     });
@@ -41,7 +41,7 @@ export const ProvinciasCrud = () => {
         });
       }
     });
-  };
+  };*/
 
   return (
     <>

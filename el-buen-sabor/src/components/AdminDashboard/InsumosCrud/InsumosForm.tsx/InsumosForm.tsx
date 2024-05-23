@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { LoaderFunction, useLoaderData, useParams } from "react-router"
+import { LoaderFunction, useLoaderData } from "react-router"
 import { ArticuloInsumo } from "../../../../types/Articulos/ArticuloInsumo";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 import { useFormik } from "formik";

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router";
-import { Form } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useLoaderData } from "react-router";
+import { Form } from "react-bootstrap";
+//import Swal from "sweetalert2";
 import { useAppDispatch } from "../../../hooks/redux";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import { DomicilioService } from "../../../services/DomicilioService";
@@ -11,20 +11,20 @@ import { Domicilio } from "../../../types/Domicilio/Domicilio";
 export const DomicilioCrud = () => {
   const domicilios = useLoaderData() as Domicilio[];
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const service: DomicilioService = new DomicilioService();
+  //const navigate = useNavigate();
+  //const service: DomicilioService = new DomicilioService();
 
   useEffect(() => {
     dispatch(setDataTable(domicilios));
   }, []);
 
-  const getDomicilios = async () => {
+  /*const getDomicilios = async () => {
     await service.getAll().then((data) => {
       dispatch(setDataTable(data));
     });
-  };
+  };*/
 
-  const handleDelete = async (id: number) => {
+  /*const handleDelete = async (id: number) => {
     Swal.fire({
       title: "¿Estás seguro?",
       text: "¿Seguro que desea eliminar el domicilio?",
@@ -41,7 +41,7 @@ export const DomicilioCrud = () => {
         });
       }
     });
-  };
+  };*/
 
   return (
     <>

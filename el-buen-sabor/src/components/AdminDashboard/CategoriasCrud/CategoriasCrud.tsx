@@ -1,32 +1,32 @@
 //import { useLoaderData } from "react-router"
 //import { Categoria } from "../../../types/Categoria";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData/*, useNavigate*/ } from "react-router";
 import { CategoriaService } from "../../../services/CatogoriaService";
 import { Categoria } from "../../../types/Articulos/Categoria";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useEffect } from "react";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
-import Swal from "sweetalert2";
-import { Form, Col, Row, Button, InputGroup, Dropdown, DropdownButton } from "react-bootstrap";
+//import Swal from "sweetalert2";
+import { Form } from "react-bootstrap";
 
 export const CategoriasCrud = () => {
   //const categorias = useLoaderData() as Categoria[];
   const categorias = useLoaderData() as Categoria[];
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const service: CategoriaService = new CategoriaService();
+  //const navigate = useNavigate();
+  //const service: CategoriaService = new CategoriaService();
 
   useEffect(() => {
     dispatch(setDataTable(categorias));
   }, []);
 
-  const getCategorias = async () => {
+  /*const getCategorias = async () => {
     await service.getAll().then((data) => {
       dispatch(setDataTable(data));
     });
-  };
+  };*/
 
-  const handleDelete = async (id: number) => {
+  /*const handleDelete = async (id: number) => {
     Swal.fire({
       title: "¿Estás seguro?",
       text: "¿Seguro que desea eliminar la categoría?",
@@ -44,7 +44,7 @@ export const CategoriasCrud = () => {
       }
     });
   };
-
+*/
   return (
     <>
       <div>CategoriasCrud</div>

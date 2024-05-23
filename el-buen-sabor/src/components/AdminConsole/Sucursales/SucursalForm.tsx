@@ -51,9 +51,6 @@ const validationSchema = Yup.object().shape({
 
 export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) => {
 
-    const [pais, setPais] = useState<Pais>();
-    const [provincia, setProvincia] = useState<Provincia>();
-    const [localidad, setLocalidad] = useState<Localidad>();
     const [empresa, setEmpresa] = useState<Empresa>();
 
     const emp = useSelector((state: RootState) => state.empresaReducer.empresa);
@@ -67,10 +64,6 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
             const paisEncontrado = paises.find((p) => p.id === parseInt(paisSelected));
             const provinciaEncontrada = provincias.find((pr) => pr.id === parseInt(provinciaSelected));
             const localidadEncontrada = localidades.find((l) => l.id === parseInt(localidadSelected));
-
-            if (paisEncontrado) setPais(paisEncontrado);
-            if (provinciaEncontrada) setProvincia(provinciaEncontrada);
-            if (localidadEncontrada) setLocalidad(localidadEncontrada);
 
             if (paisEncontrado && provinciaEncontrada && localidadEncontrada) {
                 values.domicilio.localidad.provincia.pais = paisEncontrado;
