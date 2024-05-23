@@ -1,8 +1,8 @@
 import { ArticuloInsumo } from "../types/Articulos/ArticuloInsumo";
-import { BackendClient } from "./BackendClient";
+import { BackendClient, base } from "./BackendClient";
 
 export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
-    baseUrl: string = process.env.BASE_URL + "articuloInsumo"; 
+    baseUrl: string = base + "articuloInsumo"; 
     
     //baseUrl: string = "http://localhost:8083/articuloInsumo"; 
 

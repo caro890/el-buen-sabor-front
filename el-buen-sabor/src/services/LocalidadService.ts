@@ -1,8 +1,8 @@
 import { Localidad } from "../types/Domicilio/Localidad";
-import { BackendClient } from "./BackendClient";
+import { BackendClient, base } from "./BackendClient";
 
 export class LocalidadService extends BackendClient<Localidad> {
-    baseUrl: string = process.env.BASE_URL + "localidad"; 
+    baseUrl: string = base + "localidad"; 
     
     //baseUrl: string = "http://localhost:8083/localidad"; 
     

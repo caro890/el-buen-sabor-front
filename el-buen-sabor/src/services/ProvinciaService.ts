@@ -1,8 +1,8 @@
 import { Provincia } from "../types/Domicilio/Provincia";
-import { BackendClient } from "./BackendClient";
+import { BackendClient, base } from "./BackendClient";
 
 export class ProvinciaService extends BackendClient<Provincia> {
-    baseUrl: string = process.env.BASE_URL + "provincia"; 
+    baseUrl: string = base + "provincia"; 
      
     //baseUrl: string = "http://localhost:8083/provincia"; 
 

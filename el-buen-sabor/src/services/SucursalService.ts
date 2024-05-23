@@ -1,8 +1,8 @@
 import { Sucursal } from "../types/Empresas/Sucursal";
-import { BackendClient } from "./BackendClient";
+import { BackendClient, base } from "./BackendClient";
 
 export class SucursalService extends BackendClient<Sucursal> {
-    baseUrl: string = process.env.BASE_URL + "sucursal";
+    baseUrl: string = base + "sucursal";
     //baseUrl: string = "http://localhost:8083/sucursal";
 
     async findByEmpresaId(idEmpresa: number): Promise<Sucursal[]>{

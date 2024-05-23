@@ -8,7 +8,7 @@ import { IconButton } from "@mui/material";
 import CIcon from "@coreui/icons-react";
 import { cilTrash, cilPencil } from "@coreui/icons";
 import { EmpresaService } from "../../../services/EmpresaService";
-import { Link, json } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { EmptyCard } from "../EmptyCard/EmptyCard";
 import { EmpresaForm } from "./EmpresaForm";
 import { useAppDispatch } from "../../../hooks/redux";
@@ -39,6 +39,7 @@ export const Empresas = () => {
 
   useEffect(() => {
     //traigo empresas por servicio
+    console.log(service.baseUrl);
     service.getAll().then((lista) => {
       setEmpresas(lista);
     });  

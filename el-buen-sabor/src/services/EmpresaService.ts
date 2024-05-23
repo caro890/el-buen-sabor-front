@@ -1,8 +1,8 @@
 import { Empresa } from "../types/Empresas/Empresa";
-import { BackendClient } from "./BackendClient";
+import { BackendClient, base } from "./BackendClient";
 
 export class EmpresaService extends BackendClient<Empresa> {
-    baseUrl: string = process.env.BASE_URL + "empresa"; 
+    baseUrl: string = base + "empresa"; 
     
     //baseUrl: string = "http://localhost:8083/empresa"; 
 
