@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Sucursal } from "../../../types/Empresas/Sucursal";
-import { useFormik } from "formik";
+import { ErrorMessage, useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { Typography } from "@mui/material";
@@ -28,30 +28,23 @@ const domicilioSchema = Yup.object().shape({
     piso: Yup.number().required('El piso es obligatorio').positive('El piso debe ser positivo'),
     nroDpto: Yup.number().required('El número de departamento es obligatorio').positive('El número de departamento debe ser positivo'),
     localidad: Yup.object().shape({
-        nombre: Yup.string().required('El nombre de la localidad es obligatorio'),
+        id: Yup.string().required('Debe seleccionar una localidad'),
         provincia: Yup.object().shape({
-            nombre: Yup.string().required('El nombre de la provincia es obligatorio'),
+            id: Yup.string().required('Debe seleccionar una provincia'),
             pais: Yup.object().shape({
-                nombre: Yup.string().required('El nombre del país es obligatorio')
+                id: Yup.string().required('Debe seleccionar un país'),
             })
         })
     })
 });
 
-const empresaSchema = Yup.object().shape({
-    nombre: Yup.string().required('El nombre es obligatorio'),
-    razonSocial: Yup.string().required('La razón social es obligatoria'),
-    cuit: Yup.number().required('El CUIT es obligatorio').positive('El CUIT debe ser positivo'),
-    logo: Yup.string().required('El logo es obligatorio'),
-});
 
 
 const validationSchema = Yup.object().shape({
-    // nombre: Yup.string().required('El nombre de la sucursal es obligatorio'),
-    // horarioApertura: Yup.string().required('El horario de apertura es obligatorio'),
-    // horarioCierre: Yup.string().required('El horario de cierre es obligatorio'),
-    // domicilio: domicilioSchema,
-    // empresa: empresaSchema
+    nombre: Yup.string().required('El nombre de la sucursal es obligatorio'),
+    horarioApertura: Yup.string().required('El horario de apertura es obligatorio'),
+    horarioCierre: Yup.string().required('El horario de cierre es obligatorio'),
+    domicilio: domicilioSchema
 });
 
 
@@ -64,7 +57,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
     const [provincia, setProvincia] = useState<Provincia>();
     const [localidad, setLocalidad] = useState<Localidad>();
     const [empresa, setEmpresa] = useState<Empresa>();
-    
+
     const emp = useSelector((state: RootState) => state.empresaReducer.empresa);
 
     const formik = useFormik({
@@ -89,11 +82,15 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
 
             values.esCasaMatriz = esCasaMatriz;
 
+            alert(values.domicilio.localidad.id);
+            alert(values.domicilio.localidad.provincia.id);
+            alert(values.domicilio.localidad.provincia.pais.id);
+
             //agregar domicilio
-            createDomicilio(values.domicilio);
+            // createDomicilio(values.domicilio);
 
             //agregar empresa
-            if(empresa) values.empresa = empresa;
+            if (empresa) values.empresa = empresa;
 
             console.log(values);
 
@@ -194,6 +191,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
             sucursal.domicilio.localidad = selectedLocalidad;
 
             setLocalidadSelected(sucursal.domicilio.localidad.id.toString());
+            alert(sucursal.domicilio.localidad.id);
         }
     }
 
@@ -356,6 +354,11 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
                                 </option>
                             ))}
                         </Form.Select>
+                        {formik.touched.domicilio?.localidad?.provincia?.pais?.id && formik.errors.domicilio?.localidad?.provincia?.pais?.id ?
+                            (<div className="text-danger"> {formik.errors.domicilio?.localidad?.provincia?.pais?.id} </div>)
+                            : null
+                        }
+
                     </Form.Group>
                     <Form.Group as={Col} controlId="domicilio.localidad.provincia.id">
                         <Form.Label>Provincia</Form.Label>
@@ -367,6 +370,10 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
                                 </option>
                             ))}
                         </Form.Select>
+                        {formik.touched.domicilio?.localidad?.provincia?.id && formik.errors.domicilio?.localidad?.provincia?.id ?
+                            (<div className="text-danger"> {formik.errors.domicilio?.localidad?.provincia?.id} </div>)
+                            : null
+                        }
                     </Form.Group>
                     <Form.Group as={Col} controlId="domicilio.localidad.id">
                         <Form.Label name="localidad">Localidad</Form.Label>
@@ -378,6 +385,10 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
                                 </option>
                             ))}
                         </Form.Select>
+                        {formik.touched.domicilio?.localidad?.id && formik.errors.domicilio?.localidad?.id ?
+                            (<div className="text-danger"> {formik.errors.domicilio?.localidad?.id} </div>)
+                            : null
+                        }
                     </Form.Group>
                 </Row>
                 <Button type="submit" className="save-button" >GUARDAR</Button>

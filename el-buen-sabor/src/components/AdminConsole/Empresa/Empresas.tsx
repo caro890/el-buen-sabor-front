@@ -8,7 +8,7 @@ import { IconButton } from "@mui/material";
 import CIcon from "@coreui/icons-react";
 import { cilTrash, cilPencil } from "@coreui/icons";
 import { EmpresaService } from "../../../services/EmpresaService";
-import { Link } from "react-router-dom";
+import { Link, json } from "react-router-dom";
 import { EmptyCard } from "../EmptyCard/EmptyCard";
 import { EmpresaForm } from "./EmpresaForm";
 import { useAppDispatch } from "../../../hooks/redux";
@@ -101,8 +101,9 @@ export const Empresas = () => {
     handleClose();
   }
 
-  const hanldeEmpresaSelection = (empresa: Empresa) => {
-    dispatch(setEmpresa(empresa));
+  const hanldeEmpresaSelection = async (empresa: Empresa) => {
+    const data = await service.getFull(empresa.id);
+    dispatch(setEmpresa(data));
   };
 
   const handleClose = () => {

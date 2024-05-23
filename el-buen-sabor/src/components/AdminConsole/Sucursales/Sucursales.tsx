@@ -18,17 +18,23 @@ import { Domicilio } from "../../../types/Domicilio/Domicilio";
 import { Provincia } from "../../../types/Domicilio/Provincia";
 import { Localidad } from "../../../types/Domicilio/Localidad";
 import { Pais } from "../../../types/Domicilio/Pais";
-import { PaisService } from "../../../services/PaisService"
-import { paisesLoader } from "../../AdminDashboard/DomicilioCrud/PaisesCrud";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { EmpresaService } from "../../../services/EmpresaService";
 
 
 
 
 export const Sucursales = () => {
   const [sucursales, setSucursales] = useState<Sucursal[]>([]);
-  
+
 
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  //empresa
+  const [empresa, setEmpresa] = useState<Empresa>();
+
+  const emp = useSelector((state: RootState) => state.empresaReducer.empresa);
 
 
 
@@ -93,13 +99,18 @@ export const Sucursales = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    service.getAll().then((lista) => {
-      console.log(lista);
-      setSucursales(lista);
-    });
+    if(empresa){
+      setSucursales(empresa.sucursales);
+    } 
 
 
   }, [sucursalForm]);
+
+  useEffect(() => {
+    if (emp) setEmpresa(emp);
+
+  }, [emp]);
+
 
   const handleDelete = (id: number) => {
     Swal.fire({
@@ -170,6 +181,8 @@ export const Sucursales = () => {
     setShowModal(false);
   };
 
+
+
   return (
     <div>
       <Box>
@@ -211,4 +224,3 @@ export const Sucursales = () => {
     </div>
   )
 }
-
