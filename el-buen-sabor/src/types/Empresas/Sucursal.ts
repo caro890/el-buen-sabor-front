@@ -6,6 +6,7 @@ export interface Sucursal extends IBase{
     nombre: string,
     horarioApertura: string,
     horarioCierre: string,
+    esCasaMatriz: boolean
     domicilio: Domicilio,
-    empresa: Empresa
+    empresa: Empresa,
 }

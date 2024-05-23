@@ -25,7 +25,7 @@ const router = createBrowserRouter(
 
       <Route path="dashboard" element={<DashboardLayout />} >
         <Route path="sucursales">
-          <Route index element={<SucursalCrud />} />
+          <Route index element={<Sucursales />} />
         </Route>
         <Route path="productos">
           <Route index element={<ProductosCrud />} loader={productosLoader} />
