@@ -1,3 +1,10 @@
+.title-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
 
 .card-container .card {
     flex-basis: 18rem;
@@ -24,6 +31,13 @@
     color: white;
     background-color: darkgrey;
     border: darkgray;
+}
+
+.filled-card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .filled-card-body:hover{

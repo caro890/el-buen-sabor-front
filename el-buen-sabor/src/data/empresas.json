@@ -97,5 +97,59 @@
       "logo": "",
       "sucursales": []
     }
+  ],
+  "sucursales": [
+      {
+        "id": 1,
+        "nombre": "En chacras",
+        "horarioApertura": "17:00:00",
+        "horarioCierre": "23:00:00",
+        "domicilio": {
+          "id": 1,
+          "calle": "Viamonte",
+          "numero": 500,
+          "cp": 5509,
+          "piso": 2,
+          "nroDpto": 23,
+          "localidad": {
+            "id": 1,
+            "nombre": "Lujan de Cuyo",
+            "provincia": {
+              "id": 1,
+              "nombre": "Mendoza",
+              "pais": {
+                "id": 1,
+                "nombre": "Argentina"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "nombre": "LKYT",
+        "horarioApertura": "16:00:00",
+        "horarioCierre": "23:30:00",
+        "domicilio": {
+          "id": 2,
+          "calle": "San Martin",
+          "numero": 789,
+          "cp": 5511,
+          "piso": null,
+          "nroDpto": null,
+          "localidad": {
+            "id": 2,
+            "nombre": "Godoy Cruz",
+            "provincia": {
+              "id": 1,
+              "nombre": "Mendoza",
+              "pais": {
+                "id": 1,
+                "nombre": "Argentina"
+              }
+            }
+          }
+        }
+      }
   ]
 }

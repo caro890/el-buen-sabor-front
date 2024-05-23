@@ -20,7 +20,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<RootLayout />}>
       <Route path="admin-console" >
         <Route index element={<Empresas />}></Route>
-        <Route path="sucursales/:id" element={<Sucursales/>}></Route>
+        <Route path="sucursales" element={<Sucursales/>}></Route>
       </Route>
 
       <Route path="dashboard" element={<DashboardLayout />} >

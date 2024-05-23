@@ -120,7 +120,7 @@ export const Empresas = () => {
 
   return (
     <div>
-      <Box>
+      <Box className="title-box">
         <Typography variant="h5" gutterBottom>
           ¿Con qué empresa quiere acceder?
         </Typography>
@@ -130,7 +130,7 @@ export const Empresas = () => {
         
         {empresas?.map((empresa: Empresa, index: number) => (
         <Card key={index} className="filled-card">
-          <Card.Body as={Link} onClick={() => hanldeEmpresaSelection(empresa)} to={"sucursales/"+empresa.id} className="filled-card-body">
+          <Card.Body as={Link} onClick={() => hanldeEmpresaSelection(empresa)} to={"sucursales"} className="filled-card-body">
             <Card.Img  className="img-fluid mb-2" variant="top" src={empresa.logo}  />
             <Card.Title>{empresa.nombre}</Card.Title>
             <Card.Text>
