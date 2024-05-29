@@ -1,32 +1,57 @@
-//import { useLoaderData } from "react-router"
-//import { Categoria } from "../../../types/Categoria";
-import { useLoaderData/*, useNavigate*/ } from "react-router";
+import { useLoaderData, useNavigate } from "react-router"
 import { CategoriaService } from "../../../services/CatogoriaService";
-import { Categoria } from "../../../types/Articulos/Categoria";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useEffect } from "react";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
-//import Swal from "sweetalert2";
-import { Form } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { Button, Form } from "react-bootstrap";
+import { cilPlus } from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
+import { Box, Typography } from "@mui/material";
+import { GenericTable } from "../../GenericTable/GenericTable";
+import { Categoria } from "../../../types/Articulos/Categoria";
 
 export const CategoriasCrud = () => {
-  //const categorias = useLoaderData() as Categoria[];
   const categorias = useLoaderData() as Categoria[];
   const dispatch = useAppDispatch();
-  //const navigate = useNavigate();
-  //const service: CategoriaService = new CategoriaService();
+  const navigate = useNavigate();
+  const service: CategoriaService = new CategoriaService();
 
   useEffect(() => {
     dispatch(setDataTable(categorias));
+    console.log(categorias);
   }, []);
 
-  /*const getCategorias = async () => {
+  const columnsTableCategorias = [
+    {
+      label: "Denominacion",
+      key: "denominacion"
+    },
+    {
+      label: "Categoría padre",
+      key: "categoriaPadre",
+      render: (categoria: Categoria) => {
+        if (categoria.categoriaPadre) {
+          return categoria.categoriaPadre.denominacion;
+        } else {
+          return "";
+        }
+      }
+    },
+    {
+      label: "Acciones",
+      key: "acciones"
+    }
+  ];
+
+
+  const getCategorias = async () => {
     await service.getAll().then((data) => {
       dispatch(setDataTable(data));
     });
-  };*/
+  };
 
-  /*const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     Swal.fire({
       title: "¿Estás seguro?",
       text: "¿Seguro que desea eliminar la categoría?",
@@ -44,27 +69,38 @@ export const CategoriasCrud = () => {
       }
     });
   };
-*/
+
   return (
-    <>
-      <div>CategoriasCrud</div>
+    <Box component="main" sx={{ flexGrow: 1, my: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
+        <Typography variant="h5" gutterBottom>
+          Categorías
+        </Typography>
+        <Button
+          sx={{
+            bgcolor: "#fb6376",
+            "&:hover": {
+              bgcolor: "#d73754",
+            },
+          }}
+          variant="contained"
+          startIcon={<CIcon icon={cilPlus} size="lg"></CIcon>}
+          onClick={() => navigate("form")}
+        >
+          NUEVO
+        </Button>
+      </Box>
 
+      <GenericTable<Categoria>
+        handleDelete={handleDelete}
+        columns={columnsTableCategorias}>
+      </GenericTable>
 
-
-      <Form.Select>
-        <option>Elija una categoría</option>
-        {categorias.map((categoria) => (
-          <option key={categoria.id} value={categoria.id}>
-            {categoria.denominacion}
-          </option>
-        ))}
-      </Form.Select>
-    </>
+    </Box>
   )
 }
 
 
-//loader function
 export const categoriasLoader = async () => {
   const service: CategoriaService = new CategoriaService();
   return service.getAll();

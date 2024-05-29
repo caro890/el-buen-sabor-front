@@ -49,6 +49,12 @@ const BasicSidebar: React.FC = () => {
                                 Categorías
                             </Link>
                         </CNavItem>
+                        <CNavItem>
+                            <Link to="unidadesmedida" className="nav-link">
+                                <span className="nav-icon"><span className="nav-icon-bullet"></span></span>
+                                Unidades de Medida
+                            </Link>
+                        </CNavItem>
                     </CNavGroup>
 
                     <CNavItem>

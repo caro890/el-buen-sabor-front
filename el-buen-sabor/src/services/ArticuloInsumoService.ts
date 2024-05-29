@@ -2,7 +2,7 @@ import { ArticuloInsumo } from "../types/Articulos/ArticuloInsumo";
 import { BackendClient, base } from "./BackendClient";
 
 export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
-    baseUrl: string = base + "articuloInsumo"; 
+    baseUrl: string = base + "articulosInsumos"; 
     
     //baseUrl: string = "http://localhost:8083/articuloInsumo"; 
 

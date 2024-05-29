@@ -3,13 +3,15 @@ import TableDataReducer from "./slices/TablaDataReducer"
 import IngredientesReducer from "./slices/IngredientesReducer";
 import EmpresaReducer from "./slices/EmpresaReducer";
 import SucursalReducer from "./slices/SucursalReducer";
+import SucursalesReducer from "./slices/SucursalesReducer";
 
 export const store = configureStore({
     reducer: {
         tableDataReducer: TableDataReducer,
         ingredientesReducer: IngredientesReducer,
         empresaReducer: EmpresaReducer,
-        sucursalRedurer: SucursalReducer
+        sucursalReducer: SucursalReducer,
+        sucursalesReducer: SucursalesReducer
     }
 })
 

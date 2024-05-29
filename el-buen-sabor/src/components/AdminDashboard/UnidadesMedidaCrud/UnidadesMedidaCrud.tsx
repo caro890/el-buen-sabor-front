@@ -2,26 +2,42 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../../../hooks/redux";
 import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
 import { UnidadMedida } from "../../../types/Articulos/UnidadMedida";
-import { useLoaderData/*, useNavigate*/ } from "react-router";
+import {
+    useLoaderData,/*, useNavigate*/
+    useNavigate
+} from "react-router";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 //import Swal from "sweetalert2";
-import { Form/*, Col, Row, Button, InputGroup, Dropdown, DropdownButton*/ } from "react-bootstrap";
+import { Button, Form/*, Col, Row, Button, InputGroup, Dropdown, DropdownButton*/ } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { cilPlus } from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
+import { Box, Typography } from "@mui/material";
+import { GenericTable } from "../../GenericTable/GenericTable";
 
 export const UnidadesMedidaCrud = () => {
     const unidadesMedida = useLoaderData() as UnidadMedida[];
     const dispatch = useAppDispatch();
-    //const navigate = useNavigate();
-    //const service: UnidadMedidaService = new UnidadMedidaService();
+    const navigate = useNavigate();
+    const service: UnidadMedidaService = new UnidadMedidaService();
 
     useEffect(() => {
         dispatch(setDataTable(unidadesMedida));
     }, []);
 
-    /*const getUnidadesMedida = async () => {
+    const columnsTableUnidadesMedida = [
+        {
+            label: "Denominacion",
+            key: "denominacion"
+        }
+    ];
+
+    const getUnidadesMedida = async () => {
         await service.getAll().then((data) => {
             dispatch(setDataTable(data));
         });
     };
+
 
     const handleDelete = async (id: number) => {
         Swal.fire({
@@ -40,22 +56,34 @@ export const UnidadesMedidaCrud = () => {
                 });
             }
         });
-    };*/
+    };
 
     return (
-        <>
-            <div>UnidadMedidaCrud</div>
+        <Box component="main" sx={{ flexGrow: 1, my: 2 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
+                <Typography variant="h5" gutterBottom>
+                    Productos
+                </Typography>
+                <Button
+                    sx={{
+                        bgcolor: "#fb6376",
+                        "&:hover": {
+                            bgcolor: "#d73754",
+                        },
+                    }}
+                    variant="contained"
+                    startIcon={<CIcon icon={cilPlus} size="lg"></CIcon>}
+                    onClick={() => navigate("form")}
+                >
+                    NUEVO
+                </Button>
+            </Box>
+            <GenericTable<UnidadMedida>
+                handleDelete={handleDelete}
+                columns={columnsTableUnidadesMedida}>
+            </GenericTable>
 
-            <Form.Select>
-                <option>Elija una unidad de medida</option>
-                {unidadesMedida.map((unidadMedida) => (
-                    <option key={unidadMedida.id} value={unidadMedida.id}>
-                        {unidadMedida.denominacion}
-                    </option>
-                ))}
-            </Form.Select>
-
-        </>
+        </Box>
     )
 }
 

@@ -4,7 +4,7 @@ export abstract class AbstractBackendClient<T> {
 
   abstract getAll(): Promise<T[]>;
 
-  abstract getById(id: number): Promise<T | null>;
+  abstract getById(id: number): Promise<T | undefined>;
 
   abstract post(data: T): Promise<T>;
   

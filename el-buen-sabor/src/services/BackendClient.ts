@@ -1,9 +1,9 @@
 import { AbstractBackendClient } from "./AbstractBackendClient";
 
-export const base = import.meta.env.VITE_BASE_URL;
+// export const base = import.meta.env.VITE_BASE_URL;
+export const base: string = "http://localhost:8092/";
 
 export abstract class BackendClient<T> extends AbstractBackendClient<T> {
-  baseUrl: string = "";
 
   async getAll(): Promise<T[]> {
     const response = await fetch(`${this.baseUrl}`);
@@ -11,10 +11,10 @@ export abstract class BackendClient<T> extends AbstractBackendClient<T> {
     return data as T[];
   }
 
-  async getById(id: number): Promise<T | null> {
+  async getById(id: number): Promise<T | undefined> {
     const response = await fetch(`${this.baseUrl}/${id}`);
     if (!response.ok) {
-      return null;
+      return undefined;
     }
     const data = await response.json();
     return data as T;

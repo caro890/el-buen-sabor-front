@@ -2,7 +2,7 @@ import { Provincia } from "../types/Domicilio/Provincia";
 import { BackendClient, base } from "./BackendClient";
 
 export class ProvinciaService extends BackendClient<Provincia> {
-    baseUrl: string = base + "provincia"; 
+    baseUrl: string = base + "provincias"; 
      
     //baseUrl: string = "http://localhost:8083/provincia"; 
 

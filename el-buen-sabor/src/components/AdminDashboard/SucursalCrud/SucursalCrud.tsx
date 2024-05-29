@@ -1,6 +1,7 @@
 import { SucursalesList } from "../../AdminConsole/Sucursales/SucursalesList"
 import "../../../styles/SucursalCrud.module.css"
 import { Typography, Box } from "@mui/material"
+import { SucursalService } from "../../../services/SucursalService"
 
 export const SucursalCrud = () => {
   return (
@@ -15,4 +16,9 @@ export const SucursalCrud = () => {
       </div>
     </div>
   )
+}
+
+export const sucursalesLoader = async () => {
+  const service: SucursalService = new SucursalService();
+  return service.getAll();
 }

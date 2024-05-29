@@ -2,7 +2,7 @@ import { Sucursal } from "../types/Empresas/Sucursal";
 import { BackendClient, base } from "./BackendClient";
 
 export class SucursalService extends BackendClient<Sucursal> {
-    baseUrl: string = base + "sucursal";
+    baseUrl: string = base + "sucursales";
     //baseUrl: string = "http://localhost:8083/sucursal";
 
     async findByEmpresaId(idEmpresa: number): Promise<Sucursal[]>{

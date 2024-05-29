@@ -11,8 +11,10 @@ import { getProvinciasPorPaisId } from "../../AdminDashboard/DomicilioCrud/Provi
 import { Localidad } from "../../../types/Domicilio/Localidad";
 import { getLocalidadesPorProvinciaId } from "../../AdminDashboard/DomicilioCrud/LocalidadesCrud";
 import { useSelector } from "react-redux";
-import { Empresa } from "../../../types/Empresas/Empresa";
 import { RootState } from "../../../redux/store";
+import { EmpresaService } from "../../../services/EmpresaService";
+import { Empresa } from "../../../types/Empresas/Empresa";
+
 
 interface IPropsSucursalForm {
     saveChanges: (suc: Sucursal) => void;
@@ -60,6 +62,15 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
         validationSchema: validationSchema,
 
         onSubmit: (values) => {
+            let tieneCasaMatriz = empresa?.sucursales.some(s => s.esCasaMatriz);
+
+            if (esCasaMatriz && tieneCasaMatriz) {
+                alert("La empresa ya tiene una casa matriz.");
+                return;
+            }
+
+            tieneCasaMatriz = true;
+
             //manejar valores y armar objetos internos
             const paisEncontrado = paises.find((p) => p.id === parseInt(paisSelected));
             const provinciaEncontrada = provincias.find((pr) => pr.id === parseInt(provinciaSelected));
@@ -86,6 +97,8 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
         }
     });
 
+
+
     const [paises, setPaises] = useState<Pais[]>([]);
     const [paisSelected, setPaisSelected] = useState('');
 
@@ -97,6 +110,8 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
     const [localidadSelected, setLocalidadSelected] = useState('');
 
     const [esCasaMatriz, setEsCasaMatriz] = useState(false);
+    const [tieneCasaMatriz, setTieneCasaMatriz] = useState(false);
+
 
 
 
@@ -140,8 +155,14 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
 
     useEffect(() => {
         if (emp) setEmpresa(emp);
+    }, []);
 
-    }, [emp]);
+    useEffect(() => {
+        if (emp) {
+            setTieneCasaMatriz(emp?.sucursales.some(sucursal => sucursal.esCasaMatriz));
+        }
+    }, [esCasaMatriz]);
+
 
 
     const handlePaisChange = async (event: { target: { value: any; }; }) => {
@@ -182,8 +203,21 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
     }
 
     const handleEsCasaMatrizChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
+
+
+        if (tieneCasaMatriz && event.target.checked) {
+            alert("La sucursal ya tiene una casa matriz.");
+            return;
+        }
+
         setEsCasaMatriz(event.target.checked);
-    };
+        formik.setFieldValue('esCasaMatriz', event.target.checked);
+        setTieneCasaMatriz(event.target.checked);
+    }
+
+
+
+
 
     return (
         <div>
@@ -241,7 +275,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
                             type="checkbox"
                             label="Es Casa Matriz"
                             name="esCasaMatriz"
-                            checked={esCasaMatriz}
+                            checked={formik.values.esCasaMatriz}
                             onChange={handleEsCasaMatrizChange}
                         />
                     </Form.Group>

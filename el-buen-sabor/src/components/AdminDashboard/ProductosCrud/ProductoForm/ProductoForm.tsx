@@ -32,7 +32,7 @@ export const ProductoForm = () => {
   const [insumos, setInsumos] = useState<ArticuloInsumo[]>([]);
 
   //Estado  para controlar la ventana modals
-  const [openModal, setOpenModal] = useState<boolean>(false);  
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [unidadMedidaSelected, setUnidadMedidaSelected] = useState('');
 
   const [categoriaSelected, setCategoriaSelected] = useState('');
@@ -69,23 +69,23 @@ export const ProductoForm = () => {
     });
 
     dispatch(setIngredientes(arrayI));
-  },[]);
+  }, []);
 
   //cargar los insumos como detalles
   useEffect(() => {
-      var array: ArticuloManufacturadoDetalle[] = details.slice();
-      ingredientes.forEach((item) => {
-        var found = array.some(function(element) { 
-          return element.articuloInsumo.id === item.id; 
-        });
-
-        if(!found){
-          var detalle: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
-          detalle.articuloInsumo = item;
-          array.push(detalle);
-        }
+    var array: ArticuloManufacturadoDetalle[] = details.slice();
+    ingredientes.forEach((item) => {
+      var found = array.some(function (element) {
+        return element.articuloInsumo.id === item.id;
       });
-      
+
+      if (!found) {
+        var detalle: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
+        detalle.articuloInsumo = item;
+        array.push(detalle);
+      }
+    });
+
     /*ingredientes.forEach((item, index)=>{
       var detalle: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
       detalle.articuloInsumo = item;
@@ -115,7 +115,7 @@ export const ProductoForm = () => {
   //insumos
   useEffect(() => {
     serviceInsumo.getInsumosParaElaborar().then((data) => {
-      if(data) setInsumos(data);
+      if (data) setInsumos(data);
     });
   }, []);
 
@@ -170,21 +170,21 @@ export const ProductoForm = () => {
     // alert();
 
 
-    
+
 
 
     var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
-    var found = arrayAux.some(function(element) { 
-      return element.cantidad === 0; 
+    var found = arrayAux.some(function (element) {
+      return element.cantidad === 0;
     });
 
-    if(found){
+    if (found) {
       alert("Los ingredientes no pueden tener cantidad cero");
       return;
     }
 
     //logica guardado detalles
-    producto.articuloManufacturadoDetalles = details; 
+    producto.articuloManufacturadoDetalles = details;
     console.log(producto.articuloManufacturadoDetalles);
 
 
@@ -204,27 +204,27 @@ export const ProductoForm = () => {
   const handleChangeAmount = (e: any, art: ArticuloManufacturadoDetalle) => {
     try {
       var amount = e.target.value;
-      if(amount > 0) {
-      //busco el detalle en el arreglo
-      var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
-      var f: number = 0;
-      var found = arrayAux.some(function(element, index) { 
-        f = index; return element.articuloInsumo === art.articuloInsumo; 
-      });
-      //lo  obtengo del arreglo
-      if(found){
-        var aux: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
-        var detalle = arrayAux.splice(f, 1);
-        detalle.forEach(( item)=>{
-          aux.createFrom(item);
+      if (amount > 0) {
+        //busco el detalle en el arreglo
+        var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
+        var f: number = 0;
+        var found = arrayAux.some(function (element, index) {
+          f = index; return element.articuloInsumo === art.articuloInsumo;
         });
-        aux.cantidad = amount;
+        //lo  obtengo del arreglo
+        if (found) {
+          var aux: ArticuloManufacturadoDetalle = new ArticuloManufacturadoDetalle();
+          var detalle = arrayAux.splice(f, 1);
+          detalle.forEach((item) => {
+            aux.createFrom(item);
+          });
+          aux.cantidad = amount;
 
-        arrayAux.splice(f, 0, aux);
-        setDetails(arrayAux);
+          arrayAux.splice(f, 0, aux);
+          setDetails(arrayAux);
+        }
       }
-    }
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   };
@@ -232,98 +232,98 @@ export const ProductoForm = () => {
   const deleteIngrediente = (a: ArticuloManufacturadoDetalle) => {
     var arrayAux: ArticuloManufacturadoDetalle[] = details.slice();
     var f: number = 0;
-    var found = arrayAux.some(function(element, index) { 
-      f = index; return element.articuloInsumo === a.articuloInsumo; 
+    var found = arrayAux.some(function (element, index) {
+      f = index; return element.articuloInsumo === a.articuloInsumo;
     });
 
-    if(found){
+    if (found) {
       arrayAux.splice(f, 1);
 
       setDetails(arrayAux);
       //dispatch(removeIngrediente({element: a.articuloInsumo}));
     }
-    
+
   };
 
   return (
     <div className="w-100">
-        <div className="header-box mb-3">
-          <Typography variant="h5" gutterBottom>
-            {`${id ? "Editar" : "Crear"} un producto`}
-          </Typography>
-          <Button type="button" onClick={() => { navigate("..") }} style={{ color: "black", backgroundColor: "var(--itemsColor)", border: "var(--itemsColor)" }}><CIcon icon={cilArrowLeft} size="lg"></CIcon> VOLVER</Button>
-        </div>
-        
-          <Form className="w-100" >
-            <Form.Group as={Row} className="mb-3" controlId="denominacion">
-              <Form.Label column sm={2}>
-                Denominación
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control required type="text" placeholder="Denominación" defaultValue={producto?.denominacion} onChange={e => producto.denominacion = String(e.target.value)} />
-              </Col>
-            </Form.Group>
+      <div className="header-box mb-3">
+        <Typography variant="h5" gutterBottom>
+          {`${id ? "Editar" : "Crear"} un producto`}
+        </Typography>
+        <Button type="button" onClick={() => { navigate("..") }} style={{ color: "black", backgroundColor: "var(--itemsColor)", border: "var(--itemsColor)" }}><CIcon icon={cilArrowLeft} size="lg"></CIcon> VOLVER</Button>
+      </div>
 
-            <Form.Group as={Row} className="mb-3" controlId="codigo">
-              <Form.Label column sm={2}>
-                Código
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control required type="number" placeholder="Código" value={codigoSelected} onChange={handleCodigoChange} />
-              </Col>
-            </Form.Group>
+      <Form className="w-100" >
+        <Form.Group as={Row} className="mb-3" controlId="denominacion">
+          <Form.Label column sm={2}>
+            Denominación
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control required type="text" placeholder="Denominación" defaultValue={producto?.denominacion} onChange={e => producto.denominacion = String(e.target.value)} />
+          </Col>
+        </Form.Group>
 
-            <Form.Group as={Row} className="mb-3" controlId="descripcion">
-              <Form.Label column sm={2}>
-                Descripción
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control as="textarea" placeholder="Descripción" defaultValue={producto?.descripcion} onChange={e => producto.descripcion = String(e.target.value)} />
-              </Col>
-            </Form.Group>
+        <Form.Group as={Row} className="mb-3" controlId="codigo">
+          <Form.Label column sm={2}>
+            Código
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control required type="number" placeholder="Código" value={codigoSelected} onChange={handleCodigoChange} />
+          </Col>
+        </Form.Group>
 
-            <Form.Group as={Row} className="mb-3" controlId="precioVenta">
-              <Form.Label column sm={2}>
-                Precio de Venta
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control type="number" placeholder="Precio de venta" value={precioVentaSelected} onChange={handlePrecioVentaChange} />
-              </Col>
-            </Form.Group>
+        <Form.Group as={Row} className="mb-3" controlId="descripcion">
+          <Form.Label column sm={2}>
+            Descripción
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control as="textarea" placeholder="Descripción" defaultValue={producto?.descripcion} onChange={e => producto.descripcion = String(e.target.value)} />
+          </Col>
+        </Form.Group>
 
-            <Form.Group as={Row} className="mb-3" selectid="categoria">
-              <Form.Label column sm={2}>
-                Categoría
-              </Form.Label>
-              <Col sm={10}>
+        <Form.Group as={Row} className="mb-3" controlId="precioVenta">
+          <Form.Label column sm={2}>
+            Precio de Venta
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control type="number" placeholder="Precio de venta" value={precioVentaSelected} onChange={handlePrecioVentaChange} />
+          </Col>
+        </Form.Group>
 
-                <Form.Select value={categoriaSelected} onChange={handleCategoriaChange}>
-                  <option value="0">Elija una categoría</option>
-                  {categorias.map((categoria) => (
-                    <option key={categoria.id} value={categoria.id}>
-                      {categoria.denominacion}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Col>
-            </Form.Group>
+        <Form.Group as={Row} className="mb-3" selectid="categoria">
+          <Form.Label column sm={2}>
+            Categoría
+          </Form.Label>
+          <Col sm={10}>
 
-            <Form.Group as={Row} className="mb-4" selectid="unidadMedida">
-              <Form.Label column sm={2}>
-                Unidad de Medida
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Select value={unidadMedidaSelected} onChange={handleUnidadMedidaChange}>
-                  <option value="0">Elija una unidad de medida</option>
-                  {unidadesMedida.map((unidadMedida) => (
-                    <option key={unidadMedida.id} value={unidadMedida.id}>
-                      {unidadMedida.denominacion}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Col>
-            </Form.Group>
-            {/*}
+            <Form.Select value={categoriaSelected} onChange={handleCategoriaChange}>
+              <option value="0">Elija una categoría</option>
+              {categorias.map((categoria) => (
+                <option key={categoria.id} value={categoria.id}>
+                  {categoria.denominacion}
+                </option>
+              ))}
+            </Form.Select>
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-4" selectid="unidadMedida">
+          <Form.Label column sm={2}>
+            Unidad de Medida
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Select value={unidadMedidaSelected} onChange={handleUnidadMedidaChange}>
+              <option value="0">Elija una unidad de medida</option>
+              {unidadesMedida.map((unidadMedida) => (
+                <option key={unidadMedida.id} value={unidadMedida.id}>
+                  {unidadMedida.denominacion}
+                </option>
+              ))}
+            </Form.Select>
+          </Col>
+        </Form.Group>
+        {/*}
           <Typography variant="h6" gutterBottom>
             Imagenes
           </Typography>
@@ -337,69 +337,69 @@ export const ProductoForm = () => {
             </Col>
           </Form.Group>
           */}
-            <Typography variant="h6" gutterBottom>
-              Preparación e ingredientes
-            </Typography>
+        <Typography variant="h6" gutterBottom>
+          Preparación e ingredientes
+        </Typography>
 
-            <Form.Group as={Row} className="mb-3" controlId="preparacion">
-              <Form.Label column sm={2}>
-                Preparación
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control as="textarea" placeholder="Preparación" defaultValue={producto?.preparacion} onChange={e => producto.preparacion = String(e.target.value)} />
+        <Form.Group as={Row} className="mb-3" controlId="preparacion">
+          <Form.Label column sm={2}>
+            Preparación
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control as="textarea" placeholder="Preparación" defaultValue={producto?.preparacion} onChange={e => producto.preparacion = String(e.target.value)} />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3" controlId="tiempoEstimadoMinutos">
+          <Form.Label column sm={2}>
+            Tiempo estimado de preparación
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control type="number" placeholder="Tiempo estimado de preparación" value={tiempoEstimadoSelected} onChange={handleTiempoEstimadoChange} />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-4">
+          <Form.Label column sm={2}>
+            Ingredientes
+          </Form.Label>
+          <Col sm={3}>
+            <Button type="button" className="btnAdd" onClick={() => { setOpenModal(true) }} >Agregar</Button>
+          </Col>
+        </Form.Group>
+
+        <Container>
+          {details?.map((art: ArticuloManufacturadoDetalle, index: number) =>
+            <Row key={index} className="mb-3">
+              <Col>
+                {art.articuloInsumo.denominacion}
               </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3" controlId="tiempoEstimadoMinutos">
-              <Form.Label column sm={2}>
-                Tiempo estimado de preparación
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Control type="number" placeholder="Tiempo estimado de preparación" value={tiempoEstimadoSelected} onChange={handleTiempoEstimadoChange} />
+              <Col>
+                <Form.Control className="mb-3" type="number" onChange={(e) => handleChangeAmount(e, art)}></Form.Control>
               </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-4">
-              <Form.Label column sm={2}>
-                Ingredientes
-              </Form.Label>
-              <Col sm={3}>
-                <Button type="button" className="btnAdd" onClick={() => {setOpenModal(true)}} >Agregar</Button>
+              <Col>
+                {art.cantidad} {art.articuloInsumo.unidadMedida.denominacion}
               </Col>
-            </Form.Group>
-
-            <Container>
-              {details?.map((art: ArticuloManufacturadoDetalle, index: number) =>
-                <Row key={index} className="mb-3">
-                  <Col>
-                    {art.articuloInsumo.denominacion}
-                  </Col>
-                  <Col>
-                     <Form.Control className="mb-3" type="number" onChange={(e) => handleChangeAmount(e, art)}></Form.Control>
-                  </Col>
-                  <Col>
-                    {art.cantidad} {art.articuloInsumo.unidadMedida.denominacion}
-                  </Col>
-                  <Col>
-                    <Button className="btn btn-danger mb-3" onClick={() => {deleteIngrediente(art)}}>Eliminar</Button>
-                  </Col>
-                  <span></span>
-                </Row>
-                
-              )}
-            </Container>
-
-            <Form.Group as={Row} className="mb-3">
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button onClick={save} type="button">CONFIRMAR</Button>
+              <Col>
+                <Button className="btn btn-danger mb-3" onClick={() => { deleteIngrediente(art) }}>Eliminar</Button>
               </Col>
-            </Form.Group>
-          </Form>
-        <ProductModalSearch 
-          open={openModal} 
-          handleClose={async () => {setOpenModal(false)}} 
-          options={insumos}>
-        </ProductModalSearch>
-    </div>  
+              <span></span>
+            </Row>
+
+          )}
+        </Container>
+
+        <Form.Group as={Row} className="mb-3">
+          <Col sm={{ span: 10, offset: 2 }}>
+            <Button onClick={save} type="button">CONFIRMAR</Button>
+          </Col>
+        </Form.Group>
+      </Form>
+      <ProductModalSearch
+        open={openModal}
+        handleClose={async () => { setOpenModal(false) }}
+        options={insumos}>
+      </ProductModalSearch>
+    </div>
   )
 }
