@@ -3,7 +3,9 @@ import { Sucursal } from "../Empresas/Sucursal";
 
 export class Categoria extends Base{
     denominacion: string = "";
-    categoriaPadre?: Categoria;
+    categoriaPadre?: number;
     hijos?: Categoria[];
-    sucursales?: Sucursal[];
+    esInsumo: boolean = false;
+    //solo pasar ids
+    sucursales?: number[];
 }

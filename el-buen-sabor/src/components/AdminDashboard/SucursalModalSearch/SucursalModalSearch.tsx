@@ -63,7 +63,7 @@ export const SucursalModalSearch: FC<IPropsSucursalModalSearch> = ({ open, handl
           {filteredData ? filteredData.map((option: Sucursal, index: number) => (
             <Row key={index}>
               <Col md="auto">
-                <Form.Check radioGroup="seleccionados" aria-label={option.nombre} name={String(option.id)} onChange={(e) => handleCheckButtonChange(option, e.target.checked)} />
+                <Form.Check radioGroup="seleccionados" checked aria-label={option.nombre} name={String(option.id)} onChange={(e) => handleCheckButtonChange(option, e.target.checked)} />
               </Col>
               <Col md="6">
                 {option.nombre}

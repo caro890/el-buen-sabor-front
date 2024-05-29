@@ -22,16 +22,23 @@ export const CategoriaForm = () => {
   const [categoria, setCategoria] = useState<Categoria>(new Categoria());
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
-  const [categoriaPadreSelected, setCategoriaPadreSelected] = useState('');
+  const [categoriaPadreSelected, setCategoriaPadreSelected] = useState(0);
 
 
   const [sucursales, setSucursales] = useState<Sucursal[]>([]);
-  const sucursalesSelected = useAppSelector((state) => (state.sucursalesReducer.sucursalesSelected));
+  const [sucursalesSelected, setSucursalesSelected] = useState<Sucursal[]>([]);
 
+
+  const [filteredData, setFilteredData] = useState<Sucursal[]>([]);
+
+
+  const [esInsumo, setEsInsumo] = useState<boolean>(false);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-
+  useEffect(() => {
+    setFilteredData(sucursales);
+  }, [sucursales]);
 
   useEffect(() => {
     if (id) {
@@ -39,10 +46,14 @@ export const CategoriaForm = () => {
         var c = data as Categoria;
 
         if (c.categoriaPadre)
-          setCategoriaPadreSelected(c.categoriaPadre.id.toString());
+          setCategoriaPadreSelected(c.categoriaPadre);
 
         if (c.sucursales)
-          setSucursalesSelected(c.sucursales);
+          setSucursalesSelected(sucursales);
+
+        setEsInsumo(c.esInsumo);
+
+        alert(JSON.stringify(sucursalesSelected));
 
 
         setCategoria(c);
@@ -72,47 +83,72 @@ export const CategoriaForm = () => {
     loadCategorias();
   }, []);
 
+  const handleChangeDenominacion = (value: string) => {
+    const results = sucursales.filter(
+      option => (option.nombre?.toString().toUpperCase().includes(value.toUpperCase()))
+    );
+    setFilteredData(results);
+  };
 
-  const handleSucursalChange = (event: {
-    target: {
-      options: any; value: any;
-    };
-  }) => {
-    const options = event.target.options;
-    const values: Sucursal[] = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        values.push(options[i].value);
-      }
+  const handleCheckButtonChange = (item: Sucursal, checked: boolean) => {
+    var aux: Sucursal[] = sucursalesSelected.slice();
+    var f = 0;
+    var found = aux.some(function (element, index) { f = index; return element.id == item.id; });
+
+    if (checked) {
+      if (!found)
+        aux.push(item);
+    } else {
+      if (found)
+        aux.splice(f, 1);
     }
-    setSucursalesSelected(values);
-  }
+    setSucursalesSelected(aux);
+  };
+
 
 
   const handleCategoriaPadreChange = (event: { target: { value: any; }; }) => {
     const selectedCategoriaPadreId = event.target.value;
     const selectedCategoria = categorias.find((cat) => cat.id == selectedCategoriaPadreId);
     if (selectedCategoria && selectedCategoria.denominacion) {
-      categoria.categoriaPadre = selectedCategoria;
+      categoria.categoriaPadre = selectedCategoriaPadreId;
     } else {
-      categoria.categoriaPadre = new Categoria();
+      categoria.categoriaPadre = 0;
     };
-    setCategoriaPadreSelected(categoria.categoriaPadre.id.toString());
+
+    if (categoria.categoriaPadre)
+      setCategoriaPadreSelected(categoria.categoriaPadre);
   }
 
-  const deleteSucursal = (s: Sucursal) => {
 
+  const handleEsInsumoChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
+    setEsInsumo(event.target.checked);
+  }
 
-  };
 
   //formulario
   const save = async () => {
 
 
+    categoria.sucursales = sucursalesSelected.map(s => s.id);
+    categoria.esInsumo = esInsumo;
+    // if(categoria.categoriaPadre)
+    //   categoria.idCategoriaPadre = categoria.categoriaPadre.id;
+
+
+    if (categoria.denominacion.length <= 0) {
+      alert("Debes completar el nombre de la categoría.")
+      return;
+    }
+
+
+    if (categoria.sucursales.length <= 0) {
+      alert("Debes seleccionar al menos una sucursal.")
+      return;
+    }
 
     await service.post(categoria);
     navigate('/dashboard/categorias');
-
   }
 
   return (
@@ -151,32 +187,55 @@ export const CategoriaForm = () => {
           </Col>
         </Form.Group>
 
+        <Form.Group as={Col} controlId="esInsumo">
+          <Form.Check
+            type="checkbox"
+            label="Es Insumo"
+            name="esInsumo"
+            checked={esInsumo}
+            onChange={handleEsInsumoChange}
+          />
+        </Form.Group>
+
         <Form.Group as={Row} className="mb-4">
           <Form.Label column sm={2}>
             Sucursales
           </Form.Label>
-          <Col sm={3}>
-            <Button type="button" className="btnAdd" onClick={() => { setOpenModal(true) }} >Agregar</Button>
-          </Col>
+
+          {filteredData ?
+            <Container className="search-container mb-3">
+              <Form.Control
+                className="search"
+                aria-label="denominacion"
+                placeholder="Denominación"
+                onChange={(e: { target: { value: string; }; }) => { handleChangeDenominacion(e.target.value) }} />
+            </Container>
+            : null}
+          <Container className="grid-container">
+            {filteredData ? filteredData.map((option: Sucursal, index: number) => (
+              <Row key={index}>
+                <Col md="auto">
+                  <Form.Check radioGroup="seleccionados"
+                    aria-label={option.nombre}
+                    name={String(option.id)}
+                    onChange={(e) => handleCheckButtonChange(option, e.target.checked)}
+                    checked={sucursalesSelected.some(selected => selected.id === option.id)}
+                  />
+                </Col>
+                <Col md="6">
+                  {option.nombre}
+                </Col>
+              </Row>
+            )) :
+              <Row>
+                <Col>
+                  {sucursales ? <p>Ninguna sucursal concuerda con la búsqueda</p> : <p>No hay sucursales para agregar</p>}
+                </Col>
+              </Row>
+            }
+          </Container>
+
         </Form.Group>
-
-        <Container>
-          {sucursalesSelected?.map((suc: Sucursal, index: number) =>
-            <Row key={index} className="mb-3">
-              <Col>
-                {suc.nombre}
-              </Col>
-              <Col>
-                <Button className="btn btn-danger mb-3" onClick={() => { deleteSucursal(suc) }}>Eliminar</Button>
-              </Col>
-              <span></span>
-            </Row>
-
-          )}
-        </Container>
-
-
-
 
         <Form.Group as={Row} className="mb-3">
           <Col sm={{ span: 10, offset: 2 }}>
