@@ -9,11 +9,11 @@ import { Typography } from "@mui/material";
 import { UnidadMedida } from "../../../../types/Articulos/UnidadMedida";
 import { Categoria } from "../../../../types/Articulos/Categoria";
 import { unidadesMedidaLoader } from "../../UnidadesMedidaCrud/UnidadesMedidaCrud";
-import { categoriasLoader } from "../../CategoriasCrud/CategoriasCrud";
 import styles from "../../../../styles/InsumosForm.module.css"
 import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
 import { useNavigate } from "react-router";
+import { CategoriaService } from "../../../../services/CatogoriaService";
 
 //objeto de insumo vacio
 const insumoVacio = {
@@ -26,6 +26,7 @@ const insumoVacio = {
   stockMaximo: 0,
   esParaElaborar: false,
   codigo: "",
+  imagenes: [],
   unidadMedida: {
     id: 0,
     eliminado: false,
@@ -34,7 +35,8 @@ const insumoVacio = {
   categoria: {
     id: 0,
     eliminado: false,
-    denominacion: ""
+    denominacion: "",
+    esInsumo: true
   }
 }
 
@@ -78,12 +80,12 @@ export const InsumosForm = () => {
 
   //servicio de articulo insumos
   const service = new ArticuloInsumoService();
+  //servicio de categoria
+  const serviceCat = new CategoriaService();
 
   //cargo el insumo en el estado
   useEffect(() => {
     setInsumo(insumoSeleccionado);
-    console.log(insumoSeleccionado);
-    console.log(insumo);
   }, []);
 
   //cargo las unidades de medida y las categorias
@@ -91,7 +93,8 @@ export const InsumosForm = () => {
     unidadesMedidaLoader().then((data) =>
       setUnidades(data)
     )
-    categoriasLoader().then((data) =>
+    
+    serviceCat.getAllInsumo().then((data) =>
       setCategorias(data)
     )
   }, []);
@@ -298,7 +301,6 @@ export const insumoLoader: LoaderFunction = async ({params}) => {
 
   if(id) {  //si recibo una id de la url, cargo el insumo desde la api
     var res = await service.getById(Number(id));
-    console.log(res);
     return res;
   } else {  //sino devuelvo el insumo vacio
     return insumoVacio;

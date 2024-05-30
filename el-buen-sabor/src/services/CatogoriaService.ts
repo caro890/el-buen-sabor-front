@@ -19,4 +19,16 @@ export class CategoriaService extends BackendClient<Categoria> {
       const newData = await response.json();
       return newData as CategoriaCreate;
     }
+
+  async getAllInsumo(): Promise<Categoria[]> {
+    const response = await fetch(`${this.baseUrl}` + "/categoriasInsumos");
+    const data = await response.json();
+    return data as Categoria[];
+  }    
+
+  async getAllManufacturado(): Promise<Categoria[]> {
+    const response = await fetch(`${this.baseUrl}` + "/categoriasManufacturados");
+    const data = await response.json();
+    return data as Categoria[];
+  }
 }
