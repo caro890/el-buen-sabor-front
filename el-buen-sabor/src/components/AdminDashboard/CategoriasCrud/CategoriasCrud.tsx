@@ -4,10 +4,9 @@ import { useAppDispatch } from "../../../hooks/redux";
 import { useEffect } from "react";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
 import Swal from "sweetalert2";
-import { Button, Form } from "react-bootstrap";
 import { cilPlus } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { GenericTable } from "../../GenericTable/GenericTable";
 import { Categoria } from "../../../types/Articulos/Categoria";
 

@@ -1,0 +1,27 @@
+.mainBox {
+    width: 100%;
+    margin: 0;
+    font-size:large;
+}
+
+.headerBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.formBox {
+    text-align: left;
+}
+
+.formBox input {
+    font-size: large;
+}
+
+.formBox select {
+    font-size: large;
+}
+
+

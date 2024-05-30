@@ -1,10 +1,9 @@
 import { useLoaderData, useNavigate } from "react-router"
 import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
 import { useAppDispatch } from "../../../hooks/redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArticuloInsumo } from "../../../types/Articulos/ArticuloInsumo";
-import { setDataTable } from "../../../redux/slices/TablaDataReducer";
-import formatPrice from "../../../types/formats/priceFormat";
+import { removeElementActive, setDataTable } from "../../../redux/slices/TablaDataReducer";
 import formatCantidad from "../../../types/formats/stockCantidadFormat";
 import formatBoolean from "../../../types/formats/booleanFormat";
 import Swal from "sweetalert2";
@@ -12,82 +11,40 @@ import { GenericTable } from "../../GenericTable/GenericTable";
 import { Box, Typography, Button, Container} from "@mui/material";
 import CIcon from "@coreui/icons-react"
 import { cilPlus } from "@coreui/icons"
-import formatImage from "../../../types/formats/imageFormat";
+import { InsumoDetailModal } from "./InsumoDetailModal/InsumoDetailModal";
 
 export const InsumosCrud = () => {
+  //recibo la lista de insumos de la funcion loader
   const insumos = useLoaderData() as ArticuloInsumo[];
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [showDetail, setShowDetail] = useState<boolean>(false);
+
+  //servicio para interactuar con la api
   const service: ArticuloInsumoService = new ArticuloInsumoService();
 
+  //seteo el estado global data table con el array de insumos
   useEffect(() => {
     dispatch(setDataTable(insumos));
   }, []);
 
+  //defino las columnas de la tabla de insumos y si corresponde, un metodo para renderizar los valores
   const columnsTableInsumos = [
+    {
+      label: "Código",
+      key: "codigo"
+    },
     {
       label: "Denominacion",
       key: "denominacion"
-    },
-    {
-      label: "Precio de Venta",
-      key: "precioVenta",
-      render: (insumo: ArticuloInsumo) => {
-        return formatPrice(insumo.precioVenta);
-      }
-    },
-    {
-      label: "Imagenes",
-      key: "imagenes",
-      render: (insumo: ArticuloInsumo) => {
-        if(insumo.imagenes){
-          return formatImage(insumo.imagenes[0].url);
-        } else {
-          return "";
-        }
-      }
-    },
-    {
-      label: "Unidad de Medida",
-      key: "unidadMedida",
-      render: (insumo: ArticuloInsumo) => {
-        if(insumo.unidadMedida){
-          return insumo.unidadMedida.denominacion;
-        } else {
-          return "";
-        }
-      }
-    },
-    {
-      label: "Categoria",
-      key: "categoria",
-      render: (insumo: ArticuloInsumo) => {
-        if(insumo.categoria){
-          return insumo.categoria.denominacion;
-        } else {
-          return "";
-        }
-      }
-    },
-    {
-      "label": "Precio Compra",
-      "key": "precioCompra",
-      render: (insumo: ArticuloInsumo) => {
-        return formatPrice(insumo.precioCompra);
-      }
     },
     {
       "label": "Stock Actual",
       "key": "stockActual",
       render: (insumo: ArticuloInsumo) => {
         return formatCantidad(insumo.stockActual, insumo.unidadMedida);
-      }
-    },
-    {
-      "label": "Stock Máximo",
-      "key": "stockMaximo",
-      render: (insumo: ArticuloInsumo) => {
-        return formatCantidad(insumo.stockMaximo, insumo.unidadMedida);
       }
     },
     {
@@ -103,13 +60,16 @@ export const InsumosCrud = () => {
     }
   ]
 
+  //funcion para actualizar el estado global de los datos de la tabla
   const getInsumos = async () => {
     await service.getAll().then((data) => {
       dispatch(setDataTable(data));
     });
   };
 
+  //funcion para manejar el eliminado de un insumo
   const handleDelete = async (id: number) => {
+    //muestro una ventana para la confirmacion
     Swal.fire({
       title: "¿Estás seguro?",
       text: "¿Seguro que desea eliminar el producto?",
@@ -120,13 +80,22 @@ export const InsumosCrud = () => {
       confirmButtonText: "Si, Eliminar",
       cancelButtonText: "Cancelar",
     }).then((result) => {
-      if(result.isConfirmed){
+      if(result.isConfirmed){ //si se confirma la eliminacion, elimino el insumo y cargo de nuevo los insumos
         service.delete(id).then(() => {
           getInsumos();
         });
       }
     });
   };
+
+  const handleSelect = () => {
+    setShowDetail(true);
+  };
+
+  const handleClose = () => {
+    setShowDetail(false);
+    dispatch(removeElementActive());
+  }
 
   return (
     <Box component="main" sx={{ flexGrow: 1, my: 2}}>
@@ -149,14 +118,15 @@ export const InsumosCrud = () => {
             NUEVO
           </Button>
         </Box>
-        {/* Barra de búsqueda 
-        <Box sx={{mt:2 }}>
-          <SearchBar onSearch={handleSearch} />
-        </Box>*/}
         <GenericTable<ArticuloInsumo> 
-          handleDelete={handleDelete} 
+          handleDelete={handleDelete}
+          handleSelect={handleSelect}
           columns={columnsTableInsumos}
         ></GenericTable>
+        <InsumoDetailModal
+          open={showDetail} 
+          handleClose={handleClose} 
+        />
       </Container>
     </Box>
   )
@@ -166,17 +136,4 @@ export const InsumosCrud = () => {
 export const insumosLoader = async () => {
   const service: ArticuloInsumoService = new ArticuloInsumoService();
   return service.getAll();
-}
-
-export async function getInsumoPorId(id:string){
-  let urlServer = 'http://localhost:8080/articulos/insumos/'+ id;
-  let response = await fetch(urlServer, {
-    method: 'GET',
-        headers: {
-      'Content-type': 'application/json',
-      'Access-Control-Allow-Origin':'*'
-    },
-        mode: 'cors'
-  });
-    return await response.json() as ArticuloInsumo;    
 }

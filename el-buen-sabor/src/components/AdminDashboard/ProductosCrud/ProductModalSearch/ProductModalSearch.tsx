@@ -1,9 +1,9 @@
 import { Button, Col, Modal, Row, Form, Container } from "react-bootstrap"
 import { FC, useEffect, useState } from "react";
-import "../../../styles/ProductModalSearch.module.css"
-import { ArticuloInsumo } from "../../../types/Articulos/ArticuloInsumo";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { setIngredientes } from "../../../redux/slices/IngredientesReducer";
+import "../../../../styles/ProductModalSearch.module.css"
+import { ArticuloInsumo } from "../../../../types/Articulos/ArticuloInsumo";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/redux";
+import { setIngredientes } from "../../../../redux/slices/IngredientesReducer";
 
 //valores que recibe el componente
 interface IPropsProductModalSearch {

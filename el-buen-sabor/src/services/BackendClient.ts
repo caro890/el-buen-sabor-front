@@ -1,6 +1,6 @@
 import { AbstractBackendClient } from "./AbstractBackendClient";
 
-// export const base = import.meta.env.VITE_BASE_URL;
+ //export const base = import.meta.env.VITE_BASE_URL;
 export const base: string = "http://localhost:8092/";
 
 export abstract class BackendClient<T> extends AbstractBackendClient<T> {

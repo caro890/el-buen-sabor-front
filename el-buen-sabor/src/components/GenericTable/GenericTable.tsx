@@ -3,6 +3,9 @@ import { Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody
 import { GenericTableButtons } from "./GenericTableButtons/GenericTableButtons";
 import { Base } from "../../types/Base";
 import { useAppSelector } from "../../hooks/redux";
+import { useDispatch } from "react-redux";
+import { setElementActive } from "../../redux/slices/TablaDataReducer";
+import styles from "../../styles/GenericTable.module.css"
 
 interface IGenericTableColumn<T> {
     label: string;
@@ -13,11 +16,13 @@ interface IGenericTableColumn<T> {
 interface IPropsGenericTable<T> {
     columns: IGenericTableColumn<T>[];
     handleDelete: (id: number) => void;
+    handleSelect: () => void
 } 
 
 export const GenericTable = <T extends Base>({
         columns,
-        handleDelete
+        handleDelete,
+        handleSelect
     }: IPropsGenericTable<T>
 ) => {
   const [page, setPage] = useState(0);
@@ -43,7 +48,14 @@ export const GenericTable = <T extends Base>({
 
   useEffect(() => {
     setRows(dataTable);
-  }, [dataTable])
+  }, [dataTable]);
+
+  const dispatch = useDispatch();
+
+  const handleRowSelection = (row: any) => {
+    dispatch(setElementActive({element: row}));
+    handleSelect();
+  }
 
   return (
     <div>
@@ -66,7 +78,7 @@ export const GenericTable = <T extends Base>({
                     .map((row, index: number) => {
                         return(
 
-                            <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                            <TableRow className={styles.row} hover role="checkbox" tabIndex={-1} key={index} onClick={() => handleRowSelection(row)}>
                                 {columns.map((column: IGenericTableColumn<T>, i: number) => {
                                     return(
 

@@ -13,9 +13,9 @@ import { unidadesMedidaLoader } from "../../UnidadesMedidaCrud/UnidadesMedidaCru
 import { UnidadMedida } from "../../../../types/Articulos/UnidadMedida";
 import { ArticuloInsumo } from "../../../../types/Articulos/ArticuloInsumo";
 import { ArticuloManufacturadoDetalle } from "../../../../types/Articulos/ArticuloManufacturadoDetalle";
-import { ProductModalSearch } from "../../ProductModalSearch/ProductModalSearch";
+import { ProductModalSearch } from "../ProductModalSearch/ProductModalSearch";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
-import "../../../../styles/ProductForm.module.css"
+import styles from "../../../../styles/ProductForm.module.css"
 import { setIngredientes } from "../../../../redux/slices/IngredientesReducer";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/redux";
 
@@ -246,15 +246,15 @@ export const ProductoForm = () => {
   };
 
   return (
-    <div className="w-100">
-      <div className="header-box mb-3">
+    <div className={styles.mainBox}>
+      <div className={ styles.headerBox + " mb-3"}>
         <Typography variant="h5" gutterBottom>
           {`${id ? "Editar" : "Crear"} un producto`}
         </Typography>
         <Button type="button" onClick={() => { navigate("..") }} style={{ color: "black", backgroundColor: "var(--itemsColor)", border: "var(--itemsColor)" }}><CIcon icon={cilArrowLeft} size="lg"></CIcon> VOLVER</Button>
       </div>
 
-      <Form className="w-100" >
+      <Form className={styles.formBox} >
         <Form.Group as={Row} className="mb-3" controlId="denominacion">
           <Form.Label column sm={2}>
             Denominación
@@ -364,7 +364,7 @@ export const ProductoForm = () => {
             Ingredientes
           </Form.Label>
           <Col sm={3}>
-            <Button type="button" className="btnAdd" onClick={() => { setOpenModal(true) }} >Agregar</Button>
+            <Button type="button" className={styles.btnAdd} onClick={() => { setOpenModal(true) }} >Agregar</Button>
           </Col>
         </Form.Group>
 

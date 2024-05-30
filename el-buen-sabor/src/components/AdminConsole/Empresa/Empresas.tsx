@@ -41,7 +41,7 @@ export const Empresas = () => {
     //traigo empresas por servicio
     service.getAll().then((lista) => {
       setEmpresas(lista);
-    });  
+    }); 
   }, []);
 
   //funcion para manejar la eliminación de una empresa

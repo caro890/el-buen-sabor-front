@@ -12,7 +12,6 @@ import { Localidad } from "../../../types/Domicilio/Localidad";
 import { getLocalidadesPorProvinciaId } from "../../AdminDashboard/DomicilioCrud/LocalidadesCrud";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { EmpresaService } from "../../../services/EmpresaService";
 import { Empresa } from "../../../types/Empresas/Empresa";
 
 

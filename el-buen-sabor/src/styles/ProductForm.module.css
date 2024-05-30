@@ -1,9 +1,9 @@
-.main-box {
+.mainBox {
     width: 100%;
     margin: 0;
 }
 
-.header-box{
+.headerBox{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -11,7 +11,7 @@
     margin-bottom: 1;
 }
 
-.form-box {
+.formBox {
     text-align: left;
 }
 
@@ -45,7 +45,7 @@
     color: rgb(126, 52, 65);
 }
 
-.detalle-row {
+.detalleRow {
     border-bottom: 1px lightslategray;
 }
 
@@ -53,4 +53,4 @@ span{
     display:block;
     width:100% /*or whatever width you want the effect of <hr>*/;
     border-top: 1px solid #ccc
- }
+}
