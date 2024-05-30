@@ -12,6 +12,7 @@ import { categoriasLoader } from "../CategoriasCrud";
 import { SucursalModalSearch } from "../../SucursalModalSearch/SucursalModalSearch";
 import { useAppSelector } from "../../../../hooks/redux";
 import { setSucursalesSelected } from "../../../../redux/slices/SucursalesReducer";
+import { CategoriaCreate } from "../../../../types/Articulos/CategoriaCreate";
 
 
 export const CategoriaForm = () => {
@@ -22,7 +23,7 @@ export const CategoriaForm = () => {
   const [categoria, setCategoria] = useState<Categoria>(new Categoria());
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
-  const [categoriaPadreSelected, setCategoriaPadreSelected] = useState(0);
+  const [categoriaPadreSelected, setCategoriaPadreSelected] = useState<Categoria>();
 
 
   const [sucursales, setSucursales] = useState<Sucursal[]>([]);
@@ -48,13 +49,13 @@ export const CategoriaForm = () => {
         if (c.categoriaPadre)
           setCategoriaPadreSelected(c.categoriaPadre);
 
-        if (c.sucursales)
+        if (c.sucursales && c.sucursales.length <= 0) {
           setSucursalesSelected(sucursales);
+        } else if (c.sucursales) {
+          setSucursalesSelected(c.sucursales);
+        }
 
         setEsInsumo(c.esInsumo);
-
-        alert(JSON.stringify(sucursalesSelected));
-
 
         setCategoria(c);
       }).catch((error) => console.log(error));
@@ -110,10 +111,10 @@ export const CategoriaForm = () => {
   const handleCategoriaPadreChange = (event: { target: { value: any; }; }) => {
     const selectedCategoriaPadreId = event.target.value;
     const selectedCategoria = categorias.find((cat) => cat.id == selectedCategoriaPadreId);
-    if (selectedCategoria && selectedCategoria.denominacion) {
-      categoria.categoriaPadre = selectedCategoriaPadreId;
+    if (selectedCategoria) {
+      categoria.categoriaPadre = selectedCategoria;
     } else {
-      categoria.categoriaPadre = 0;
+      categoria.categoriaPadre = new Categoria();
     };
 
     if (categoria.categoriaPadre)
@@ -129,25 +130,30 @@ export const CategoriaForm = () => {
   //formulario
   const save = async () => {
 
+    const categoriaCreate = new CategoriaCreate();
 
-    categoria.sucursales = sucursalesSelected.map(s => s.id);
-    categoria.esInsumo = esInsumo;
-    // if(categoria.categoriaPadre)
-    //   categoria.idCategoriaPadre = categoria.categoriaPadre.id;
+    categoriaCreate.denominacion = categoria.denominacion;
+
+    if (categoriaPadreSelected)
+      categoriaCreate.categoriaPadre = categoriaPadreSelected.id;
+
+    categoriaCreate.esInsumo = esInsumo;
+    categoriaCreate.sucursales = sucursalesSelected.map(s => s.id);
 
 
-    if (categoria.denominacion.length <= 0) {
+    if (categoriaCreate.denominacion.length <= 0) {
       alert("Debes completar el nombre de la categoría.")
       return;
     }
 
 
-    if (categoria.sucursales.length <= 0) {
+    if (categoriaCreate.sucursales.length <= 0) {
       alert("Debes seleccionar al menos una sucursal.")
       return;
     }
 
-    await service.post(categoria);
+    console.log(JSON.stringify(categoriaCreate));
+    await service.postCategoriaCreate(categoriaCreate);
     navigate('/dashboard/categorias');
   }
 
@@ -176,7 +182,7 @@ export const CategoriaForm = () => {
             Categoría Padre
           </Form.Label>
           <Col sm={10}>
-            <Form.Select value={categoriaPadreSelected} onChange={handleCategoriaPadreChange}>
+            <Form.Select value={categoriaPadreSelected?.id} onChange={handleCategoriaPadreChange}>
               <option value="0">Elija una categoría padre</option>
               {categorias.map((categoria) => (
                 <option key={categoria.id} value={categoria.id}>

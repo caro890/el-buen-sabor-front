@@ -19,7 +19,6 @@ export const CategoriasCrud = () => {
 
   useEffect(() => {
     dispatch(setDataTable(categorias));
-    console.log(categorias);
   }, []);
 
   const columnsTableCategorias = [
