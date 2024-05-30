@@ -1,8 +1,8 @@
 import { Base } from "../Base";
 
-export class CategoriaCreate extends Base{
+export class CategoriaCreate {
     denominacion: string = "";
-    categoriaPadre?: number;
+    idCategoriaPadre?: number;
     esInsumo: boolean = false;
-    sucursales?: number[];
+    idSucursales?: number[];
 }

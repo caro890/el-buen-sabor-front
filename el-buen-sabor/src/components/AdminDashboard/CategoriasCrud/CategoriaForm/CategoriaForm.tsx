@@ -135,10 +135,10 @@ export const CategoriaForm = () => {
     categoriaCreate.denominacion = categoria.denominacion;
 
     if (categoriaPadreSelected)
-      categoriaCreate.categoriaPadre = categoriaPadreSelected.id;
+      categoriaCreate.idCategoriaPadre = categoriaPadreSelected.id;
 
     categoriaCreate.esInsumo = esInsumo;
-    categoriaCreate.sucursales = sucursalesSelected.map(s => s.id);
+    categoriaCreate.idSucursales = sucursalesSelected.map(s => s.id);
 
 
     if (categoriaCreate.denominacion.length <= 0) {
@@ -147,7 +147,7 @@ export const CategoriaForm = () => {
     }
 
 
-    if (categoriaCreate.sucursales.length <= 0) {
+    if (categoriaCreate.idSucursales.length <= 0) {
       alert("Debes seleccionar al menos una sucursal.")
       return;
     }
