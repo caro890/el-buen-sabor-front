@@ -91,7 +91,8 @@ export const CategoriasCrud = () => {
 
       <GenericTable<Categoria>
         handleDelete={handleDelete}
-        columns={columnsTableCategorias}>
+        columns={columnsTableCategorias}
+        handleSelect={() => {}}>
       </GenericTable>
 
     </Box>

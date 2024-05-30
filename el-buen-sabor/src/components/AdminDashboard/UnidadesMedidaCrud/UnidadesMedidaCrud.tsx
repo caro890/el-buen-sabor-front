@@ -3,12 +3,10 @@ import { useAppDispatch } from "../../../hooks/redux";
 import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
 import { UnidadMedida } from "../../../types/Articulos/UnidadMedida";
 import {
-    useLoaderData,/*, useNavigate*/
+    useLoaderData,
     useNavigate
 } from "react-router";
 import { setDataTable } from "../../../redux/slices/TablaDataReducer";
-//import Swal from "sweetalert2";
-import { /*, Col, Row, Button, InputGroup, Dropdown, DropdownButton*/ } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { cilPlus } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
@@ -85,7 +83,8 @@ export const UnidadesMedidaCrud = () => {
             </Box>
             <GenericTable<UnidadMedida>
                 handleDelete={handleDelete}
-                columns={columnsTableUnidadesMedida}>
+                columns={columnsTableUnidadesMedida}
+                handleSelect={() => {}}>
             </GenericTable>
 
         </Box>
