@@ -30,6 +30,11 @@ export const UnidadesMedidaCrud = () => {
             label: "Denominacion",
             key: "denominacion"
         }
+        ,
+        {
+            label: "Acciones",
+            key: "acciones"
+        }
     ];
 
     const getUnidadesMedida = async () => {

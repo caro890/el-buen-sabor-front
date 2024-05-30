@@ -43,10 +43,10 @@ const router = createBrowserRouter(
           <Route index element={<CategoriasCrud />} loader={categoriasLoader} />
           <Route path="form/:id?" element={<CategoriaForm />} />
         </Route>
-        {/* <Route path="unidadesMedida">
+        <Route path="unidadesMedida">
           <Route index element={<UnidadesMedidaCrud />} loader={unidadesMedidaLoader} />
           <Route path="form/:id?" element={<UnidadMedidaForm />} />
-        </Route> */}
+        </Route>
         <Route path="insumos">
           <Route index element={<InsumosCrud />} loader={insumosLoader} />
           <Route path="form/:id?" element={<InsumosForm />} loader={insumoLoader} />
