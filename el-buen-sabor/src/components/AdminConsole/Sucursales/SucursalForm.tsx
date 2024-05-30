@@ -160,7 +160,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
         if (emp) {
             setTieneCasaMatriz(emp?.sucursales.some(sucursal => sucursal.esCasaMatriz));
         }
-    }, [esCasaMatriz]);
+    }, [esCasaMatriz, sucursal]);
 
 
 

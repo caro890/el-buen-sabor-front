@@ -22,3 +22,8 @@ export const sucursalesLoader = async () => {
   const service: SucursalService = new SucursalService();
   return service.getAll();
 }
+
+export const sucursalesByEmpresaLoader = async(id: number) =>{
+  const service: SucursalService = new SucursalService();
+  return service.findByEmpresaId(id);
+}
