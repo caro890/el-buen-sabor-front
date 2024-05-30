@@ -134,11 +134,15 @@ export const CategoriaForm = () => {
 
     categoriaCreate.denominacion = categoria.denominacion;
 
-    if (categoriaPadreSelected)
+    if (categoriaPadreSelected) {
       categoriaCreate.idCategoriaPadre = categoriaPadreSelected.id;
+      categoria.categoriaPadre = categoriaPadreSelected;
+    }
 
     categoriaCreate.esInsumo = esInsumo;
     categoriaCreate.idSucursales = sucursalesSelected.map(s => s.id);
+
+    categoria.sucursales = sucursalesSelected;
 
 
     if (categoriaCreate.denominacion.length <= 0) {
@@ -152,8 +156,15 @@ export const CategoriaForm = () => {
       return;
     }
 
-    console.log(JSON.stringify(categoriaCreate));
-    await service.postCategoriaCreate(categoriaCreate);
+
+    if (categoria.id == 0) {
+
+      await service.postCategoriaCreate(categoriaCreate);
+
+    } else {
+      await service.put(categoria.id, categoria);
+
+    }
     navigate('/dashboard/categorias');
   }
 

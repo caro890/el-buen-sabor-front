@@ -9,7 +9,7 @@ export class CategoriaService extends BackendClient<Categoria> {
 
 
     async postCategoriaCreate(data: CategoriaCreate): Promise<CategoriaCreate> {
-      const response = await fetch(`${this.baseUrl}`, {
+      const response = await fetch(`${this.baseUrl + "/create"}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

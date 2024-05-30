@@ -65,7 +65,7 @@ export const UnidadesMedidaCrud = () => {
         <Box component="main" sx={{ flexGrow: 1, my: 2 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
                 <Typography variant="h5" gutterBottom>
-                    Productos
+                    Unidades de Medida
                 </Typography>
                 <Button
                     sx={{
