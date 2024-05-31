@@ -53,6 +53,10 @@ export const ProductosCrud = () => {
     {
       label: "Acciones",
       key: "acciones"
+    },
+    {
+      label: "Habilitado",
+      key: "btnHabilitar"
     }
   ];
 
@@ -90,6 +94,11 @@ export const ProductosCrud = () => {
     dispatch(removeElementActive());
   }
 
+  const handleHabilitar = async (id: number) => {
+    await service.changeHabilitadoState(id);
+    getProductos();
+  }
+
   return (
     <Box  component="main" sx={{ flexGrow: 1, my: 2}}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
@@ -113,7 +122,8 @@ export const ProductosCrud = () => {
         <GenericTable<ArticuloManufacturado> 
           handleDelete={handleDelete} 
           handleSelect={handleSelect}
-          columns={columnsTableProductos}>
+          columns={columnsTableProductos}
+          handleHabilitar={handleHabilitar}>
         </GenericTable>
         <ProductoDetailModal
           open={showDetail} 

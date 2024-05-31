@@ -10,6 +10,7 @@ export interface IArticulo extends IBase {
     unidadMedida: UnidadMedida,
     categoria: Categoria,
     codigo: string,
+    habilitado: boolean
 }
 
 export class Articulo extends Base implements IArticulo {
@@ -19,4 +20,5 @@ export class Articulo extends Base implements IArticulo {
     unidadMedida: UnidadMedida = new UnidadMedida();
     categoria: Categoria = new Categoria();
     codigo: string = "";
+    habilitado: boolean = true;
 }

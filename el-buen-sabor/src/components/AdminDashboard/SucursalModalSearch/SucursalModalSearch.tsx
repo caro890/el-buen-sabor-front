@@ -4,7 +4,6 @@ import "../../../styles/SucursalModalSearch.module.css"
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { setSucursalesSelected } from "../../../redux/slices/SucursalesReducer";
 import { Sucursal } from "../../../types/Empresas/Sucursal";
-import { json } from "react-router";
 
 interface IPropsSucursalModalSearch {
   open: boolean;

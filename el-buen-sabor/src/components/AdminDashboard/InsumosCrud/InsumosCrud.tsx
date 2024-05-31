@@ -122,6 +122,7 @@ export const InsumosCrud = () => {
           handleDelete={handleDelete}
           handleSelect={handleSelect}
           columns={columnsTableInsumos}
+          handleHabilitar={() => {}}
         ></GenericTable>
         <InsumoDetailModal
           open={showDetail} 

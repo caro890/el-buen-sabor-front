@@ -6,4 +6,17 @@ export class ArticuloManufacturadoService extends BackendClient<ArticuloManufact
     
     //baseUrl: string = "http://localhost:8083/articuloManufacturado"; 
 
+    async changeHabilitadoState(id: number) {
+        let url = this.baseUrl + `/changeHabilitado/${id}`;
+        let method:string = "PUT";
+        const response = await fetch(url, {
+          "method": method,
+          "headers": {
+            "Content-Type": 'application/json'
+          }
+        });
+        if (!response.ok) {
+            throw new Error(`Error al cambiar el estado del elemento con ID ${id}`);
+        }
+    }
 }
