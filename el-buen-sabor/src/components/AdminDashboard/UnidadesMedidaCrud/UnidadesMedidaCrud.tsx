@@ -84,7 +84,8 @@ export const UnidadesMedidaCrud = () => {
             <GenericTable<UnidadMedida>
                 handleDelete={handleDelete}
                 columns={columnsTableUnidadesMedida}
-                handleSelect={() => {}}>
+                handleSelect={() => {}}
+                handleHabilitar={() => {}}>
             </GenericTable>
 
         </Box>

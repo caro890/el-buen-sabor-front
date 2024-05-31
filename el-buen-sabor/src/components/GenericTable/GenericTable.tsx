@@ -6,6 +6,7 @@ import { useAppSelector } from "../../hooks/redux";
 import { useDispatch } from "react-redux";
 import { setElementActive } from "../../redux/slices/TablaDataReducer";
 import styles from "../../styles/GenericTable.module.css"
+import { HabilitarButton } from "./GenericTableButtons/HabilitarButton";
 
 interface IGenericTableColumn<T> {
     label: string;
@@ -16,13 +17,15 @@ interface IGenericTableColumn<T> {
 interface IPropsGenericTable<T> {
     columns: IGenericTableColumn<T>[];
     handleDelete: (id: number) => void;
-    handleSelect: () => void
+    handleSelect: () => void;
+    handleHabilitar: (id: number) => void 
 } 
 
 export const GenericTable = <T extends Base>({
         columns,
         handleDelete,
-        handleSelect
+        handleSelect,
+        handleHabilitar
     }: IPropsGenericTable<T>
 ) => {
   const [page, setPage] = useState(0);
@@ -78,11 +81,11 @@ export const GenericTable = <T extends Base>({
                     .map((row, index: number) => {
                         return(
 
-                            <TableRow className={styles.row} hover role="checkbox" tabIndex={-1} key={index} onClick={() => handleRowSelection(row)}>
+                            <TableRow className={styles.row} hover role="checkbox" tabIndex={-1} key={index} >
                                 {columns.map((column: IGenericTableColumn<T>, i: number) => {
                                     return(
 
-                                        <TableCell key={i} align="center">
+                                        <TableCell key={i} align="center" onClick={() => {column.label!="Acciones" && column.label!="Habilitado" ? handleRowSelection(row) : null}} >
                                             {
                                                 column.render ? (
                                                     column.render(row)
@@ -92,6 +95,11 @@ export const GenericTable = <T extends Base>({
                                                         item={row}
                                                         handleDelete={handleDelete}
                                                     ></GenericTableButtons>
+                                                ) : column.label === "Habilitado" ? (
+                                                    <HabilitarButton 
+                                                        item={row}
+                                                        handleHabilitar={handleHabilitar}
+                                                    />
                                                 ) : (
                                                     row[column.key]
                                                 )

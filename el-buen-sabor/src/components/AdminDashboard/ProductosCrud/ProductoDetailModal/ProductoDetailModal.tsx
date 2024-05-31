@@ -3,6 +3,7 @@ import { useAppSelector } from "../../../../hooks/redux";
 import formatPrice from "../../../../types/formats/priceFormat";
 import { ArticuloManufacturadoDetalle } from "../../../../types/Articulos/ArticuloManufacturadoDetalle";
 import { GenericGallery } from "../../../GenericGallery/GenericGallery";
+import styles from "../../../../styles/ProductoDetailModal.module.css"
 
 //defino que va a recibir la ventana
 interface IPropsProductoDetailModal {
@@ -21,7 +22,11 @@ export const ProductoDetailModal = ({
   return (
     <Modal show={open} onHide={handleClose} centered size="lg">
         <Modal.Header closeButton>
-            {item? <Modal.Title>{item.codigo} {item.denominacion}</Modal.Title>: null}
+            {item? <Modal.Title  className={styles.title}> 
+                <p className={styles.title}>{item.codigo}</p> 
+                <p className={styles.title}>{item.denominacion}</p> 
+                {item.habilitado ? <div className={styles.habilitadoBox}><p className={styles.habilitadoLabel}>HABILITADO</p></div> : 
+                <div className={styles.deshabilitadoBox}><p className={styles.deshabilitadoLabel}>DESHABILITADO</p></div>}</Modal.Title>: null}
         </Modal.Header>
         <Modal.Body>
           {item?
