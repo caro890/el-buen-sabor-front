@@ -2,7 +2,7 @@ import { Form, Button, Col, Container, Modal, ModalBody, ModalHeader, ModalTitle
 import { FC, useEffect, useState } from "react"
 import { ArticuloInsumo } from "../../../../types/Articulos/ArticuloInsumo"
 import { ArticuloManufacturadoDetalle } from "../../../../types/Articulos/ArticuloManufacturadoDetalle"
-import styles from "../../../../styles/ProductModalSearch.module.css"
+import styles from "../../../../styles/ProductoModalInsumos.module.css"
 
 interface IPropsModalInsumos {
     show: boolean,  //indica si se muestra o no la ventana

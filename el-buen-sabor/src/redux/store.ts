@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit"
 import TableDataReducer from "./slices/TablaDataReducer"
-import IngredientesReducer from "./slices/IngredientesReducer";
 import EmpresaReducer from "./slices/EmpresaReducer";
 import SucursalReducer from "./slices/SucursalReducer";
 import SucursalesReducer from "./slices/SucursalesReducer";
@@ -8,7 +7,6 @@ import SucursalesReducer from "./slices/SucursalesReducer";
 export const store = configureStore({
     reducer: {
         tableDataReducer: TableDataReducer,
-        ingredientesReducer: IngredientesReducer,
         empresaReducer: EmpresaReducer,
         sucursalReducer: SucursalReducer,
         sucursalesReducer: SucursalesReducer

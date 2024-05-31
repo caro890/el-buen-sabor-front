@@ -71,14 +71,10 @@ export const ProductoForm = () => {
     );
     
     var serviceCat = new CategoriaService();
-    serviceCat.getAllInsumo().then((data) =>
+    serviceCat.getAllManufacturado().then((data) =>
       setCategorias(data)
     );
 
-    var serviceInsumo = new ArticuloInsumoService();
-    serviceInsumo.getInsumosParaElaborar().then((data) => {
-        setInsumos(data as ArticuloInsumo[])
-    });
   }, []);
 
   //seteo el estado con el producto que recibi del loader
@@ -88,9 +84,36 @@ export const ProductoForm = () => {
   }, []);
 
   //cargo los insumos según los que ya estén en el producto
-  /*useEffect(() => {
-    
-  }, [detalles]);*/
+  useEffect(() => {
+    actualizarInsumos();
+  }, [detalles]);
+
+  //funcion para actualizar los insumos que se van a mostrar en la ventana modal
+  const actualizarInsumos = async () => {
+    //con el servicio de Articulo insumo obtengo todos los insumos para elaborar
+    var serviceInsumo = new ArticuloInsumoService();
+    var listaInsumos = await serviceInsumo.getInsumosParaElaborar() as ArticuloInsumo[];
+
+    //si existen detalles, elimino los insumos de esos detalles de la lista
+    if(detalles.length != 0) {
+
+      var existentes: ArticuloInsumo[] = [];
+      detalles.forEach((detalle: ArticuloManufacturadoDetalle) => {
+        listaInsumos.forEach((insumo: ArticuloInsumo) => {
+          if(detalle.articuloInsumo.id == insumo.id) {
+            existentes.push(insumo);
+          }
+        });
+      });
+
+      listaInsumos = listaInsumos.filter( ( insumo ) => {
+        return existentes.indexOf( insumo ) < 0;
+      } );
+    } 
+
+    //seteo insumos con la lista
+    setInsumos(listaInsumos);
+  };
 
   //configuro formik
   const formik: any = useFormik({
