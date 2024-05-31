@@ -1,4 +1,4 @@
-.grid-container {
+.gridContainer {
     font-size:larger;
 }
 
@@ -14,7 +14,7 @@
     background-color: rgb(247, 246, 246);
 }
 
-.search-container{
+.searchContainer{
     display: flex;
     justify-content:space-between;
     row-gap: 2;

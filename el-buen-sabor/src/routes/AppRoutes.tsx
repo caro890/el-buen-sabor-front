@@ -9,7 +9,7 @@ import { DashboardLayout } from "./layouts/DashboardLayout"
 import { ProductosCrud, productosLoader } from "../components/AdminDashboard/ProductosCrud/ProductosCrud"
 import { CategoriasCrud, categoriasLoader } from "../components/AdminDashboard/CategoriasCrud/CategoriasCrud"
 import { InsumosCrud, insumosLoader } from "../components/AdminDashboard/InsumosCrud/InsumosCrud"
-import { ProductoForm } from "../components/AdminDashboard/ProductosCrud/ProductoForm/ProductoForm"
+//import { ProductoForm } from "../components/AdminDashboard/ProductosCrud/ProductoForm/ProductoForm"
 import { InsumosForm, insumoLoader } from "../components/AdminDashboard/InsumosCrud/InsumosForm.tsx/InsumosForm"
 import { Sucursales } from "../components/AdminConsole/Sucursales/Sucursales"
 import { Empresas } from "../components/AdminConsole/Empresa/Empresas"
@@ -19,6 +19,7 @@ import { Empleados } from "../components/AdminDashboard/Empleados/Empleados"
 import { UnidadesMedidaCrud, unidadesMedidaLoader } from "../components/AdminDashboard/UnidadesMedidaCrud/UnidadesMedidaCrud"
 import { CategoriaForm } from "../components/AdminDashboard/CategoriasCrud/CategoriaForm/CategoriaForm"
 import { UnidadMedidaForm } from "../components/AdminDashboard/UnidadesMedidaCrud/UnidadMedidaForm/UnidadMedidaForm"
+import { Formulario, productoLoader } from "../components/AdminDashboard/ProductosCrud/ProductoForm/Form"
 
 
 
@@ -37,7 +38,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="productos">
           <Route index element={<ProductosCrud />} loader={productosLoader} />
-          <Route path="form/:id?" element={<ProductoForm />} />
+          <Route path="form/:id?" element={<Formulario/>} loader={productoLoader} />
         </Route>
         <Route path="categorias">
           <Route index element={<CategoriasCrud />} loader={categoriasLoader} />
