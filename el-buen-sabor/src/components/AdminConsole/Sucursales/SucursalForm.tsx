@@ -24,8 +24,8 @@ const domicilioSchema = Yup.object().shape({
     calle: Yup.string().required('La calle es obligatoria'),
     numero: Yup.number().required('El número es obligatorio').positive('El número debe ser positivo'),
     cp: Yup.number().required('El código postal es obligatorio').positive('El código postal debe ser positivo'),
-    piso: Yup.number().positive('El piso debe ser positivo'),
-    nroDpto: Yup.number().positive('El número de departamento debe ser positivo'),
+    piso: Yup.number().min(0, 'El piso debe ser positivo'),
+    nroDpto: Yup.number().min(0, 'El número de departamento debe ser positivo'),
     localidad: Yup.object().shape({
         id: Yup.string().required('Debe seleccionar una localidad'),
         provincia: Yup.object().shape({

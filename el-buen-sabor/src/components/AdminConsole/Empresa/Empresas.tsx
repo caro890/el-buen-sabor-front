@@ -79,7 +79,7 @@ export const Empresas = () => {
   };
 
   //funcion para guardar la empresa nueva o los cambio hechos en una empresa
-  const saveEmpresa = (empresa: Empresa) => {
+  const saveEmpresa = async (empresa: Empresa) => {
     //reemplazo la empresa de la lista
     var auxArray: Empresa[] = empresas.slice();
     
@@ -90,12 +90,12 @@ export const Empresas = () => {
       });
       auxArray.splice(index, 1);
 
-      service.put(empresa.id, empresa);
+      var newEmpresa = await service.put(empresa.id, empresa);
     } else {
-      service.post(empresa);
+      var newEmpresa = await service.post(empresa);
     }
 
-    auxArray.push(empresa);
+    auxArray.push(newEmpresa);
     setEmpresas(auxArray);    
 
     handleClose();

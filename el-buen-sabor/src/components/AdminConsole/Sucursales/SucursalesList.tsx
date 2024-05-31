@@ -21,8 +21,6 @@ import { RootState } from "../../../redux/store";
 
 export const SucursalesList = () => {
   const [sucursales, setSucursales] = useState<Sucursal[]>([]);
-
-
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const emp = useSelector((state: RootState) => state.empresaReducer.empresa);
@@ -89,10 +87,11 @@ export const SucursalesList = () => {
 
   useEffect(() => {
     if (emp){
-      setSucursales(emp.sucursales);
+      service.findByEmpresaId(emp.id).then((data) => {
+        setSucursales(data);
+      });
     } 
-
-  }, [emp]);
+  }, [emp, sucursalForm]);
 
   const handleDelete = (id: number) => {
     Swal.fire({
@@ -124,7 +123,7 @@ export const SucursalesList = () => {
     setShowModal(true);
   };
 
-  const saveSucursal = (sucursal: Sucursal) => {
+  const saveSucursal = async (sucursal: Sucursal) => {
     var auxArray: Sucursal[] = sucursales.slice();
 
     if (sucursal.id != 0) {
@@ -134,12 +133,12 @@ export const SucursalesList = () => {
       });
       auxArray.splice(index, 1);
 
-      service.put(sucursal.id, sucursal);
+      var newSucursal = await service.put(sucursal.id, sucursal);
     } else {
-      service.post(sucursal);
+      var newSucursal = await service.post(sucursal);
     }
 
-    auxArray.push(sucursal);
+    auxArray.push(newSucursal);
     setSucursales(auxArray);
 
     handleClose();

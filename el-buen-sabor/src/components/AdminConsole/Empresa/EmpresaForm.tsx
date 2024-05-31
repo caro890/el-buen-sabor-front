@@ -23,7 +23,6 @@ export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
     validationSchema: validationSchema,
 
     onSubmit: (values) => {
-        console.log(values);
         saveChanges(values);
     }
   });
