@@ -228,8 +228,8 @@ export const CategoriaForm = () => {
             <Container className="search-container mb-3">
               <Form.Control
                 className="search"
-                aria-label="denominacion"
-                placeholder="Denominación"
+                aria-label="nombre"
+                placeholder="Nombre"
                 onChange={(e: { target: { value: string; }; }) => { handleChangeDenominacion(e.target.value) }} />
             </Container>
             : null}

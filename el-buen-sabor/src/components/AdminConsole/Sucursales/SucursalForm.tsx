@@ -61,14 +61,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
         validationSchema: validationSchema,
 
         onSubmit: (values) => {
-            let tieneCasaMatriz = empresa?.sucursales.some(s => s.esCasaMatriz);
-
-            if (esCasaMatriz && tieneCasaMatriz) {
-                alert("La empresa ya tiene una casa matriz.");
-                return;
-            }
-
-            tieneCasaMatriz = true;
+            values.esCasaMatriz = esCasaMatriz;
 
             //manejar valores y armar objetos internos
             const paisEncontrado = paises.find((p) => p.id === parseInt(paisSelected));
@@ -81,7 +74,6 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
                 values.domicilio.localidad = localidadEncontrada;
             }
 
-            values.esCasaMatriz = esCasaMatriz;
 
             //agregar domicilio
             // createDomicilio(values.domicilio);
@@ -112,6 +104,23 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
     const [tieneCasaMatriz, setTieneCasaMatriz] = useState(false);
 
 
+    useEffect(() => {
+        if (emp) {
+            setEmpresa(emp);
+            const tieneCasaMatrizInicial = emp.sucursales.some(sucursal => sucursal.esCasaMatriz);
+            console.log("tiene casa matriz inicial: " + tieneCasaMatrizInicial);
+            setTieneCasaMatriz(tieneCasaMatrizInicial);
+        }
+
+    }, [emp]);
+
+    useEffect(() => {
+        setTieneCasaMatriz(esCasaMatriz);
+    }, [esCasaMatriz]);
+
+    useEffect(() => {
+        console.log("tiene casa matriz: " + tieneCasaMatriz);
+    }, [tieneCasaMatriz]);
 
 
     useEffect(() => {
@@ -152,15 +161,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
         }
     }, [provinciaSelected, sucursal]);
 
-    useEffect(() => {
-        if (emp) setEmpresa(emp);
-    }, []);
 
-    useEffect(() => {
-        if (emp) {
-            setTieneCasaMatriz(emp?.sucursales.some(sucursal => sucursal.esCasaMatriz));
-        }
-    }, [esCasaMatriz, sucursal]);
 
 
 
@@ -203,15 +204,15 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
 
     const handleEsCasaMatrizChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
 
+        const esCasaMatrizActual = event.target.checked;
 
-        if (tieneCasaMatriz && event.target.checked) {
-            alert("La sucursal ya tiene una casa matriz.");
+        if (esCasaMatrizActual && tieneCasaMatriz) {
+            alert("La empresa ya tiene una casa matriz.");
             return;
         }
 
-        setEsCasaMatriz(event.target.checked);
-        formik.setFieldValue('esCasaMatriz', event.target.checked);
-        setTieneCasaMatriz(event.target.checked);
+        setEsCasaMatriz(esCasaMatrizActual);
+        formik.setFieldValue('esCasaMatriz', esCasaMatrizActual);
     }
 
 
