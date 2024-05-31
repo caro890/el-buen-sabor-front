@@ -22,6 +22,7 @@ import { RootState } from "../../../redux/store";
 export const SucursalesList = () => {
   const [sucursales, setSucursales] = useState<Sucursal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [tieneCasaMatriz, setTieneCasaMatriz] = useState<boolean>(false);
 
   const emp = useSelector((state: RootState) => state.empresaReducer.empresa);
 
@@ -92,6 +93,19 @@ export const SucursalesList = () => {
       });
     } 
   }, [emp, sucursalForm]);
+
+  //seteo el estado con si existe una sucursal que sea casa matriz
+  useEffect(() => {
+    //busco si tiene casa matriz
+    const tieneCasaMatrizInicial = sucursales.some( 
+      function (sucursal) {
+        return sucursal.esCasaMatriz == true;
+      }
+    );
+
+    //si la tiene seteo el estado
+    setTieneCasaMatriz(tieneCasaMatrizInicial);
+  }, [sucursales]);
 
   const handleDelete = (id: number) => {
     Swal.fire({
@@ -192,7 +206,7 @@ export const SucursalesList = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <SucursalForm saveChanges={saveSucursal} sucursal={sucursalForm} />
+          <SucursalForm saveChanges={saveSucursal} sucursal={sucursalForm} tieneCasaMatriz={tieneCasaMatriz} />
         </Modal.Body>
       </Modal>
     </div>

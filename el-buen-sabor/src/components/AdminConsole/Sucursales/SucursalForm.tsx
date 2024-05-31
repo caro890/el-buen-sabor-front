@@ -17,7 +17,8 @@ import { Empresa } from "../../../types/Empresas/Empresa";
 
 interface IPropsSucursalForm {
     saveChanges: (suc: Sucursal) => void;
-    sucursal: Sucursal
+    sucursal: Sucursal;
+    tieneCasaMatriz: boolean
 }
 
 const domicilioSchema = Yup.object().shape({
@@ -37,8 +38,6 @@ const domicilioSchema = Yup.object().shape({
     })
 });
 
-
-
 const validationSchema = Yup.object().shape({
     nombre: Yup.string().required('El nombre de la sucursal es obligatorio'),
     horarioApertura: Yup.string().required('El horario de apertura es obligatorio'),
@@ -50,7 +49,7 @@ const validationSchema = Yup.object().shape({
 
 
 
-export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) => {
+export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal, tieneCasaMatriz }) => {
 
     const [empresa, setEmpresa] = useState<Empresa>();
 
@@ -61,7 +60,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
         validationSchema: validationSchema,
 
         onSubmit: (values) => {
-            values.esCasaMatriz = esCasaMatriz;
+            //values.esCasaMatriz = esCasaMatriz;
 
             //manejar valores y armar objetos internos
             const paisEncontrado = paises.find((p) => p.id === parseInt(paisSelected));
@@ -81,14 +80,9 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
             //agregar empresa
             if (empresa) values.empresa = empresa;
 
-            console.log(values);
-
-
             saveChanges(values);
         }
     });
-
-
 
     const [paises, setPaises] = useState<Pais[]>([]);
     const [paisSelected, setPaisSelected] = useState('');
@@ -100,28 +94,36 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
     const [localidades, setLocalidades] = useState<Localidad[]>([]);
     const [localidadSelected, setLocalidadSelected] = useState('');
 
-    const [esCasaMatriz, setEsCasaMatriz] = useState(false);
-    const [tieneCasaMatriz, setTieneCasaMatriz] = useState(false);
+    /*const [esCasaMatriz, setEsCasaMatriz] = useState(false);
+    const [tieneCasaMatriz, setTieneCasaMatriz] = useState(false);*/
 
 
     useEffect(() => {
         if (emp) {
             setEmpresa(emp);
-            const tieneCasaMatrizInicial = emp.sucursales.some(sucursal => sucursal.esCasaMatriz);
-            console.log("tiene casa matriz inicial: " + tieneCasaMatrizInicial);
-            setTieneCasaMatriz(tieneCasaMatrizInicial);
         }
-
     }, [emp]);
 
-    useEffect(() => {
+    //cargo si la empresa seleccionada tiene casa matriz
+    /*useEffect(() => {
+        if (emp) {
+            //busco si tiene casa matriz
+            const tieneCasaMatrizInicial = emp.sucursales.some(sucursal => sucursal.esCasaMatriz);
+            
+            console.log("tiene casa matriz inicial: " + tieneCasaMatrizInicial);
+
+            //si la tiene seteo el estado
+            setTieneCasaMatriz(tieneCasaMatrizInicial);
+        }
+    }, [emp]);*/
+
+    /*useEffect(() => {
         setTieneCasaMatriz(esCasaMatriz);
-    }, [esCasaMatriz]);
+    }, [esCasaMatriz]);*/
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log("tiene casa matriz: " + tieneCasaMatriz);
-    }, [tieneCasaMatriz]);
-
+    }, [tieneCasaMatriz]);*/
 
     useEffect(() => {
         const loadPaises = async () => {
@@ -202,7 +204,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
         }
     }
 
-    const handleEsCasaMatrizChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
+    /*const handleEsCasaMatrizChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
 
         const esCasaMatrizActual = event.target.checked;
 
@@ -213,11 +215,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
 
         setEsCasaMatriz(esCasaMatrizActual);
         formik.setFieldValue('esCasaMatriz', esCasaMatrizActual);
-    }
-
-
-
-
+    }*/
 
     return (
         <div>
@@ -269,17 +267,23 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal }) 
                         }
                     </Form.Group>
                 </Row>
-                <Row>
-                    <Form.Group as={Col} controlId="esCasaMatriz">
-                        <Form.Check
-                            type="checkbox"
-                            label="Es Casa Matriz"
-                            name="esCasaMatriz"
-                            checked={formik.values.esCasaMatriz}
-                            onChange={handleEsCasaMatrizChange}
-                        />
-                    </Form.Group>
-                </Row>
+
+                {
+                    !tieneCasaMatriz || (tieneCasaMatriz && sucursal.esCasaMatriz) ? (
+                        <Row>
+                            <Form.Group as={Col} controlId="esCasaMatriz">
+                                <Form.Check
+                                    type="checkbox"
+                                    label="Es Casa Matriz"
+                                    name="esCasaMatriz"
+                                    checked={formik.values.esCasaMatriz}
+                                    onChange={formik.handleChange}
+                                    //onChange={handleCasaMatrizChange}
+                                />
+                            </Form.Group>
+                        </Row>
+                    ) : null
+                }
 
                 <Typography variant="h6" gutterBottom>
                     Domicilio
