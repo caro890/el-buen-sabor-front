@@ -71,6 +71,9 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal, ti
                 values.domicilio.localidad.provincia.pais = paisEncontrado;
                 values.domicilio.localidad.provincia = provinciaEncontrada;
                 values.domicilio.localidad = localidadEncontrada;
+            } else {
+                alert("Debes completar la dirección.");
+                return;
             }
 
 
@@ -278,7 +281,7 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal, ti
                                     name="esCasaMatriz"
                                     checked={formik.values.esCasaMatriz}
                                     onChange={formik.handleChange}
-                                    //onChange={handleCasaMatrizChange}
+                                //onChange={handleCasaMatrizChange}
                                 />
                             </Form.Group>
                         </Row>
