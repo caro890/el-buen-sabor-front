@@ -19,8 +19,7 @@ import { UnidadesMedidaCrud, unidadesMedidaLoader } from "../components/AdminDas
 import { CategoriaForm } from "../components/AdminDashboard/CategoriasCrud/CategoriaForm/CategoriaForm"
 import { UnidadMedidaForm } from "../components/AdminDashboard/UnidadesMedidaCrud/UnidadMedidaForm/UnidadMedidaForm"
 import { ProductoForm, productoLoader } from "../components/AdminDashboard/ProductosCrud/ProductoForm/ProductoForm"
-
-
+import { ModuloImagenes } from "../components/ModuloImagenes copy/ModuloImagenes2"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -55,6 +54,8 @@ const router = createBrowserRouter(
           <Route index element={<Empleados />} />
         </Route>
       </Route>
+
+      <Route path="imagenes" element={<ModuloImagenes imagenes={[]} />} />
     </Route>
   )
 )

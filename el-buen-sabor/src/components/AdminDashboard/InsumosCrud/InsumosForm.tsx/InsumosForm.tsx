@@ -14,6 +14,8 @@ import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
 import { useNavigate } from "react-router";
 import { CategoriaService } from "../../../../services/CatogoriaService";
+import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2";
+//import { IImagen } from "../../../../types/Articulos/ImagenArticulo";
 
 //objeto de insumo vacio
 const insumoVacio = {
@@ -26,6 +28,7 @@ const insumoVacio = {
   stockMaximo: 0,
   esParaElaborar: false,
   codigo: "",
+  habilitado: true,
   imagenes: [],
   unidadMedida: {
     id: 0,
@@ -78,6 +81,9 @@ export const InsumosForm = () => {
   //estado para las categorias
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
+  //estado para las imagenes
+  //const [imagenes, setImagenes] = useState<IImagen[]>([]);
+
   //servicio de articulo insumos
   const service = new ArticuloInsumoService();
   //servicio de categoria
@@ -86,6 +92,7 @@ export const InsumosForm = () => {
   //cargo el insumo en el estado
   useEffect(() => {
     setInsumo(insumoSeleccionado);
+    //if(insumoSeleccionado.imagenes) setImagenes(insumoSeleccionado.imagenes);
   }, []);
 
   //cargo las unidades de medida y las categorias
@@ -283,7 +290,13 @@ export const InsumosForm = () => {
               />
             </Col>
           </Form.Group>
-          
+
+          <Typography variant="h6" gutterBottom>
+            Imágenes
+          </Typography>
+
+          <ModuloImagenes imagenes={insumoSeleccionado.imagenes || []} ></ModuloImagenes>
+
           <Button type="submit">GUARDAR</Button>
         </Form>
       </div>

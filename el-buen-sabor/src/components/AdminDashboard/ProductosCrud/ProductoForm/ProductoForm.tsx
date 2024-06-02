@@ -17,6 +17,8 @@ import { ModalInsumos } from "../ProductModalSearch/ModalInsumos"
 import styles from "../../../../styles/ProductForm.module.css"
 import CIcon from "@coreui/icons-react"
 import { cilTrash, cilArrowLeft } from "@coreui/icons"
+//import { IImagen } from "../../../../types/Articulos/ImagenArticulo"
+import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2"
 
 //esquemas de validacion para formik
 const unidadMedidaValidation = Yup.object().shape({
@@ -64,6 +66,9 @@ export const ProductoForm = () => {
   //estado para manejar la apertura de la ventana modal
   const [showModal, setShowModal] = useState<boolean>(false);
 
+  //estado para almacenar las imagenes del producto
+  //const [imagenes, setImagenes] = useState<IImagen[]>([]);
+
   //cargo las unidades de medida y las categorias
   useEffect(() => {
     unidadesMedidaLoader().then((data) =>
@@ -81,6 +86,7 @@ export const ProductoForm = () => {
   useEffect(() => {
     setProducto(productoSeleccionado);
     setDetalles(productoSeleccionado.articuloManufacturadoDetalles);
+    //if(productoSeleccionado.imagenes) setImagenes(productoSeleccionado.imagenes);
   }, []);
 
   //cargo los insumos según los que ya estén en el producto
@@ -311,6 +317,12 @@ export const ProductoForm = () => {
                     formik.touched.categoria && formik.errors.categoria ?
                     (<div className="text-danger"> {formik.errors.categoria.id} </div>) : null
                 }
+                
+                <Typography variant="h6" gutterBottom>
+                    Imágenes
+                </Typography>
+
+                <ModuloImagenes imagenes={productoSeleccionado.imagenes || []} ></ModuloImagenes>
 
                 <Typography variant="h6" gutterBottom>
                     Preparación e ingredientes
