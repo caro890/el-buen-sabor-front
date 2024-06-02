@@ -5,16 +5,17 @@ import CIcon from "@coreui/icons-react";
 import { CNavGroup, CNavItem, CNavTitle, CSidebar, CSidebarNav } from "@coreui/react";
 import '@coreui/coreui/dist/css/coreui.min.css';
 import { cilDollar } from "@coreui/icons";
+import { useAppSelector } from '../../../hooks/redux';
 
 
 const BasicSidebar: React.FC = () => {
-
+    const empresaSelected = useAppSelector((state) => state.empresaReducer.empresa);
     return (
         
             <CSidebar className="border-end d-flex flex-column" style={{ height: '100vh' }}>
                 <CSidebarNav>
                     <CNavTitle>
-                        El Buen Sabor
+                        <h3>{empresaSelected?.nombre}</h3>
                     </CNavTitle>
                     <CNavItem>
                         <Link to="/dashboard" className="nav-link" >
