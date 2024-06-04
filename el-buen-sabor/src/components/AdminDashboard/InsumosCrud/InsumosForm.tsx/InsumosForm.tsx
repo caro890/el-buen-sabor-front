@@ -15,7 +15,8 @@ import { cilArrowLeft } from "@coreui/icons";
 import { useNavigate } from "react-router";
 import { CategoriaService } from "../../../../services/CatogoriaService";
 import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2";
-//import { IImagen } from "../../../../types/Articulos/ImagenArticulo";
+import Swal from "sweetalert2";
+import { ImagenesService } from "../../../../services/ImagenesService";
 
 //objeto de insumo vacio
 const insumoVacio = {
@@ -81,8 +82,8 @@ export const InsumosForm = () => {
   //estado para las categorias
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
-  //estado para las imagenes
-  //const [imagenes, setImagenes] = useState<IImagen[]>([]);
+  //estado para almacenar los archivos
+  const [filesToUpload, setFilesToUpload] = useState<File[] | null>(null);
 
   //servicio de articulo insumos
   const service = new ArticuloInsumoService();
@@ -110,18 +111,68 @@ export const InsumosForm = () => {
   const formik: any = useFormik({
     initialValues: insumoSeleccionado,  
     validationSchema: validationSchema, 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      var newInsumo: ArticuloInsumo = new ArticuloInsumo();
+
       if(values.id!=0) {
-        service.put(values.id, values).then(() =>
-          navigate("/dashboard/insumos")
-        )
+        newInsumo = await service.put(values.id, values)
       } else {
-        service.post(values).then(() =>
-          navigate("/dashboard/insumos")
-        )
+        newInsumo = await service.post(values)
       }
+
+      try {
+        await uploadImages(newInsumo.id);
+      } catch (error) {
+        //Mostrar mensaje de error si ocurre una exepcion
+        Swal.fire({
+          title: "Error",
+          text: "Algo falló al intentar subir las imágenes",
+          icon: "error"
+        });
+        console.log("Error: ", error);
+        return;
+      }
+      
+      navigate("/dashboard/insumos");
     }
   });
+
+  //Funcion asincronica para subir archivos al servidor
+  const uploadImages = async (insumoId: number) => {
+    //Crear un objeto FormData y agregar los archivos seleccionados
+    if(filesToUpload) {
+      const formData = new FormData();
+      filesToUpload.forEach((file: File) => {
+        formData.append("uploads", file);
+      });
+
+      //Mostrar un mensaje de carga mientras se suben los archivos
+      Swal.fire({
+        title: "Guardando imagénes...",
+        text: "Espere mientras se guardan las imágenes",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      try {
+        //Realizar la peticion POST para subir los archivos
+        var imgService = new ImagenesService();
+        await imgService.upload(insumoId, formData);
+
+        //cerrar el mensaje de espera
+        Swal.close();
+
+      } catch ( error ) {
+        Swal.close();
+
+        throw new Error();
+      }
+
+      setFilesToUpload(null); //limpiar el estado de archivos para subir despues de la subida
+    }
+  };
 
   return (
     <div className={styles.mainBox}>
@@ -295,7 +346,7 @@ export const InsumosForm = () => {
             Imágenes
           </Typography>
 
-          <ModuloImagenes imagenes={insumoSeleccionado.imagenes || []} ></ModuloImagenes>
+          <ModuloImagenes files={filesToUpload} setFiles={setFilesToUpload} imagenes={insumoSeleccionado.imagenes || []} ></ModuloImagenes>
 
           <Button type="submit">GUARDAR</Button>
         </Form>

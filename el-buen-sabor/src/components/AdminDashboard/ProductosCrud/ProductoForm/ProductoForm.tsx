@@ -19,6 +19,8 @@ import CIcon from "@coreui/icons-react"
 import { cilTrash, cilArrowLeft } from "@coreui/icons"
 //import { IImagen } from "../../../../types/Articulos/ImagenArticulo"
 import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2"
+import Swal from "sweetalert2"
+import { ImagenesService } from "../../../../services/ImagenesService"
 
 //esquemas de validacion para formik
 const unidadMedidaValidation = Yup.object().shape({
@@ -65,9 +67,9 @@ export const ProductoForm = () => {
 
   //estado para manejar la apertura de la ventana modal
   const [showModal, setShowModal] = useState<boolean>(false);
-
-  //estado para almacenar las imagenes del producto
-  //const [imagenes, setImagenes] = useState<IImagen[]>([]);
+  
+  //estado para almacenar los archivos
+  const [filesToUpload, setFilesToUpload] = useState<File[] | null>(null);
 
   //cargo las unidades de medida y las categorias
   useEffect(() => {
@@ -125,7 +127,7 @@ export const ProductoForm = () => {
   const formik: any = useFormik({
     initialValues: productoSeleccionado,  
     validationSchema: validationSchema, 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       //comprobar que los detalles no están vacíos y que las cantidades no sean cero
       if(detalles.length == 0 ){
         alert("Detalles vacíos");
@@ -142,17 +144,68 @@ export const ProductoForm = () => {
 
       //guardar
       values.articuloManufacturadoDetalles = detalles;
+      
+      var newProducto: ArticuloManufacturado = new ArticuloManufacturado();
+
       if(values.id!=0) {
-        service.put(values.id, values).then(() =>
-          navigate("/dashboard/productos")
-        )
+        newProducto = await service.put(values.id, values);
       } else {
-        service.post(values).then(() =>
-          navigate("/dashboard/productos")
-        )
+        newProducto = await service.post(values);
       }
+
+      try {
+        await uploadImages(newProducto.id);
+      } catch (error) {
+        //Mostrar mensaje de error si ocurre una exepcion
+        Swal.fire({
+          title: "Error",
+          text: "Algo falló al intentar subir las imágenes",
+          icon: "error"
+        });
+        console.log("Error: ", error);
+        return;
+      }
+
+      navigate("/dashboard/productos");
     }
   });
+
+  //Funcion asincronica para subir archivos al servidor
+  const uploadImages = async (articuloId: number) => {
+    //Crear un objeto FormData y agregar los archivos seleccionados
+    if(filesToUpload) {
+      const formData = new FormData();
+      filesToUpload.forEach((file: File) => {
+        formData.append("uploads", file);
+      });
+
+      //Mostrar un mensaje de carga mientras se suben los archivos
+      Swal.fire({
+        title: "Guardando imagénes...",
+        text: "Espere mientras se guardan las imágenes",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      try {
+        //Realizar la peticion POST para subir los archivos
+        var imgService = new ImagenesService();
+        await imgService.upload(articuloId, formData);
+
+        //cerrar el mensaje de espera
+        Swal.close();
+
+      } catch ( error ) {
+        Swal.close();
+
+        throw new Error();
+      }
+
+      setFilesToUpload(null); //limpiar el estado de archivos para subir despues de la subida
+    }
+  };
 
   //funcion para manejar el cambio en el input de cantidad
   const handleChangeAmount = (amount: any, detalle: ArticuloManufacturadoDetalle) => {
@@ -322,7 +375,7 @@ export const ProductoForm = () => {
                     Imágenes
                 </Typography>
 
-                <ModuloImagenes imagenes={productoSeleccionado.imagenes || []} ></ModuloImagenes>
+                <ModuloImagenes files={filesToUpload} setFiles={setFilesToUpload} imagenes={productoSeleccionado.imagenes || []} ></ModuloImagenes>
 
                 <Typography variant="h6" gutterBottom>
                     Preparación e ingredientes

@@ -8,26 +8,17 @@ import CIcon from "@coreui/icons-react";
 import { cilTrash } from "@coreui/icons";
 //import { ImagenesService } from "../../services/ImagenesService";
 
-/**- state for eliminated images that were already in the cloud to eliminate them when the user presses GUARDAR
-
-- issue with updating the state of files when the user uploads an image and then deletes it.
- */
-
 interface ImageFile {
     imagen: IImagen,
     file?: File
 }
 
 interface IPropsModuloImagenes {
-    imagenes: IImagen[],
-    files: File[] | null,
-    setFiles: (array: File[]) => void
+    imagenes: IImagen[]
 }
 
 export const ModuloImagenes = ({
-    imagenes,
-    files,
-    setFiles
+    imagenes
 }: IPropsModuloImagenes ) => {
 
   //estado para almacenar las imagenes a mostrar
@@ -35,6 +26,9 @@ export const ModuloImagenes = ({
 
   //estado para almacenar archivos seleccionados para subir
   const [selectedFiles, setSelectedFiles]  = useState<FileList | null>(null);
+
+  //estado para almacenar los archivos
+  const [filesToUpload, setFilesToUpload] = useState<File[] | null>(null);
 
   //cargo las imagenes de las que obtengo por props
   useEffect(() => {
@@ -79,7 +73,7 @@ export const ModuloImagenes = ({
         );
     }
 
-    setFiles(Array.from(selectedFiles));
+    setFilesToUpload(Array.from(selectedFiles));
 
     //add to images
     var imagesArray: ImageFile[] = images.slice();
@@ -100,26 +94,22 @@ export const ModuloImagenes = ({
             file: f
         }
 
-        console.log(newImageFile);
         imagesArray.push(newImageFile);
     });
 
     setImages(imagesArray);
   };
 
-  const deleteFile = async (eliminado: ImageFile) => {
-    console.log(eliminado.file);
+  const deleteFile = (eliminado: ImageFile) => {
     if(eliminado.file){
-        if(files){
-            var arrayFiles = Array.from(files).slice();
+        if(filesToUpload){
+            var arrayFiles = Array.from(filesToUpload).slice();
 
             arrayFiles = arrayFiles.filter( ( file ) => {
                 return file != eliminado.file;
             });
-            console.log(arrayFiles);
 
-            setFiles(arrayFiles);
-            console.log(files);
+            setFilesToUpload(arrayFiles);
         }
     } 
 
