@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { IBase } from "../Base";
 import { Domicilio } from "../Domicilio/Domicilio";
 import { Empresa } from "./Empresa";

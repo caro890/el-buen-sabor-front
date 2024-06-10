@@ -1,4 +1,3 @@
-import { Base } from "../Base";
 
 export class CategoriaCreate {
     denominacion: string = "";
