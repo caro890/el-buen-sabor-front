@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { CategoriaService } from "../../../../services/CatogoriaService";
 import { Categoria } from "../../../../types/Articulos/Categoria";
 import { Sucursal } from "../../../../types/Empresas/Sucursal";
-import { sucursalesByEmpresaLoader, sucursalesLoader } from "../../SucursalCrud/SucursalCrud";
+import { sucursalesByEmpresaLoader } from "../../SucursalCrud/SucursalCrud";
 import { Form, Col, Row, Button, Container } from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
@@ -11,11 +11,7 @@ import { Typography } from "@mui/material";
 import { categoriasLoader } from "../CategoriasCrud";
 import { SucursalModalSearch } from "../../SucursalModalSearch/SucursalModalSearch";
 import { useAppSelector } from "../../../../hooks/redux";
-import { setSucursalesSelected } from "../../../../redux/slices/SucursalesReducer";
 import { CategoriaCreate } from "../../../../types/Articulos/CategoriaCreate";
-import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
-
 
 export const CategoriaForm = () => {
   const { id } = useParams();
@@ -39,7 +35,7 @@ export const CategoriaForm = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const empresa = useSelector((state: RootState) => state.empresaReducer.empresa);
+  const empresa = useAppSelector((state) => state.empresaReducer.empresa);
 
 
   useEffect(() => {
@@ -72,8 +68,10 @@ export const CategoriaForm = () => {
   //sucursales
   useEffect(() => {
     const loadSucursales = async () => {
+      if(empresa) {
       const sucursales = await sucursalesByEmpresaLoader(empresa.id);
       setSucursales(sucursales);
+      }
     };
     loadSucursales();
 

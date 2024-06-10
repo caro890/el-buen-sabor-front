@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { Form, Col, Row, Button, Container } from "react-bootstrap";
+import { Form, Col, Row, Button } from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
 import { cilArrowLeft } from "@coreui/icons";
 import { Typography } from "@mui/material";
-import { useAppDispatch } from "../../../../hooks/redux";
 import { UnidadMedidaService } from "../../../../services/UnidadMedidaService";
 import { UnidadMedida } from "../../../../types/Articulos/UnidadMedida";
 
@@ -12,7 +11,6 @@ import { UnidadMedida } from "../../../../types/Articulos/UnidadMedida";
 export const UnidadMedidaForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const service: UnidadMedidaService = new UnidadMedidaService();
 
   const [unidadMedida, setUnidadMedida] = useState<UnidadMedida>(new UnidadMedida());
