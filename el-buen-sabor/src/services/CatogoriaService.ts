@@ -3,10 +3,7 @@ import { CategoriaCreate } from "../types/Articulos/CategoriaCreate";
 import { BackendClient, base } from "./BackendClient";
 
 export class CategoriaService extends BackendClient<Categoria> {
-    baseUrl: string = base + "categorias"; 
-    
-    //baseUrl: string = "http://localhost:8083/categoria"; 
-
+    baseUrl: string = base + "categoria"; 
 
     async postCategoriaCreate(data: CategoriaCreate): Promise<CategoriaCreate> {
       const response = await fetch(`${this.baseUrl + "/create"}`, {

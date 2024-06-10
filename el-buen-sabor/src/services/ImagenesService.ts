@@ -1,7 +1,6 @@
 import { IImagen } from "../types/Articulos/ImagenArticulo";
 import { base } from "./BackendClient";
 
-
 export class ImagenesService {
 
     baseUrl: string = base + "images";
