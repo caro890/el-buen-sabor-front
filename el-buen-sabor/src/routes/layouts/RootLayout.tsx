@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 
 const RootLayout = () => {
   const navigate = useNavigate();
-  useEffect(() => {
+  /*useEffect(() => {
     navigate("/admin-console");
-  },[]);
+  },[]);*/
 
   return (
       <Container component="main" sx={{ flexGrow: 1, pl: 9, pt: 4}}>

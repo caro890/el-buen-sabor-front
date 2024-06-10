@@ -13,9 +13,9 @@ export const DashboardLayout = () => {
 
   useEffect(() => {   
     //cuando cargo el dashboard me aseguro de que haya una empresa y una sucursal seleccionadas
-    if(empresaActual === null && sucursalActual === null){ 
+    /*if(empresaActual === null && sucursalActual === null){ 
       navigate("/admin-console"); //si no hay ninguna seleccionada redirecciono al la consola para seleccionarlas
-    }
+    }*/
   }, []);
 
   return (

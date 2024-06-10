@@ -11,7 +11,6 @@ import { useAppSelector } from '../../../hooks/redux';
 const BasicSidebar: React.FC = () => {
     const empresaSelected = useAppSelector((state) => state.empresaReducer.empresa);
     return (
-        
             <CSidebar className="border-end d-flex flex-column" style={{ height: '100vh' }}>
                 <CSidebarNav>
                     <CNavTitle>
@@ -59,7 +58,7 @@ const BasicSidebar: React.FC = () => {
                     </CNavGroup>
 
                     <CNavItem>
-                        <Link to="/dashboard" className="nav-link">
+                        <Link to="promociones" className="nav-link">
                             <CIcon customClassName="nav-icon" icon={cilDollar} />
                             Promociones
                         </Link>
@@ -94,9 +93,6 @@ const BasicSidebar: React.FC = () => {
                     </CNavItem>
                 </CSidebarNav>
             </CSidebar>
-        
-
-        
     );
 }
 

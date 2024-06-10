@@ -3,7 +3,6 @@ import { base } from "./BackendClient";
 
 
 export class ImagenesService {
-
     baseUrl: string = base + "images";
 
     async getAll() {

@@ -250,7 +250,7 @@ export const ProductoForm = () => {
   };
 
   return (
-    <div className={styles.mainBox}>
+   <div className={styles.mainBox}>
         <div className={styles.headerBox + " mb-3"}>
             <Typography variant="h5" gutterBottom>
                 {`${producto.id!=0 ? "Editar" : "Crear"} un producto`}

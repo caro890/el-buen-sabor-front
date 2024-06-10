@@ -19,6 +19,8 @@ import { UnidadesMedidaCrud, unidadesMedidaLoader } from "../components/AdminDas
 import { CategoriaForm } from "../components/AdminDashboard/CategoriasCrud/CategoriaForm/CategoriaForm"
 import { UnidadMedidaForm } from "../components/AdminDashboard/UnidadesMedidaCrud/UnidadMedidaForm/UnidadMedidaForm"
 import { ProductoForm, productoLoader } from "../components/AdminDashboard/ProductosCrud/ProductoForm/ProductoForm"
+import { Promociones, promocionesLoader } from "../components/AdminDashboard/PromocionesCrud/Promociones"
+import { PromocionForm, promocionLoader } from "../components/AdminDashboard/PromocionesCrud/Formulario/PromocionForm"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -51,6 +53,10 @@ const router = createBrowserRouter(
         </Route>
         <Route path="empleados" >
           <Route index element={<Empleados />} />
+        </Route>
+        <Route path="promociones">
+          <Route index element={<Promociones/>} loader={promocionesLoader} />
+          <Route path="form/:id?" element={<PromocionForm />} loader={promocionLoader} />
         </Route>
       </Route>
     </Route>
