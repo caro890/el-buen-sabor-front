@@ -1,7 +1,9 @@
 .mainBox {
     width: 100%;
     margin: 0;
-    font-size:large;
+    padding-left: 5%;
+    padding-right: 5%;
+    text-align: left;
 }
 
 .headerBox {
@@ -15,13 +17,3 @@
 .formBox {
     text-align: left;
 }
-
-.formBox input {
-    font-size: large;
-}
-
-.formBox select {
-    font-size: large;
-}
-
-

@@ -1,18 +1,17 @@
 .mainBox {
     width: 100%;
     margin: 0;
+    padding-left: 5%;
+    padding-right: 5%;
+    text-align: left;
 }
 
-.headerBox{
+.headerBox {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1;
-    margin-bottom: 1;
-}
-
-.formBox {
-    text-align: left;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .btnAdd {
