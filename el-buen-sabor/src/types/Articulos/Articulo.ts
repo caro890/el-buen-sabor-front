@@ -1,12 +1,12 @@
 import { Base, IBase } from "../Base";
 import { Categoria } from "./Categoria";
-import { ImagenArticulo } from "./ImagenArticulo";
+import { IImagen } from "./ImagenArticulo";
 import { UnidadMedida } from "./UnidadMedida";
 
 export interface IArticulo extends IBase {
     denominacion: string,
     precioVenta: number,
-    imagenes?: ImagenArticulo[],
+    imagenes?: IImagen[],
     unidadMedida: UnidadMedida,
     categoria: Categoria,
     codigo: string,
@@ -16,9 +16,19 @@ export interface IArticulo extends IBase {
 export class Articulo extends Base implements IArticulo {
     denominacion: string = "";
     precioVenta: number = 0;
-    imagenes?: ImagenArticulo[];
+    imagenes?: IImagen[];
     unidadMedida: UnidadMedida = new UnidadMedida();
     categoria: Categoria = new Categoria();
     codigo: string = "";
     habilitado: boolean = true;
+}
+
+export interface ArticuloCreate extends IBase {
+    denominacion: string;
+    precioVenta: number;
+    imagenes?: IImagen[];
+    idUnidadMedida: number;
+    idCategoria: number;
+    codigo: string;
+    habilitado: boolean;
 }

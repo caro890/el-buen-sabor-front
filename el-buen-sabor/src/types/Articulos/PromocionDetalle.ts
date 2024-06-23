@@ -1,17 +1,15 @@
-import { Base } from "../Base";
-import { ArticuloInsumo } from "./ArticuloInsumo";
-import { ArticuloManufacturado } from "./ArticuloManufacturado";
+import { Base, IBase } from "../Base";
+import { Articulo } from "./Articulo";
 
 export interface PromocionDetalle extends Base {
     cantidad: number,
-    articulo: ArticuloInsumo | ArticuloManufacturado
+    articulo: Articulo
 }
 
-/*export class PromocionDetalle implements PromocionDetalle {
-    id: number = 0;
-    eliminado: boolean = false;
-    cantidad: number = 0;
-}*/
+export interface PromocionDetalleCreate extends IBase {
+    cantidad: number,
+    idArticulo: number
+}
 
 export class PromocionDetalleClass {
     public static createFrom(viejo: PromocionDetalle, nuevo: PromocionDetalle) : PromocionDetalle {
@@ -20,5 +18,19 @@ export class PromocionDetalleClass {
         nuevo.cantidad = viejo.cantidad;
         nuevo.articulo = viejo.articulo;
         return nuevo;
+    }
+
+    public static transform(detalles: PromocionDetalle[]) : PromocionDetalleCreate[] {
+        let nuevos: PromocionDetalleCreate[] = [];
+        detalles.forEach((detalle: PromocionDetalle) => {
+            let nuevo: PromocionDetalleCreate = {
+                id: detalle.id,
+                eliminado: detalle.eliminado,
+                cantidad: detalle.cantidad,
+                idArticulo: detalle.articulo.id
+            }
+            nuevos.push(nuevo)
+        });
+        return nuevos;
     }
 }

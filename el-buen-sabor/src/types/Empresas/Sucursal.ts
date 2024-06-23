@@ -10,3 +10,7 @@ export interface Sucursal extends IBase{
     domicilio: Domicilio,
     empresa: Empresa,
 }
+
+export interface SucursalShort extends IBase {
+    nombre: string
+}

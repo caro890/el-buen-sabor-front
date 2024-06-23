@@ -9,3 +9,10 @@ export class Categoria extends Base{
     //solo pasar ids
     sucursales?: Sucursal[];
 }
+
+export class CategoriaCreate {
+    denominacion: string = "";
+    idCategoriaPadre?: number;
+    esInsumo: boolean = false;
+    idSucursales?: number[];
+}
