@@ -1,22 +1,12 @@
-import { IImagen } from "../types/Articulos/ImagenArticulo";
 import { base } from "./BackendClient";
 
-
 export class ImagenesService {
-    baseUrl: string = base + "images";
+    baseUrl: string;
 
-    async getAll() {
-        var url: string = this.baseUrl + "/getImages" ;
-        const response = await fetch(url, {
-            method: "GET"
-        })
-        if (!response.ok) {
-            throw new Error("Error al eliminar la imagen");
-        }
-        const data = await response.json();
-        return data as IImagen[];   
+    constructor(objUrl: string) {
+        this.baseUrl = base + objUrl;
     }
-
+    
     async delete(image: {id: number, publicId: string}) {
         var url: string = this.baseUrl + "/deleteImg" + `?publicId=${image.publicId}&id=${image.id}` ;
         const response = await fetch(url, {

@@ -1,5 +1,4 @@
-import { Categoria } from "../types/Articulos/Categoria";
-import { CategoriaCreate } from "../types/Articulos/CategoriaCreate";
+import { Categoria, CategoriaCreate } from "../types/Articulos/Categoria";
 import { BackendClient, base } from "./BackendClient";
 
 export class CategoriaService extends BackendClient<Categoria> {
@@ -16,6 +15,24 @@ export class CategoriaService extends BackendClient<Categoria> {
       const newData = await response.json();
       return newData as CategoriaCreate;
     }
+
+  async getAllBySucursalId(id: number): Promise<Categoria[]> {
+    const response = await fetch(`${this.baseUrl}/allCategoriasPorSucursal/${id}`);
+    const data = await response.json();
+    return data as Categoria[];
+  }    
+
+  async getAllInsumoBySucursalId(id: number): Promise<Categoria[]> {
+    const response = await fetch(`${this.baseUrl}/categoriasInsumosPorSucursal/${id}`);
+    const data = await response.json();
+    return data as Categoria[];
+  }    
+
+  async getAllManufacturadoSucursalById(id: number): Promise<Categoria[]> {
+    const response = await fetch(`${this.baseUrl}/categoriasManufacturados/${id}`);
+    const data = await response.json();
+    return data as Categoria[];
+  }
 
   async getAllInsumo(): Promise<Categoria[]> {
     const response = await fetch(`${this.baseUrl}` + "/categoriasInsumos");

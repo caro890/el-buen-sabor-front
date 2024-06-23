@@ -17,4 +17,11 @@ export class ArticuloManufacturadoService extends BackendClient<ArticuloManufact
             throw new Error(`Error al cambiar el estado del elemento con ID ${id}`);
         }
     }
+    
+  //obtener todos por sucursal
+  async getAllBySucursalId(id: number): Promise<ArticuloManufacturado[]>{
+    const response = await fetch(`${this.baseUrl}/getManufacturadosPorSucursal/${id}`);
+    const data = await response.json();
+    return data as ArticuloManufacturado[];
+  }
 }
