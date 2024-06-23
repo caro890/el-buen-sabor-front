@@ -5,14 +5,14 @@ import * as Yup from "yup";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { Typography } from "@mui/material";
 import { Pais } from "../../../types/Domicilio/Pais";
-import { paisesLoader } from "../../AdminDashboard/DomicilioCrud/PaisesCrud";
+import { PaisService } from "../../../services/PaisService";
 import { Provincia } from "../../../types/Domicilio/Provincia";
-import { getProvinciasPorPaisId } from "../../AdminDashboard/DomicilioCrud/ProvinciasCrud";
+import { ProvinciaService } from "../../../services/ProvinciaService";
 import { Localidad } from "../../../types/Domicilio/Localidad";
-import { getLocalidadesPorProvinciaId } from "../../AdminDashboard/DomicilioCrud/LocalidadesCrud";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { Empresa } from "../../../types/Empresas/Empresa";
+import { LocalidadService } from "../../../services/LocalidadService";
 
 
 interface IPropsSucursalForm {
@@ -60,8 +60,6 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal, ti
         validationSchema: validationSchema,
 
         onSubmit: (values) => {
-            //values.esCasaMatriz = esCasaMatriz;
-
             //manejar valores y armar objetos internos
             const paisEncontrado = paises.find((p) => p.id === parseInt(paisSelected));
             const provinciaEncontrada = provincias.find((pr) => pr.id === parseInt(provinciaSelected));
@@ -75,10 +73,6 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal, ti
                 alert("Debes completar la dirección.");
                 return;
             }
-
-
-            //agregar domicilio
-            // createDomicilio(values.domicilio);
 
             //agregar empresa
             if (empresa) values.empresa = empresa;
@@ -97,36 +91,26 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal, ti
     const [localidades, setLocalidades] = useState<Localidad[]>([]);
     const [localidadSelected, setLocalidadSelected] = useState('');
 
-    /*const [esCasaMatriz, setEsCasaMatriz] = useState(false);
-    const [tieneCasaMatriz, setTieneCasaMatriz] = useState(false);*/
+    const paisesLoader = async () => {
+        const service: PaisService = new PaisService();
+        return service.getAll();
+    }      
 
+    const getProvinciasPorPaisId = async (idPais: number) => {
+        const service: ProvinciaService = new ProvinciaService();
+        return service.findByPaisId(idPais);
+    };
+
+    const getLocalidadesPorProvinciaId = async (idProvincia: number) => {
+        const service: LocalidadService = new LocalidadService();
+        return service.findByProvinciaId(idProvincia);
+    };
 
     useEffect(() => {
         if (emp) {
             setEmpresa(emp);
         }
     }, [emp]);
-
-    //cargo si la empresa seleccionada tiene casa matriz
-    /*useEffect(() => {
-        if (emp) {
-            //busco si tiene casa matriz
-            const tieneCasaMatrizInicial = emp.sucursales.some(sucursal => sucursal.esCasaMatriz);
-            
-            console.log("tiene casa matriz inicial: " + tieneCasaMatrizInicial);
-
-            //si la tiene seteo el estado
-            setTieneCasaMatriz(tieneCasaMatrizInicial);
-        }
-    }, [emp]);*/
-
-    /*useEffect(() => {
-        setTieneCasaMatriz(esCasaMatriz);
-    }, [esCasaMatriz]);*/
-
-    /*useEffect(() => {
-        console.log("tiene casa matriz: " + tieneCasaMatriz);
-    }, [tieneCasaMatriz]);*/
 
     useEffect(() => {
         const loadPaises = async () => {
@@ -166,10 +150,6 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal, ti
         }
     }, [provinciaSelected, sucursal]);
 
-
-
-
-
     const handlePaisChange = async (event: { target: { value: any; }; }) => {
         const selectedPaisId = event.target.value;
         const selectedPais = paises.find((p) => p.id == selectedPaisId);
@@ -206,19 +186,6 @@ export const SucursalForm: FC<IPropsSucursalForm> = ({ saveChanges, sucursal, ti
             setLocalidadSelected(sucursal.domicilio.localidad.id.toString());
         }
     }
-
-    /*const handleEsCasaMatrizChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
-
-        const esCasaMatrizActual = event.target.checked;
-
-        if (esCasaMatrizActual && tieneCasaMatriz) {
-            alert("La empresa ya tiene una casa matriz.");
-            return;
-        }
-
-        setEsCasaMatriz(esCasaMatrizActual);
-        formik.setFieldValue('esCasaMatriz', esCasaMatrizActual);
-    }*/
 
     return (
         <div>

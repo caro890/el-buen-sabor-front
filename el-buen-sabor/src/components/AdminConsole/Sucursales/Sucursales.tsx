@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material"
 import { SucursalesList } from "./SucursalesList"
-import "../../../styles/AdminConsole.css"
 import { useAppSelector } from "../../../hooks/redux"
 
 export const Sucursales = () => {

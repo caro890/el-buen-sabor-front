@@ -11,13 +11,9 @@ import { EmptyCard } from "../EmptyCard/EmptyCard";
 import { SucursalForm } from "./SucursalForm";
 import { useAppDispatch } from "../../../hooks/redux";
 import { setSucursal } from "../../../redux/slices/SucursalReducer";
-import { Empresa } from "../../../types/Empresas/Empresa";
-import { Domicilio } from "../../../types/Domicilio/Domicilio";
-import { Provincia } from "../../../types/Domicilio/Provincia";
-import { Localidad } from "../../../types/Domicilio/Localidad";
-import { Pais } from "../../../types/Domicilio/Pais";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { sucursalVacia } from "../../../types/TiposVacios";
 
 export const SucursalesList = () => {
   const [sucursales, setSucursales] = useState<Sucursal[]>([]);
@@ -26,61 +22,7 @@ export const SucursalesList = () => {
 
   const emp = useSelector((state: RootState) => state.empresaReducer.empresa);
 
-  // Inicializar Pais
-  const initialPais: Pais = {
-    id: 0,
-    nombre: "",
-    eliminado: false
-  };
-
-  // Inicializar Provincia
-  const initialProvincia: Provincia = {
-    id: 0,
-    nombre: "",
-    pais: initialPais,
-    eliminado: false
-  };
-
-  // Inicializar Localidad
-  const initialLocalidad: Localidad = {
-    id: 0,
-    nombre: "",
-    provincia: initialProvincia,
-    eliminado: false
-  };
-
-  const initialDomicilio: Domicilio = {
-    id: 0,
-    calle: "",
-    numero: 0,
-    cp: 0,
-    piso: 0,
-    nroDpto: 0,
-    localidad: initialLocalidad,
-    eliminado: false
-  };
-
-  const initialEmpresa: Empresa = {
-    id: 0,
-    nombre: "",
-    razonSocial: "",
-    cuit: 0,
-    logo: "",
-    sucursales: [],
-    eliminado: false
-  };
-
-
-  const [sucursalForm, setSucursalForm] = useState<Sucursal>({
-    id: 0,
-    eliminado: false,
-    nombre: "",
-    horarioApertura: "",
-    horarioCierre: "",
-    domicilio: initialDomicilio,
-    empresa: initialEmpresa,
-    esCasaMatriz: false
-  });
+  const [sucursalForm, setSucursalForm] = useState<Sucursal>(sucursalVacia);
 
   const service = new SucursalService();
 
@@ -163,16 +105,7 @@ export const SucursalesList = () => {
   };
 
   const handleClose = () => {
-    setSucursalForm({
-      id: 0,
-      eliminado: false,
-      nombre: "",
-      horarioApertura: "",
-      horarioCierre: "",
-      domicilio: initialDomicilio,
-      empresa: initialEmpresa,
-      esCasaMatriz: false
-    });
+    setSucursalForm(sucursalVacia);
     setShowModal(false);
   };
 
