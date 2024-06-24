@@ -2,7 +2,7 @@ import { Typography } from "@mui/material"
 import { Button, Form, Row, Col } from "react-bootstrap"
 import { LoaderFunction, useLoaderData, useNavigate } from "react-router"
 import { EmpleadoService } from "../../../../services/EmpleadoService"
-import { Empleado, Rol } from "../../../../types/Empresas/Empleado";
+import { Empleado, EmpleadoCreate, Rol } from "../../../../types/Empresas/Empleado";
 import { useFormik } from "formik";
 import * as Yup from "yup"
 import styles from "../../../../styles/ProductForm.module.css"
@@ -16,7 +16,7 @@ export const EmpleadoForm = () => {
   const service: EmpleadoService = new EmpleadoService();   //servicio para interactuar con la api
   const empleadoSeleccionado = useLoaderData() as Empleado;   //datos elegidos de la tabla para rellenar el form
   //sucursal actual
-  const sucursal: Sucursal | null = useAppSelector((state) => (state.empresaReducer.activeSucursal));
+  const sucursal: Sucursal | null = useAppSelector((state) => (state.sucursalReducer.sucursal));
 
   //Esquemas de validacion para formik
   const EMAIL_REGX: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
@@ -45,15 +45,22 @@ export const EmpleadoForm = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       let newEmpleado = values;
-      if(sucursal!=null) newEmpleado.sucursal = sucursal;
 
-      if(values.id!=0){
-        newEmpleado = await service.put(values.id, newEmpleado);
-      } else {
-        newEmpleado = await service.post(newEmpleado);
+      if(sucursal!=null) {
+        let empleadoCreate: EmpleadoCreate = {
+          id: values.id,
+          eliminado: values.eliminado,
+          nombre: values.nombre,
+          apellido: values.apellido,
+          telefono: values.telefono,
+          imagenPersona: values.imagenPersona,
+          fechaNacimiento: values.fechaNacimiento,
+          usuario: values.usuario,
+          idSucursal: sucursal.id
+        }
+        newEmpleado = await service.create(empleadoCreate);
       }
 
-      console.log(newEmpleado);
       navigate(-1);
     }
   });
@@ -147,7 +154,7 @@ export const EmpleadoForm = () => {
             <Col>
               <Form.Control 
                 type="text"
-                name="username"
+                name="usuario.username"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.usuario.username}
@@ -155,7 +162,7 @@ export const EmpleadoForm = () => {
             </Col>
           </Form.Group>
           {
-            formik.touched.usuario.username && formik.errors.usuario.username ?
+            formik.touched.usuario && formik.errors.usuario ?
             (<p className="text-danger"> {formik.errors.usuario.username} </p>) : null
           }
 
@@ -164,7 +171,7 @@ export const EmpleadoForm = () => {
             <Col>
               <Form.Control 
                 type="email"
-                name="email"
+                name="usuario.email"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.usuario.email}
@@ -172,7 +179,7 @@ export const EmpleadoForm = () => {
             </Col>
           </Form.Group>
           {
-            formik.touched.usuario.email && formik.errors.usuario.email ?
+            formik.touched.usuario && formik.errors.usuario ?
             (<p className="text-danger"> {formik.errors.usuario.email} </p>) : null
           }
 
@@ -181,7 +188,7 @@ export const EmpleadoForm = () => {
             <Col>
               <Form.Control 
                 type="text"
-                name="auth0Id"
+                name="usuario.auth0Id"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.usuario.auth0Id}
@@ -189,7 +196,7 @@ export const EmpleadoForm = () => {
             </Col>
           </Form.Group>
           {
-            formik.touched.usuario.auth0Id && formik.errors.usuario.auth0Id ?
+            formik.touched.usuario && formik.errors.usuario ?
             (<p className="text-danger"> {formik.errors.usuario.auth0Id} </p>) : null
           }
 
@@ -197,7 +204,7 @@ export const EmpleadoForm = () => {
             <Form.Label column sm={2}>Rol:</Form.Label>
             <Col>
               <Form.Select
-                name="rol"
+                name="usuario.rol"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.usuario.rol}
@@ -211,7 +218,7 @@ export const EmpleadoForm = () => {
             </Col>
           </Form.Group>
           {
-            formik.touched.usuario.rol && formik.errors.usuario.rol ?
+            formik.touched.usuario && formik.errors.usuario ?
             (<p className="text-danger"> {formik.errors.usuario.rol} </p>) : null
           }
 
@@ -232,7 +239,8 @@ export const empleadoLoader: LoaderFunction = async ({params}) => {
   
     if(id) {  //si recibo una id de la url, cargo desde la api
       var res = await service.getById(Number(id));
-      return res;
+      if(res!=undefined) return res;
+      else return empleadoVacio;
     } else {  //sino devuelvo el empleado vacio
       return empleadoVacio;
     }

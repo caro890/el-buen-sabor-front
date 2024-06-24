@@ -29,6 +29,9 @@ interface Persona extends IBase {
 }
 
 export interface Empleado extends Persona {
-    //pedidos: Pedido[]
     sucursal: Sucursal;
+}
+
+export interface EmpleadoCreate extends Persona {
+    idSucursal: number
 }

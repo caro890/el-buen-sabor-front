@@ -19,10 +19,10 @@ export const EmpleadoDetalle = ({
   return (
     <Modal show={open} onHide={handleClose} centered size="lg">
         <Modal.Header closeButton>
-            {item? <Modal.Title>{item.nombre} {item.apellido}</Modal.Title>: null}
+            {item!=undefined? <Modal.Title>{item.nombre} {item.apellido}</Modal.Title>: null}
         </Modal.Header>
         <Modal.Body>
-          {item?
+          {item!=undefined?
             <Container>
                 <Row className="mb-3">
                     <Col>

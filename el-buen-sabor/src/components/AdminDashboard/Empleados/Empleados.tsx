@@ -1,9 +1,9 @@
-import { Box, Typography } from "@mui/material"
+import { Box, Container, Typography } from "@mui/material"
 import { GenericTable } from "../../GenericTable/GenericTable"
 import Swal from "sweetalert2"
 import { Empleado } from "../../../types/Empresas/Empleado"
 import { useDispatch } from "react-redux"
-import { setDataTable } from "../../../redux/slices/TablaDataReducer"
+import { setDataTable, removeElementActive } from "../../../redux/slices/TablaDataReducer"
 import { EmpleadoService } from "../../../services/EmpleadoService"
 import { useEffect, useState } from "react"
 import { EmpleadoDetalle } from "./Detalle/EmpleadoDetalle"
@@ -14,12 +14,12 @@ export const Empleados = () => {
   const dispatch = useDispatch(); //hook para setear los datos de la tabla
   const service = new EmpleadoService();  //servicio para interactuar con la api
   //id de la sucursal actual
-  const idSucursal: number | undefined = useAppSelector((state) => (state.empresaReducer.activeSucursal?.id));
+  const idSucursal: number | undefined = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
   const [showDetail, setShowDetail] = useState<boolean>(false); //estado para manejar la visualizacion del detalle
 
   useEffect(()=>{
     getEmpleados();
-  });
+  }, []);
 
   //funcion para cargar los datos a mostrar
   const getEmpleados = async () => {
@@ -27,7 +27,7 @@ export const Empleados = () => {
       await service.getAllBySucursalId(idSucursal).then((data) => {
         dispatch(setDataTable(data));
       });
-    }
+    } 
   };
 
   //funcion para manejar las eliminaciones
@@ -55,6 +55,12 @@ export const Empleados = () => {
     setShowDetail(true);
   }
 
+  //funcion para manejar el cierre del detalle
+  const handleClose = () => {
+    dispatch(removeElementActive());
+    setShowDetail(false);
+  }
+
   //columnas de la tabla a mostrar
   const columnsTablaEmpleados = [
     {
@@ -65,13 +71,13 @@ export const Empleados = () => {
       label: "Apellido",
       key: "apellido"
     },
-    {
+    /*{
       label: "Puesto/Rol",
       key: "usuario",
       render: (empleado: Empleado) => {
         return empleado.usuario.rol.toString();
       }
-    },
+    },*/
     {
       label: "Acciones",
       key: "acciones"
@@ -80,6 +86,7 @@ export const Empleados = () => {
 
   return (
     <Box component="main" sx={{ flexGrow: 1, my: 2 }}>
+      <Container>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
         <Typography variant="h5" gutterBottom>
           Empleados
@@ -96,8 +103,9 @@ export const Empleados = () => {
       
       <EmpleadoDetalle
         open={showDetail} 
-        handleClose={() => setShowDetail(false)} 
+        handleClose={handleClose} 
       />
+      </Container>
     </Box>
   )
 }
