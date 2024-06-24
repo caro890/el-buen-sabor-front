@@ -76,7 +76,7 @@ export const Empleados = () => {
       label: "Acciones",
       key: "acciones"
     }
-  ]
+  ];
 
   return (
     <Box component="main" sx={{ flexGrow: 1, my: 2 }}>

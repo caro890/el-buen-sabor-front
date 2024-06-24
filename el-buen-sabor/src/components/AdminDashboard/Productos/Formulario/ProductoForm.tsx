@@ -70,7 +70,7 @@ export const ProductoForm = () => {
   //estado para manejar la apertura de la ventana modal
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const idSucursal = useAppSelector((state) => (state.empresaReducer.activeSucursal?.id));
+  const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
 
   //cargo las unidades de medida y las categorias
   useEffect(() => {
@@ -85,10 +85,7 @@ export const ProductoForm = () => {
       );
     }
 
-    img.setObjUrl("/articulosManufacturados");
-    if(productoSeleccionado.imagenes) img.setExistingImages(productoSeleccionado.imagenes);
-    else img.setExistingImages([]);
-    img.addToShowImages();
+    setImagesConfig();
   }, []);
 
   //seteo el estado con el producto que recibi del loader
@@ -102,6 +99,13 @@ export const ProductoForm = () => {
   useEffect(() => {
     actualizarInsumos();
   }, [detalles]);
+
+  const setImagesConfig = async () => {
+    img.setObjUrl("articulosManufacturados");
+    if(productoSeleccionado.imagenes) img.setExistingImages(productoSeleccionado.imagenes);
+    else img.setExistingImages([]);
+    img.addToShowImages();
+  };
 
   //funcion para actualizar los insumos que se van a mostrar en la ventana modal
   const actualizarInsumos = async () => {

@@ -36,7 +36,7 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
     
     //change the states
     //transform existingImages into ImageFile and add them to toShowImages
-    const addToShowImages = async () => {
+    const addToShowImages = () => {
         let auxArray: ImageFile[] = [];
         existingImages.forEach((img: IImagen) => {
             let newImage: ImageFile = {
@@ -51,7 +51,7 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
     };
 
     //transform selctedFiles into ImageFile and add it to toShowImages, add files to newImages
-    const addImages = async () => {
+    const addImages = () => {
         if(selectedFiles){
             let auxToShow: ImageFile[] = toShowImages.slice();
             let auxNew: File[] = newImages.slice();
@@ -84,7 +84,7 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
     };
 
     //remove from toShowImages, if it has a file we remove it from newImages if not add to toDeleteImages
-    const deleteImage = async (deleted: ImageFile) => {
+    const deleteImage = (deleted: ImageFile) => {
         let auxToShow: ImageFile[] = toShowImages.slice();
 
         auxToShow = auxToShow.filter( (img: ImageFile ) => {
@@ -113,6 +113,7 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
     const uploadImages = async (idObject: number) => {
         //Crear un objeto FormData y agregar los archivos seleccionados
         if(newImages) {
+            console.log(newImages);
             const formData = new FormData();
             newImages.forEach((file: File) => {
               formData.append("uploads", file);
@@ -146,7 +147,8 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
     };
 
     //delete toDeleteImages from cloudinary
-    const deleteImages = async () => {
+    const deleteImages = () => {
+        console.log("To Delete Images: " + toDeleteImages);
         let service = new ImagenesService(objUrl);
         toDeleteImages.forEach((img: ImageFile) => {
             //extraigo el ID publico de la URL de la imagen
@@ -165,7 +167,7 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
     };
 
     //empty the states
-    const reset = async () => {
+    const reset = () => {
         setExistingImages([]);
         setNewImages([]);
         setToShowImages([]);

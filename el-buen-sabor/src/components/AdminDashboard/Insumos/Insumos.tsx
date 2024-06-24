@@ -82,8 +82,8 @@ export const InsumosCrud = () => {
   };
 
   const handleClose = () => {
-    setShowDetail(false);
     dispatch(removeElementActive());
+    setShowDetail(false);
   }
 
   return (

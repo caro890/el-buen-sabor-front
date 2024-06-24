@@ -7,11 +7,15 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import { stockShortVacio } from "../../../types/TiposVacios"
 import { StockService } from "../../../services/StockService"
-import { StockCreate, StockShort } from "../../../types/Articulos/Stock"
+import { Stock, StockShort } from "../../../types/Articulos/Stock"
 
 //esquema de validacion para formik
 const validationSchema = Yup.object().shape({
-  stockActual: Yup.number().required("Ingrese el stock actual"),
+  stockActual: Yup.number().required("Ingrese el stock actual")
+    .max(
+      Yup.ref("stockMaximo"),
+      "El stock actual debe ser menor al stock máximo"
+    ),
   stockMaximo: Yup.number().required("Ingrese el stock máximo")
     .moreThan(
       Yup.ref("stockMinimo"),
@@ -32,15 +36,16 @@ export const StockForm = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       //creo un nuevo stock
-      let newStock: StockCreate = {
+      let newStock: Stock = {
         id: values.id,
         eliminado: values.eliminado,
         stockActual: values.stockActual,
         stockMaximo: values.stockMaximo,
         stockMinimo: values.stockMinimo,
-        idArticuloInsumo: values.articuloInsumo.id,
-        idSucursal: values.sucursal.id
+        articuloInsumo: values.articuloInsumo,
+        sucursal: values.sucursal
       }
+
       //actualizo el stock, y vuelvo a la ruta anterior
       service.put(values.id, newStock).then(() =>
         navigate(-1)

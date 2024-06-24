@@ -19,7 +19,7 @@ export const Stock = () => {
   
   useEffect(()=>{
     getStocks();
-  });
+  }, []);
 
   //función para obtener los datos a mostrar
   const getStocks = async () => {
@@ -94,7 +94,6 @@ export const Stock = () => {
                     .map((row, index: number) => {
                         return(
                             <TableRow className={styles.row} hover role="checkbox" tabIndex={-1} key={index} >
-                              return(
                                 <TableCell align="center">
                                   {row["articuloInsumo"].denominacion}
                                 </TableCell>
@@ -112,7 +111,6 @@ export const Stock = () => {
                                     <CIcon icon={cilPencil} size="lg" />
                                   </IconButton>
                                 </TableCell>
-                              );
                             </TableRow>
                         );
                     })}

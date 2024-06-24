@@ -35,10 +35,8 @@ export const UnidadMedidaForm = () => {
       return;
     }
 
-    console.log(JSON.stringify(unidadMedida));
-
     await service.post(unidadMedida);
-    navigate('/dashboard/unidadesMedida');
+    navigate(-1);
 
   }
 

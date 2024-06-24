@@ -26,6 +26,7 @@ import { Estadisticas } from "../components/AdminDashboard/Estadisticas/Estadist
 import { EmpleadoForm, empleadoLoader } from "../components/AdminDashboard/Empleados/Formulario/EmpleadoForm"
 import { StockForm, stockLoader } from "../components/AdminDashboard/Stock/StockForm.tsx"
 import { ImagesContextProvider } from "../context/ImagenesContext.tsx"
+import { EstadisticasSucursal } from "../components/AdminDashboard/Estadisticas/EstadisticasSucursal.tsx"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -68,7 +69,10 @@ const router = createBrowserRouter(
           <Route index element={<Stock/>} />
           <Route path="form/:id?" element={<StockForm/>} loader={stockLoader} />
         </Route>
-        <Route path="estadisticas" element={<Estadisticas/>} />
+        <Route path="estadisticas" >
+          <Route index element={<Estadisticas/>} />
+          <Route path="sucursal" element={<EstadisticasSucursal/>} />
+        </Route>
       </Route>
     </Route>
   )

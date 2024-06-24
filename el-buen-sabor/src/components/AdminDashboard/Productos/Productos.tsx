@@ -90,8 +90,8 @@ export const ProductosCrud = () => {
   };
 
   const handleClose = () => {
-    setShowDetail(false);
     dispatch(removeElementActive());
+    setShowDetail(false);
   }
 
   const handleHabilitar = async (id: number) => {

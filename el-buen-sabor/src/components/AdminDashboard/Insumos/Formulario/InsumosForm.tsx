@@ -28,7 +28,7 @@ const categoriaValidation = Yup.object().shape({
   id: Yup.number().required("Seleccione una categoría")
 });
 
-const validationSchema = Yup.object().shape({
+const validationSchemaCreate = Yup.object().shape({
   denominacion: Yup.string().required("Ingrese la denominación del insumo"),
   precioVenta: Yup.number().moreThan(-1, "El precio debe ser un valor positivo"),
   precioCompra: Yup.number().required("Ingrese el precio de compra").positive("El precio debe ser un valor positivo"),
@@ -42,13 +42,27 @@ const validationSchema = Yup.object().shape({
   categoria: categoriaValidation
 });
 
-
+const validationSchemaEdit = Yup.object().shape({
+  denominacion: Yup.string().required("Ingrese la denominación del insumo"),
+  precioVenta: Yup.number().moreThan(-1, "El precio debe ser un valor positivo"),
+  precioCompra: Yup.number().required("Ingrese el precio de compra").positive("El precio debe ser un valor positivo"),
+  stockActual: Yup.number().required("Ingrese el stock actual").moreThan(-1, "El stock debe ser un valor positivo"),
+  stockMaximo: Yup.number().required("Ingrese el stock máximo").moreThan(0, "El stock máximo debe ser mayor a 0")
+    .min(Yup.ref("stockMinimo"), "El stock máximo debe ser mayor al stock Mínimo"),
+  stockMinimo: Yup.number().required("Ingrese el stock mínimo").moreThan(0, "El stock mínimo debe ser mayor a 0"),
+  esParaElaborar: Yup.boolean().required("Seleccione si es para elaborar o para vender"),
+  codigo: Yup.string().required("Ingrese el código del insumo").matches(/^[I]/, 'El código debe empezar con una I mayúscula'),
+  unidadMedida: unidadMedidaValidation,
+  categoria: categoriaValidation
+});
 
 export const InsumosForm = () => {
   const navigate = useNavigate();
 
   //obtengo el insumo cargado por el loader
   const insumoSeleccionado = useLoaderData() as ArticuloInsumo;
+
+  const [validationSchema, setValidationSchema] = useState<Yup.Schema>(validationSchemaCreate);
 
   //estado para manejar el insumo a crear o editado
   const [insumo, setInsumo] = useState<ArticuloInsumo>(insumoVacio);
@@ -67,11 +81,12 @@ export const InsumosForm = () => {
   //servicio de categoria
   const serviceCat = new CategoriaService();
 
-  const idSucursal = useAppSelector((state) => (state.empresaReducer.activeSucursal?.id));
+  const sucursal = useAppSelector((state) => (state.sucursalReducer.sucursal));
 
   //cargo el insumo en el estado
   useEffect(() => {
     setInsumo(insumoSeleccionado);
+    if(insumoSeleccionado.id!=0) setValidationSchema(validationSchemaEdit);
     //if(insumoSeleccionado.imagenes) setImagenes(insumoSeleccionado.imagenes);
   }, []);
 
@@ -81,8 +96,8 @@ export const InsumosForm = () => {
       setUnidades(data)
     )
     
-    if(idSucursal){
-      serviceCat.getAllInsumoBySucursalId(idSucursal).then((data) =>
+    if(sucursal){
+      serviceCat.getAllInsumoBySucursalId(sucursal.id).then((data) =>
         setCategorias(data)
       )
     }
@@ -93,8 +108,8 @@ export const InsumosForm = () => {
     initialValues: insumoSeleccionado,  
     validationSchema: validationSchema, 
     onSubmit: async (values) => {
-
       if(values.id!=0) {
+        console.log(values);
         let newInsumo: ArticuloInsumo = await service.put(values.id, values);
         console.log(newInsumo);
       } else {

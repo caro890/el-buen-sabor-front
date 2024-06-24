@@ -93,6 +93,10 @@ const BasicSidebar: React.FC = () => {
                             <CIcon customClassName="nav-icon" icon={cilChart} />
                             Estadísticas
                         </Link>
+                        <Link to="estadisticas/sucursal" className="nav-link">
+                            <CIcon customClassName="nav-icon" icon={cilChart} />
+                            Estadísticas Sucursal
+                        </Link>
                     </CNavItem>
                 </CSidebarNav>
             </CSidebar>

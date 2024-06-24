@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../../hooks/redux";
 import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
 import { UnidadMedida } from "../../../types/Articulos/UnidadMedida";
 import { useLoaderData } from "react-router";
-import { setDataTable } from "../../../redux/slices/TablaDataReducer";
+import { setDataTable, removeElementActive } from "../../../redux/slices/TablaDataReducer";
 import Swal from "sweetalert2";
 import { Box, Typography } from "@mui/material";
 import { GenericTable } from "../../GenericTable/GenericTable";
@@ -57,6 +57,10 @@ export const UnidadesMedidaCrud = () => {
         });
     };
 
+    const handleSelect = () => {
+        dispatch(removeElementActive());
+    }
+
     return (
         <Box component="main" sx={{ flexGrow: 1, my: 2 }}>
             <Container>
@@ -69,7 +73,7 @@ export const UnidadesMedidaCrud = () => {
             <GenericTable<UnidadMedida>
                 handleDelete={handleDelete}
                 columns={columnsTableUnidadesMedida}
-                handleSelect={() => {}}
+                handleSelect={handleSelect}
                 handleHabilitar={() => {}}>
             </GenericTable>
             </Container>

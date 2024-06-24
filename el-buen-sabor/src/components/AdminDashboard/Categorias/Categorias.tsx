@@ -1,19 +1,20 @@
 import { CategoriaService } from "../../../services/CatogoriaService";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { useEffect } from "react";
-import { setDataTable } from "../../../redux/slices/TablaDataReducer";
+import { setDataTable, removeElementActive } from "../../../redux/slices/TablaDataReducer";
 import Swal from "sweetalert2";
 import { Box, Typography, Container } from "@mui/material";
 import { GenericTable } from "../../GenericTable/GenericTable";
 import { Categoria } from "../../../types/Articulos/Categoria";
 import { BotonNuevo } from "../../Botones/BotonNuevo";
+import { SucursalShort } from "../../../types/Empresas/Sucursal";
 //import { LoaderFunction, useLoaderData } from "react-router";
 
 export const CategoriasCrud = () => {
   //const loaderData = useLoaderData() as Categoria[];
   const dispatch = useAppDispatch();
   const service: CategoriaService = new CategoriaService();
-  const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
+  const sucursal = useAppSelector((state) => (state.sucursalReducer.sucursal));
 
   useEffect(() => {
     getCategorias();
@@ -43,8 +44,8 @@ export const CategoriasCrud = () => {
   ];
 
   const getCategorias = async () => {
-    if (idSucursal){
-      await service.getAllBySucursalId(idSucursal).then((data) => {
+    if (sucursal){
+      await service.getAllBySucursalId(sucursal.id).then((data) => {
         dispatch(setDataTable(data));
       });
     }
@@ -61,13 +62,22 @@ export const CategoriasCrud = () => {
       confirmButtonText: "Si, Eliminar",
       cancelButtonText: "Cancelar",
     }).then((result) => {
-      if (result.isConfirmed) {
-        service.delete(id).then(() => {
+      if (result.isConfirmed && sucursal) {
+        let sucursalShort: SucursalShort = {
+          id: sucursal?.id,
+          eliminado: sucursal?.eliminado,
+          nombre: sucursal?.nombre
+        }
+        service.deleteById(id, sucursalShort).then(() => {
           getCategorias();
         });
       }
     });
   };
+
+  const handleSelect = () => {
+    dispatch(removeElementActive());
+  }
 
   return (
     <Box component="main" sx={{ flexGrow: 1, my: 2 }}>
@@ -82,7 +92,7 @@ export const CategoriasCrud = () => {
       <GenericTable<Categoria>
         handleDelete={handleDelete}
         columns={columnsTableCategorias}
-        handleSelect={() => {}}
+        handleSelect={handleSelect}
         handleHabilitar={() => {}}>
       </GenericTable>
       </Container>
