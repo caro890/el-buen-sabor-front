@@ -1,11 +1,11 @@
-import { StockCreate, StockShort } from "../types/Articulos/Stock";
+import { Stock, StockShort } from "../types/Articulos/Stock";
 import { base } from "./BackendClient";
 
 export class StockService {
-    protected baseUrl: string = base + "/stocks";
+    protected baseUrl: string = base + "stocks";
 
     //actualizar stock
-    async put(id: number, data: StockCreate): Promise<StockCreate> {
+    async put(id: number, data: Stock): Promise<Stock> {
         const response = await fetch(`${this.baseUrl}/${id}`, {
           method: "PUT",
           headers: {
@@ -14,7 +14,7 @@ export class StockService {
           body: JSON.stringify(data),
         });
         const newData = await response.json();
-        return newData as StockCreate;
+        return newData as Stock;
     }
 
     //obtener stock por sucursal

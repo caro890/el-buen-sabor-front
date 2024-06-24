@@ -1,4 +1,5 @@
 import { Categoria, CategoriaCreate } from "../types/Articulos/Categoria";
+import { SucursalShort } from "../types/Empresas/Sucursal";
 import { BackendClient, base } from "./BackendClient";
 
 export class CategoriaService extends BackendClient<Categoria> {
@@ -16,6 +17,19 @@ export class CategoriaService extends BackendClient<Categoria> {
       return newData as CategoriaCreate;
     }
 
+    async deleteById(id: number, sucursal: SucursalShort) {
+      const response = await fetch(`${this.baseUrl}/baja/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sucursal)
+      });
+      if(!response.ok) {
+        throw new Error("Error al dar de baja a categoria");
+      }
+    }
+
   async getAllBySucursalId(id: number): Promise<Categoria[]> {
     const response = await fetch(`${this.baseUrl}/allCategoriasPorSucursal/${id}`);
     const data = await response.json();
@@ -23,25 +37,13 @@ export class CategoriaService extends BackendClient<Categoria> {
   }    
 
   async getAllInsumoBySucursalId(id: number): Promise<Categoria[]> {
-    const response = await fetch(`${this.baseUrl}/categoriasInsumosPorSucursal/${id}`);
+    const response = await fetch(`${this.baseUrl}/categoriasInsumoPorSucursal/${id}`);
     const data = await response.json();
     return data as Categoria[];
   }    
 
   async getAllManufacturadoSucursalById(id: number): Promise<Categoria[]> {
-    const response = await fetch(`${this.baseUrl}/categoriasManufacturados/${id}`);
-    const data = await response.json();
-    return data as Categoria[];
-  }
-
-  async getAllInsumo(): Promise<Categoria[]> {
-    const response = await fetch(`${this.baseUrl}` + "/categoriasInsumos");
-    const data = await response.json();
-    return data as Categoria[];
-  }    
-
-  async getAllManufacturado(): Promise<Categoria[]> {
-    const response = await fetch(`${this.baseUrl}` + "/categoriasManufacturados");
+    const response = await fetch(`${this.baseUrl}/categoriasManufacturadoPorSucursal/${id}`);
     const data = await response.json();
     return data as Categoria[];
   }

@@ -10,7 +10,10 @@ export class ImagenesService {
     async delete(image: {id: number, publicId: string}) {
         var url: string = this.baseUrl + "/deleteImg" + `?publicId=${image.publicId}&id=${image.id}` ;
         const response = await fetch(url, {
-            method: "POST"
+            "method": "POST",
+            "headers": {
+                "Content-Type": 'multipart/form-data'
+            },
         })
         if (!response.ok) {
             throw new Error("Error al eliminar la imagen");
@@ -20,8 +23,11 @@ export class ImagenesService {
     async upload(idArticulo: number, formData: FormData){
         var url: string = this.baseUrl + `/uploads/${idArticulo}` ;
         const response = await fetch(url, {
-            method: "POST",
-            body: formData,
+            "method": "POST",
+            "headers": {
+                "Content-Type": 'multipart/form-data'
+            },
+            "body": formData,
         })
         if (!response.ok) {
             throw new Error("Error al cargar las imagenes");

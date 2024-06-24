@@ -2,10 +2,10 @@ import { CostoGanancia, IngresosDiarios, IngresosMensuales, PedidosCliente, Rank
 import { base } from "./BackendClient";
 
 export class EstadisticasService {
-  protected baseUrl: string = base + "/estadisticas";
+  protected baseUrl: string = base + "estadisticas";
 
   async getBestProductsRanking(idSucursal: number, desde: Date, hasta: Date): Promise<RankingProductos[]> {
-    const response = await fetch(`${this.baseUrl}/ranking/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/ranking/${idSucursal}?fechaDesde=${desde.toISOString().split('T')[0]}&fechaHasta=${hasta.toISOString().split('T')[0]}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export class EstadisticasService {
   }
 
   async getRankingEmpresas(idEmpresa: number,desde: Date, hasta: Date): Promise<RankingProductos[]> {
-    const response = await fetch(`${this.baseUrl}/rankingEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/rankingEmpresa/${idEmpresa}?fechaDesde=${desde.toISOString().split('T')[0]}&fechaHasta=${hasta.toISOString().split('T')[0]}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
