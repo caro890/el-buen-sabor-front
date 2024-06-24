@@ -1,4 +1,3 @@
-
 export interface RankingProductos {
     countVentas: number,
     denominacion: string
