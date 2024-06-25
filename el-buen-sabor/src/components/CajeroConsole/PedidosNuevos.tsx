@@ -26,7 +26,7 @@ export const PedidosNuevos = () => {
     <Container>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
             <Typography variant="h5" gutterBottom>
-                Pedidos en Preparación
+                Pedidos Nuevos
             </Typography>
         </Box>
         <PedidosTable

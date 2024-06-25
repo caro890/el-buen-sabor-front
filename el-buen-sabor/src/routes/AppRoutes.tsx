@@ -46,6 +46,10 @@ const router = createBrowserRouter(
 
       <Route path="cocinero-console" element={<CocineroLayout/>}>
         <Route index  element={<PedidosEnPreparacion/>}/>
+        <Route path="stock">
+          <Route index element={<Stock/>} />
+          <Route path="form/:id?" element={<StockForm/>} loader={stockLoader} />
+        </Route>
       </Route>
 
       <Route path="cajero-console" element={<CajeroLayout/>}>
