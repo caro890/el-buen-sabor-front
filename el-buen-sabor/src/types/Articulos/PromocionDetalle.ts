@@ -1,5 +1,5 @@
 import { Base, IBase } from "../Base";
-import { Articulo } from "./Articulo";
+import { Articulo, ArticuloShort } from "./Articulo";
 
 export interface PromocionDetalle extends Base {
     cantidad: number,
@@ -9,6 +9,11 @@ export interface PromocionDetalle extends Base {
 export interface PromocionDetalleCreate extends IBase {
     cantidad: number,
     idArticulo: number
+}
+
+export interface PromocionDetalleShort extends IBase {
+    cantidad: number,
+    articulo: ArticuloShort
 }
 
 export class PromocionDetalleClass {

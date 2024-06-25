@@ -76,7 +76,7 @@ export const PromocionForm = () => {
     if(idSucursal) {
       //con el servicio de Articulo insumo obtengo todos los insumos para elaborar
       let serviceInsumo = new ArticuloInsumoService();
-      let listaInsumos = await serviceInsumo.getAllBySucursalId(idSucursal) as Articulo[];
+      let listaInsumos = await serviceInsumo.getAllParaVender(idSucursal) as Articulo[];
 
       //con el servicio de Articulo manufacturado obtengo los manufactuados
       let serviceManufacturado = new ArticuloManufacturadoService();

@@ -111,7 +111,8 @@ export const ProductoForm = () => {
   const actualizarInsumos = async () => {
     //con el servicio de Articulo insumo obtengo todos los insumos para elaborar
     var serviceInsumo = new ArticuloInsumoService();
-    var listaInsumos = await serviceInsumo.getAllParaElaborar() as ArticuloInsumo[];
+    var listaInsumos: ArticuloInsumo[] = [];
+    if(idSucursal) listaInsumos = await serviceInsumo.getAllParaElaborar(idSucursal) as ArticuloInsumo[];
 
     //si existen detalles, elimino los insumos de esos detalles de la lista
     if(detalles.length != 0) {

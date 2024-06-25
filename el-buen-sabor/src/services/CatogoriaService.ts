@@ -18,12 +18,11 @@ export class CategoriaService extends BackendClient<Categoria> {
     }
 
     async deleteById(id: number, sucursal: SucursalShort) {
-      const response = await fetch(`${this.baseUrl}/baja/${id}`, {
+      const response = await fetch(`${this.baseUrl}/baja/${id}/${sucursal.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-        },
-        body: JSON.stringify(sucursal)
+        }
       });
       if(!response.ok) {
         throw new Error("Error al dar de baja a categoria");

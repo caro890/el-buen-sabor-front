@@ -1,7 +1,7 @@
 import { IBase } from "../Base";
 import { Sucursal } from "../Empresas/Sucursal";
 import { IImagen } from "./ImagenArticulo";
-import { PromocionDetalle, PromocionDetalleCreate } from "./PromocionDetalle";
+import { PromocionDetalle, PromocionDetalleCreate, PromocionDetalleShort } from "./PromocionDetalle";
 
 export enum TipoPromocion {
     HAPPY_HOUR = "HAPPY_HOUR",
@@ -39,3 +39,19 @@ export interface PromocionCreate extends IBase {
     imagenes?: IImagen[],
     idsSucursales: number[]
 }
+
+export interface PromocionShort extends IBase {
+    denominacion: string,
+    fechaDesde: Date,
+    fechaHasta: Date,
+    horaDesde: Date,
+    horaHasta: Date,
+    habilitado: boolean,
+    descripcionDescuento: string,
+    precioPromocional: number,
+    tipoPromocion: TipoPromocion, //!
+
+    promocionDetalles: PromocionDetalleShort[],
+    imagenes?: IImagen[]
+}
+
