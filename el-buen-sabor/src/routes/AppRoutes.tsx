@@ -27,6 +27,14 @@ import { EmpleadoForm, empleadoLoader } from "../components/AdminDashboard/Emple
 import { StockForm, stockLoader } from "../components/AdminDashboard/Stock/StockForm.tsx"
 import { ImagesContextProvider } from "../context/ImagenesContext.tsx"
 import { EstadisticasSucursal } from "../components/AdminDashboard/Estadisticas/EstadisticasSucursal.tsx"
+import { Pedidos } from "../components/AdminDashboard/Pedidos/Pedidos.tsx"
+import { CocineroLayout } from "./layouts/CocineroLayout.tsx"
+import { CajeroLayout } from "./layouts/CajeroLayout.tsx"
+import { DeliveryLayout } from "./layouts/DeliveryLayout.tsx"
+import { PedidosEnCamino } from "../components/DeliveryConsole/PedidosEnCamino.tsx"
+import { PedidosEnPreparacion } from "../components/CocineroConsole/PedidosEnPreparacion.tsx"
+import { PedidosNuevos } from "../components/CajeroConsole/PedidosNuevos.tsx"
+import { PedidosEntregaPendiente } from "../components/CajeroConsole/PedidosEntregaPendiente.tsx"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +42,19 @@ const router = createBrowserRouter(
       <Route path="admin-console">
         <Route index element={<Empresas />}></Route>
         <Route path="sucursales/:id" element={<Sucursales />}></Route>
+      </Route>
+
+      <Route path="cocinero-console" element={<CocineroLayout/>}>
+        <Route index  element={<PedidosEnPreparacion/>}/>
+      </Route>
+
+      <Route path="cajero-console" element={<CajeroLayout/>}>
+        <Route index element={<PedidosNuevos/>} />
+        <Route path="entrega_pendiente" element={<PedidosEntregaPendiente/>}/>
+      </Route>
+
+      <Route path="delivery-console" element={<DeliveryLayout/>}>
+        <Route index  element={<PedidosEnCamino/>}/>
       </Route>
 
       <Route path="dashboard" element={<DashboardLayout />} >
@@ -72,6 +93,9 @@ const router = createBrowserRouter(
         <Route path="estadisticas" >
           <Route index element={<Estadisticas/>} />
           <Route path="sucursal" element={<EstadisticasSucursal/>} />
+        </Route>
+        <Route path="pedidos">
+          <Route index element={<Pedidos/>}/>
         </Route>
       </Route>
     </Route>
