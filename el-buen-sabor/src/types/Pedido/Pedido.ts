@@ -3,6 +3,7 @@ import { Domicilio } from "../Domicilio/Domicilio";
 import { SucursalShort } from "../Empresas/Sucursal";
 import { DetallePedidoDto } from "./DetallePedido";
 import { Factura, FormaPago } from "./Factura";
+import { PersonaShort } from "../Persona";
 
 export enum EstadoPedido {
     PENDIENTE_PAGO = "PENDIENTE_PAGO",
@@ -19,12 +20,6 @@ export enum TipoEnvio {
     DELIVERY = "DELIVERY",
     TAKE_AWAY = "TAKE_AWAY"
 }   
-
-export interface PersonaShort extends IBase {
-    nombre: string,
-    apellido: string,
-    telefono: string
-}
 
 /*export interface Pedido extends IBase {
     horaEstimadaFinalizacion: Date,

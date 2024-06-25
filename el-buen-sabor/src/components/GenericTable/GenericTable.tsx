@@ -56,6 +56,7 @@ export const GenericTable = <T extends Base>({
   const dispatch = useDispatch();
 
   const handleRowSelection = (row: any) => {
+    console.log(row);
     dispatch(setElementActive({element: row}));
     handleSelect();
   }

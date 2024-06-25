@@ -24,4 +24,16 @@ export class EmpleadoService extends BackendClient<Empleado> {
         const data = await response.json();
         return data as Empleado;
     }
+
+    async deleteById(id: number) {
+        const response = await fetch(`${this.baseUrl}/bajaEmpleado/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        if(!response.ok) {
+          throw new Error("Error al dar de baja a categoria");
+        }
+    }
 }

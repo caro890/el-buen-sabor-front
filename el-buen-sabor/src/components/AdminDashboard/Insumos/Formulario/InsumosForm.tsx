@@ -32,10 +32,6 @@ const validationSchemaCreate = Yup.object().shape({
   denominacion: Yup.string().required("Ingrese la denominación del insumo"),
   precioVenta: Yup.number().moreThan(-1, "El precio debe ser un valor positivo"),
   precioCompra: Yup.number().required("Ingrese el precio de compra").positive("El precio debe ser un valor positivo"),
-  stockActual: Yup.number().required("Ingrese el stock actual").moreThan(-1, "El stock debe ser un valor positivo"),
-  stockMaximo: Yup.number().required("Ingrese el stock máximo").moreThan(0, "El stock máximo debe ser mayor a 0")
-    .min(Yup.ref("stockMinimo"), "El stock máximo debe ser mayor al stock Mínimo"),
-  stockMinimo: Yup.number().required("Ingrese el stock mínimo").moreThan(0, "El stock mínimo debe ser mayor a 0"),
   esParaElaborar: Yup.boolean().required("Seleccione si es para elaborar o para vender"),
   codigo: Yup.string().required("Ingrese el código del insumo").matches(/^[I]/, 'El código debe empezar con una I mayúscula'),
   unidadMedida: unidadMedidaValidation,

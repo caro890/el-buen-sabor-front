@@ -43,7 +43,7 @@ export const Empleados = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        service.delete(id).then(() => {
+        service.deleteById(id).then(() => {
           getEmpleados();
         });
       }

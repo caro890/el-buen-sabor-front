@@ -92,8 +92,8 @@ export const Promociones = () => {
   };
 
   const handleClose = () => {
-    setShowDetail(false);
     dispatch(removeElementActive());
+    setShowDetail(false);
   }
 
   return (
