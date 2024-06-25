@@ -18,6 +18,7 @@ import { Articulo } from "../../../../types/Articulos/Articulo";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
 import { useAppSelector } from "../../../../hooks/redux";
+import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2 copy";
 
 export const PromocionForm = () => {
   const navigate = useNavigate();
@@ -362,11 +363,11 @@ export const PromocionForm = () => {
           </Row>
           <hr/>
 
-          {/*<Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Imágenes
           </Typography>
-          <ModuloImagenes files={filesToUpload} setFiles={setFilesToUpload} imagenes={promocionSeleccionada.imagenes || []} ></ModuloImagenes>
-          <hr/>*/}
+          <ModuloImagenes></ModuloImagenes>
+          <hr/>
 
           <Form.Group as={Row} className="mb-4">
             <Form.Label column sm={2}>

@@ -1,8 +1,19 @@
 import { ReactNode, createContext, useState } from "react";
 import { IImagen, ImageFile } from "../types/Articulos/ImagenArticulo";
-import Swal from "sweetalert2";
+import Swal, { SweetAlertIcon } from "sweetalert2";
 import { ImagenesService } from "../services/ImagenesService";
 import { extractPublicId } from "cloudinary-build-url";
+
+const showModal = (title: string, text: string, icon: SweetAlertIcon) => {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        customClass: {
+            container: "my-swal",
+        },
+    });
+};
 
 interface ImagesContextType {
     setObjUrl: (url: string) => void, 
@@ -110,40 +121,86 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
 
     //change the db
     //save newImages into cloudinary and the db, setNewImages with the full images
-    const uploadImages = async (idObject: number) => {
-        //Crear un objeto FormData y agregar los archivos seleccionados
-        if(newImages) {
-            console.log(newImages);
-            const formData = new FormData();
-            newImages.forEach((file: File) => {
-              formData.append("uploads", file);
-            });
+    // const uploadImages = async (idObject: number) => {
+    //     //Crear un objeto FormData y agregar los archivos seleccionados
+    //     if(newImages) {
+    //         console.log(newImages);
+    //         const formData = new FormData();
+    //         newImages.forEach((file: File) => {
+    //           formData.append("uploads", file);
+    //         });
   
-            //Mostrar un mensaje de carga mientras se suben los archivos
-            Swal.fire({
-              title: "Guardando imagénes...",
-              text: "Espere mientras se guardan las imágenes",
-              allowOutsideClick: false,
-              didOpen: () => {
-                Swal.showLoading();
-              }
-            });
+    //         //Mostrar un mensaje de carga mientras se suben los archivos
+    //         Swal.fire({
+    //           title: "Guardando imagénes...",
+    //           text: "Espere mientras se guardan las imágenes",
+    //           allowOutsideClick: false,
+    //           didOpen: () => {
+    //             Swal.showLoading();
+    //           }
+    //         });
   
-            try {
-              //Realizar la peticion POST para subir los archivos
-              var imgService = new ImagenesService(objUrl);
-              await imgService.upload(idObject, formData);
-              deleteImages();
+    //         try {
+    //           //Realizar la peticion POST para subir los archivos
+    //           var imgService = new ImagenesService(objUrl);
+    //           console.log("ID del Artículo:", idObject);
+    //         console.log("FormData a enviar:", formData);
+    //           await imgService.upload(idObject, formData);
+    //           deleteImages();
 
-              //cerrar el mensaje de espera
-              Swal.close();
-            } catch ( error ) {
-              Swal.close();
-              throw new Error();
-            }
+    //           //cerrar el mensaje de espera
+    //           Swal.close();
+    //         } catch ( error ) {
+    //           Swal.close();
+    //           throw new Error();
+    //         }
   
-            reset();    //limpiar el estado de archivos para subir despues de la subida
+    //         reset();    //limpiar el estado de archivos para subir despues de la subida
+    //     }
+    // };
+
+    const uploadImages = async (idObject: number) => {
+        if (!selectedFiles) {
+            return showModal("No hay imágenes seleccionadas", "Selecciona al menos una imagen", "warning");;
         }
+        const formData = new FormData();
+        Array.from(selectedFiles).forEach((file) => {
+            formData.append("uploads", file);
+        });
+
+       
+
+        Swal.fire({
+            title: "Subiendo imágenes...",
+            text: "Espere mientras se suben los archivos.",
+            customClass: {
+                container: 'my-swal',
+            },
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+                const modal = Swal.getPopup();
+                if (modal) {
+                    modal.classList.add('my-swal');
+                }
+            },
+        });
+
+        try {
+            //const token = await getToken();
+            var imgService = new ImagenesService(objUrl);
+            
+            const response = await imgService.upload(idObject, formData);
+            if (!response.ok) {
+                throw new Error('Error al subir las imágenes');
+            }
+
+            showModal("Éxito", "Imágenes subidas correctamente", "success");
+        } catch (error) {
+            showModal("Error", "Algo falló al subir las imágenes, inténtalo de nuevo.", "error");
+            console.error("Error al subir las imágenes:", error);
+        }
+        setSelectedFiles(null);
     };
 
     //delete toDeleteImages from cloudinary

@@ -20,17 +20,29 @@ export class ImagenesService {
         }
     }
 
-    async upload(idArticulo: number, formData: FormData){
-        var url: string = this.baseUrl + `/uploads/${idArticulo}` ;
-        const response = await fetch(url, {
-            "method": "POST",
-            "headers": {
-                "Content-Type": 'multipart/form-data'
-            },
-            "body": formData,
-        })
-        if (!response.ok) {
-            throw new Error("Error al cargar las imagenes");
+    async upload(idArticulo: number, formData: FormData) {
+        const url: string = `${this.baseUrl}/uploads?id=${idArticulo}`;
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                
+                body: formData,
+            });
+    
+            if (!response.ok) {
+                throw new Error("Error al cargar las imágenes");
+            }
+    
+            console.log(response)
+            // Si la respuesta es exitosa, puedes retornar cualquier dato que necesites procesar en el frontend
+            // Por ejemplo, si el backend devuelve un mensaje de confirmación o datos adicionales
+            return response // O response.text(), dependiendo del tipo de respuesta esperada
+    
+        } catch (error) {
+            // Manejo de errores
+            console.error("Error al cargar las imágenes:", error);
+            throw new Error("Error al cargar las imágenes. Por favor, inténtalo de nuevo.");
         }
     }
+    
 }
