@@ -51,10 +51,8 @@ export const Promociones = () => {
   ];
 
   const getPromociones = async () => {
-    console.log(idSucursal);
     if (idSucursal){
       await service.getAllBySucursalId(idSucursal).then((data) => {
-        console.log(data);
         dispatch(setDataTable(data));
       });
     }
@@ -62,21 +60,26 @@ export const Promociones = () => {
 
   const handleDelete = (id: number) => {
     Swal.fire({
-        title: "¿Estás seguro?",
-        text: "¿Seguro que desea eliminar la promoción?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si, Eliminar",
-        cancelButtonText: "Cancelar",
-      }).then((result) => {
-        if(result.isConfirmed){
-          service.delete(id).then(() => {
-            getPromociones();
+      title: "Eliminar promoción",
+      text: "¿Desea eliminar la promoción para la sucursal actual o para la empresa?",
+      icon: "warning",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Eliminar de Sucursal",
+      denyButtonText: "Eliminar de empresa"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if(idSucursal){
+          service.darDeBaja(id, idSucursal).then(() => {
+          getPromociones();
           });
         }
-      });
+      } else if (result.isDenied) {
+        service.delete(id).then(() => {
+          getPromociones();
+        });
+      }
+    });
   };
 
   const handleSelect = () => {

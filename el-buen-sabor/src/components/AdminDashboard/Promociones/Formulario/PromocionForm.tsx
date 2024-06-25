@@ -7,6 +7,7 @@ import { cilTrash } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import styles from "../../../../styles/ProductForm.module.css"
 import * as Yup from "yup"
+import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { PromocionDetalle, PromocionDetalleCreate } from "../../../../types/Articulos/PromocionDetalle";
 import { PromocionService } from "../../../../services/PromocionService";
@@ -18,27 +19,51 @@ import { Articulo } from "../../../../types/Articulos/Articulo";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService";
 import { useAppSelector } from "../../../../hooks/redux";
+import { Sucursal } from "../../../../types/Empresas/Sucursal";
+import { SucursalService } from "../../../../services/SucursalService";
+import formatPrice from "../../../../types/formats/priceFormat";
 
 export const PromocionForm = () => {
   const navigate = useNavigate();
   const service = new PromocionService();
-  const idSucursal = useAppSelector((state) => (state.empresaReducer.activeSucursal?.id));
-  const sucursales = useAppSelector((state) => (state.sucursalesReducer.sucursalesSelected));
+  const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
+  const idEmpresa = useAppSelector((state) => (state.empresaReducer.empresa?.id));
   const promocionSeleccionada = useLoaderData() as Promocion; //promocion seleccionada para editar
 
+  const [promocion, setPromocion] = useState<Promocion>(promocionVacia);
   const [tipoPromo, setTipoPromo] = useState<boolean>(false); //manejar los cambios en tipo de promocion
 
   //estados para manejar los detalles de promoción
   const [showModal, setShowModal] = useState<boolean>(false);
   const [detalles, setDetalles] = useState<PromocionDetalle[]>(promocionSeleccionada.promocionDetalles);
   const [articulos, setArticulos] = useState<Articulo[]>([]);
+  const [sucursales, setSucursales] = useState<Sucursal[]>([]);
+  const [idSucursales, setIdSucursales] = useState<number[]>([]);
   
   //cargo los estados cuando cargo el componente
   useEffect(() => {
-    //setPromocion(promocionSeleccionada);
+    setPromocion(promocionSeleccionada);
     setDetalles(promocionSeleccionada.promocionDetalles);
     if(promocionSeleccionada.tipoPromocion=="HAPPY_HOUR") setTipoPromo(true);
-  })
+    
+    if(promocionSeleccionada.sucursales){ 
+      let ids: number[] =[];
+      promocionSeleccionada.sucursales?.forEach((existente: Sucursal) => {
+        ids.push(existente.id);
+      });
+      setIdSucursales(ids);
+    }
+  }, []);
+
+  //traigo todas las sucursales de la empresa
+  useEffect(() => {
+    if (idEmpresa){
+      let sucursalService = new SucursalService();
+      sucursalService.findByEmpresaId(idEmpresa).then((data) => {
+        setSucursales(data);
+      });
+    } 
+  }, [idEmpresa]);
 
   //cargo los articulos según los que ya estén en el producto
   useEffect(() => {
@@ -86,20 +111,22 @@ export const PromocionForm = () => {
       if (amount > 0) {
         //busco el detalle en el arreglo
         var arrayAux: PromocionDetalle[] = detalles.slice();
+
         var f: number = 0;
         var found = arrayAux.some(function (element, index) {
-          f = index; return element.articulo.id === detalle.articulo.id;
+          f = index; return element.articulo === detalle.articulo;
         });
         //lo  obtengo del arreglo
         if (found) {
-          var newDetalle: PromocionDetalle = {
-            id: detalle.id,
-            cantidad: amount,
-            eliminado: detalle.eliminado,
-            articulo: detalle.articulo
-          };
-          arrayAux.splice(f, 1, newDetalle);
-          
+          let aux: PromocionDetalle = detalle;
+          let newDetalle = arrayAux.splice(f, 1);
+
+          newDetalle.forEach((item) => {
+            aux = PromocionDetalleClass.createFrom(aux, item);
+          });
+          aux.cantidad = Number(amount);
+
+          arrayAux.splice(f, 0, aux);
           setDetalles(arrayAux);
         }
       }
@@ -109,11 +136,11 @@ export const PromocionForm = () => {
   };
 
   //funcion para manejar la eliminacion de un articulo
-  const handleDeleteInsumo = (detalle: PromocionDetalle) => {
+  const handleDeleteArticulo = (detalle: PromocionDetalle) => {
     var arrayAux: PromocionDetalle[] = detalles.slice();
     var f: number = 0;
     var found = arrayAux.some(function (element, index) {
-      f = index; return element.articulo.id === detalle.articulo.id;
+      f = index; return element.articulo === detalle.articulo;
     });
     if (found) {
       arrayAux.splice(f, 1);
@@ -128,7 +155,34 @@ export const PromocionForm = () => {
     } else {
       setTipoPromo(false);
     }
-  }
+  };
+
+  const handleChangeSucursales = (value: string, checked: boolean) => {
+    if(value=="all"){
+      if(checked){
+        let idsAux: number[] = [];
+        sucursales.forEach((sucursal: Sucursal) => {
+          idsAux.push(sucursal.id);
+        });
+        setIdSucursales(idsAux);
+      } else {
+        setIdSucursales([]);
+      }
+    } else {
+      if(checked) {
+        let idsAux: number[] = idSucursales.slice();
+        idsAux.push(Number(value));
+        setIdSucursales(idsAux);
+      } else {
+        let idsAux: number[] = idSucursales.slice();
+        const index = idsAux.indexOf(Number(value), 0);
+        if (index > -1) {
+          idsAux.splice(index, 1);
+        }
+        setIdSucursales(idsAux);
+      }
+    }
+  };
 
   const actualDate: Date = new Date();
   actualDate.setHours(0,0,0,0);
@@ -158,6 +212,14 @@ export const PromocionForm = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       //validar detalles
+      if(detalles.length==0){
+        Swal.fire({
+          title: "La promoción no tiene detalles",
+          text: "Ingrese articulos a la promoción",
+          icon: "warning"
+        })
+        return;
+      }
 
       let newTipoPromocion: TipoPromocion;
       if(tipoPromo){
@@ -166,14 +228,10 @@ export const PromocionForm = () => {
         newTipoPromocion = TipoPromocion.PROMOCION;
       }
 
-      let newHoraDesde: Date = new Date('2000-01-01T'+values.horaDesde+':00Z');
-      //console.log(new Date(`2024-01-30T${values.horaDesde}:00Z`));
-      let newHoraHasta: Date = new Date('2000-01-01'+values.horaHasta+':00Z');
-
       let newDetalles: PromocionDetalleCreate[] = PromocionDetalleClass.transform(detalles);
 
       let newPromocion: PromocionCreate = {
-        id:0,
+        id: values.id,
         eliminado: false,
         denominacion: values.denominacion,
         fechaDesde: values.fechaDesde,
@@ -181,11 +239,11 @@ export const PromocionForm = () => {
         habilitado: true,
         precioPromocional: values.precioPromocional,
         descripcionDescuento: values.descripcionDescuento,
-        horaDesde: newHoraDesde,
-        horaHasta: newHoraHasta,
+        horaDesde: values.horaDesde,
+        horaHasta: values.horaHasta,
         tipoPromocion: newTipoPromocion,
         promocionDetalles: newDetalles,
-        idsSucursales: []
+        idsSucursales: idSucursales
       }
 
       console.log(newPromocion);
@@ -201,7 +259,7 @@ export const PromocionForm = () => {
 
       <div className={styles.headerBox + " mb-3"}>
         <Typography variant="h5" gutterBottom>
-          {`${promocionSeleccionada?.id!=undefined ? "Editar" : "Crear"} una promoción`}
+          {`${promocion?.id!=0 ? "Editar" : "Crear"} una promoción`}
         </Typography>
         <BotonVolver/>
       </div>
@@ -370,7 +428,9 @@ export const PromocionForm = () => {
 
           <Form.Group as={Row} className="mb-4">
             <Form.Label column sm={2}>
-              Articulos
+              <Typography variant="h6" gutterBottom>
+                Articulos
+              </Typography>
             </Form.Label>
             <Col sm={3}>
               <Button type="button" className={styles.btnAdd} onClick={() => { setShowModal(true) }} >Añadir</Button>
@@ -391,8 +451,11 @@ export const PromocionForm = () => {
                     {detalle.cantidad} {detalle.articulo.unidadMedida.denominacion}
                   </Col>
                   <Col>
-                    <IconButton className="mb-3" onClick={() => { handleDeleteInsumo(detalle) }}>
-                      <CIcon icon={cilTrash} size="lg" className="text-danger"></CIcon>
+                    {formatPrice(detalle.articulo.precioVenta*detalle.cantidad)}
+                  </Col>
+                  <Col>
+                    <IconButton className="mb-3" onClick={() => { handleDeleteArticulo(detalle) }}>
+                      <CIcon icon={cilTrash} size="lg"></CIcon>
                     </IconButton>
                   </Col>
                 </Row>
@@ -403,8 +466,36 @@ export const PromocionForm = () => {
           <Typography variant="h6" gutterBottom>
             Sucursales
           </Typography>
-          <Form.Group>
-            
+
+          <Form.Group as={Row} className="mb-1">
+            <Row>
+              <Col sm={1}></Col>
+              <Col sm={1}>
+                <Form.Check 
+                  radioGroup="seleccionados"
+                  label="Todas"
+                  value="all"
+                  onChange={(e) => handleChangeSucursales(e.target.value, e.target.checked)}
+                />
+              </Col>
+            </Row>
+            {
+              sucursales? sucursales.map((sucursal: Sucursal, index: number) =>
+                <Row key={index}>
+                  <Col sm={1}></Col>
+                  <Col>
+                    <Form.Check 
+                      radioGroup="seleccionados"
+                      label={sucursal.nombre}
+                      value={String(sucursal.id)}
+                      checked={idSucursales.some(id => id === sucursal.id)}
+                      onChange={(e) => handleChangeSucursales(e.target.value, e.target.checked)}
+                    />
+                  </Col>  
+                </Row>
+              )
+              : null
+            }
           </Form.Group>
 
           <Button type="submit">GUARDAR</Button>

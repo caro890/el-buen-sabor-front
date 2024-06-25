@@ -53,8 +53,9 @@ export const ArticulosModal : FC<IPropsArticulosModal> = ({
         detallesAux.push(newDetalle);
       });
 
-      //console.log(detallesAux);
+      console.log(detallesAux);
       add(detallesAux);
+      console.log(array);
       handleClose();
     }
   };

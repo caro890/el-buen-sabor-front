@@ -15,21 +15,21 @@
 }
 
 .btnAdd {
-    background-color: darksalmon;
-    border-color: darksalmon;
-    color: rgb(126, 52, 65);
+    background-color: #2196f3;
+    border-color: #2196f3;
+    color: white;
 }
 
 .btnAdd:hover {
     background-color: white;
-    border-color: rgb(126, 52, 65);
-    color: rgb(126, 52, 65);
+    border-color: #3f51b5;
+    color:#3f51b5;
 }
 
 .btnAdd:active {
-    background-color: darksalmon;
-    border-color: darksalmon;
-    color: rgb(126, 52, 65);
+    background-color: #2196f3;
+    border-color: #2196f3;
+    color: #3f51b5;
 }
 
 .detalleRow {
