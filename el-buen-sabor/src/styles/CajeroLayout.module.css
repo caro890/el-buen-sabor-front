@@ -1,0 +1,14 @@
+.linksVistas {
+    display: flex;
+    direction: row;
+    width: 100%;
+    gap: 2rem;
+}
+
+.linksVistas .link {
+    color: gray;
+}
+
+.linksVistas .link:hover {
+    color: #2196f3;
+}

@@ -32,3 +32,10 @@ export interface ArticuloCreate extends IBase {
     codigo: string;
     habilitado: boolean;
 }
+
+export interface ArticuloShort extends IBase {
+    denominacion: string,
+    precioVenta: number,
+    habilitado: boolean,
+    codigo: string
+}

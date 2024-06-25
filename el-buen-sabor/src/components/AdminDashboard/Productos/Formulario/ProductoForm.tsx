@@ -412,7 +412,7 @@ export const ProductoForm = () => {
                             </Col>
                             <Col>
                                 <IconButton className="mb-3" onClick={() => { handleDeleteInsumo(art) }}>
-                                    <CIcon icon={cilTrash} size="lg" className="text-danger"></CIcon>
+                                    <CIcon icon={cilTrash} size="lg"></CIcon>
                                 </IconButton>
                             </Col>
                             <span></span>

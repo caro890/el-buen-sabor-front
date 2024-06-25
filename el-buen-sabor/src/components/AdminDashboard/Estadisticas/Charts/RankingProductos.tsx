@@ -2,6 +2,7 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/redux";
 import { EstadisticasService } from "../../../../services/EstadisticasService"
 import { FC, useEffect, useState } from "react";
+import { RankingProductos } from "../../../../types/Estadisticas";
 import Chart from "react-google-charts";
 
 interface IPropsRankingProductos {
@@ -11,7 +12,7 @@ interface IPropsRankingProductos {
 export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) => {
   const service = new EstadisticasService();
   const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
-  const sucursal = useAppSelector((state) => (state.sucursalReducer.sucursal));
+  const idSucursal = useAppSelector((state) => (state.empresaReducer.idActiveSucursal));
 
   const [data, setData] = useState<any[]>([]);
   const intialDateFrom = new Date();
@@ -26,20 +27,32 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
 
   useEffect(() => {
     getData();
-  });
+  }, []);
 
   const getData = async () => {
     if(business=="sucursal"){
-        if(sucursal) {
-            let array: any[] = await service.getBestProductsRanking(sucursal.id, dateFrom, dateTo);
-            array.unshift(["Ventas", "Producto"]);
-            setData(array);
+        if(idSucursal) {
+            let array: RankingProductos[] = await service.getRankingSucursal(idSucursal, dateFrom, dateTo);
+            let auxArray: any[] = [];
+
+            array.forEach((ranking: RankingProductos) => {
+                auxArray.push([ranking.denominacion, ranking.countVentas])
+            });
+
+            auxArray.unshift(["Producto", "Ventas"]);
+            setData(auxArray);
         }
     } else {
         if(empresa) {
-            let array: any[] = await service.getRankingEmpresas(empresa.id, dateFrom, dateTo);
-            array.unshift(["Ventas", "Producto"]);
-            setData(array);
+            let array: RankingProductos[] = await service.getRankingEmpresas(empresa.id, dateFrom, dateTo);
+            let auxArray: any[] = [];
+
+            array.forEach((ranking: RankingProductos) => {
+                auxArray.push([ranking.denominacion, ranking.countVentas])
+            });
+
+            auxArray.unshift(["Producto", "Ventas"]);
+            setData(auxArray);
         }
     }
   };
@@ -62,18 +75,17 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
   };
 
   return (
-    <div>
-        <div>
-           Productos más vendidos {business=="sucursal" ? sucursal?.nombre : empresa?.nombre}
-        </div>
+    <div className="mb-5">
         <Container>
+            <Row className="mb-2">
+                Productos más vendidos
+            </Row>
             <Row>
                 <Col>
                     <Form.Control
                         type="date"
                         id="dateFrom"
                         aria-label="Desde"
-                        /*defaultValue={dateFrom.toDateString()}*/
                         onChange={(e) => handleChangeDateInput(e.target.id, e.target.value)}
                     />
                 </Col>
@@ -82,7 +94,6 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
                         type="date"
                         id="dateTo"
                         aria-label="Hasta"
-                        /*defaultValue={dateFrom.toDateString()}*/
                         onChange={(e) => handleChangeDateInput(e.target.id, e.target.value)}
                     />
                 </Col>
@@ -97,22 +108,24 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
             </Row>
         </Container>
         <div>
-            <Chart 
-                chartType="BarChart"
-                width={"100%"}
-                height={"400px"}
-                data={data}
-                options={{
-                    chartArea: { width: "50%" },
-                    hAxis: {
-                        title: "Productos",
-                        minValue: 0,
-                    },
-                    vAxis: {
-                        title: "Cantidad Vendida",
-                    }
-                }}
-            />
+                { data.length>1 &&
+                    <Chart 
+                        chartType="BarChart"
+                        width={"100%"}
+                        height={"400px"}
+                        data={data}
+                        options={{
+                            chartArea: { width: "50%" },
+                            hAxis: {
+                                title: "Cantidad Vendida",
+                                minValue: 0,
+                            },
+                            vAxis: {
+                                title: "Producto",
+                            }
+                        }}
+                    />
+                }
         </div>
     </div>
   )

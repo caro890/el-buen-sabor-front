@@ -9,7 +9,7 @@ export const DashboardLayout = () => {
   //obtengo la empresa actual del estado global
   const empresaActual = useAppSelector((state) => state.empresaReducer.empresa);
   //obtengo la sucursal actual del estado global
-  const sucursalActual = useAppSelector((state) => state.empresaReducer.activeSucursal);
+  const sucursalActual = useAppSelector((state) => state.sucursalReducer.sucursal);
   const navigate = useNavigate(); 
 
   useEffect(() => {   

@@ -1,16 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"; 
 import { PayloadAction } from "@reduxjs/toolkit";
-import { Sucursal } from "../../types/Empresas/Sucursal";
 import { Empresa } from "../../types/Empresas/Empresa";
 
 interface IEmpresaReducerType {
     empresa: null | Empresa;
-    activeSucursal: null | Sucursal;
+    idActiveSucursal: null | number;
 }
 
 const initialState: IEmpresaReducerType = {
     empresa: null,
-    activeSucursal: null,
+    idActiveSucursal: null,
 }
 
 export const EmpresaReducer = createSlice({
@@ -21,7 +20,7 @@ export const EmpresaReducer = createSlice({
             state.empresa = action.payload;
         },
         setActiveSucursal(state, action: PayloadAction<any>) {
-            state.activeSucursal = action.payload;
+            state.idActiveSucursal = action.payload;
         }
     }
 });

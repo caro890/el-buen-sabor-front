@@ -38,5 +38,13 @@ export class PromocionService extends BackendClient<Promocion> {
         const data = await response.json();
         return data as Promocion;
     }
-
+  
+    async darDeBaja(idPromo: number, idSucursal: number): Promise<void> {
+      const response = await fetch(`${this.baseUrl}/baja/${idPromo}/${idSucursal}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error(`Error al eliminar el elemento con ID ${idPromo}`);
+      }
+    }
 }

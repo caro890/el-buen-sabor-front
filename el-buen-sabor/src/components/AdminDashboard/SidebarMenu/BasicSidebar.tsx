@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { cilBarChart, cilBuilding, cilCart, cilChart, cilFastfood, cilMinus, cilPeople } from "@coreui/icons";
+import { cilBarChart, cilBuilding, cilCart, cilFastfood, cilMinus, cilNotes, cilPeople } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { CNavGroup, CNavItem, CNavTitle, CSidebar, CSidebarNav } from "@coreui/react";
 import '@coreui/coreui/dist/css/coreui.min.css';
@@ -88,14 +88,32 @@ const BasicSidebar: React.FC = () => {
                             </Link>
                         </CNavItem>
                     </CNavGroup>
+                    <CNavGroup
+                        toggler= {
+                            <>
+                                <CIcon customClassName="nav-icon" icon={cilBarChart} />
+                                Estadísticas
+                            </>
+                        }
+                    >
+                        <CNavItem>
+                            <Link to="estadisticas" className="nav-link">
+                                <CIcon customClassName="nav-icon" icon={cilMinus} />
+                                Empresa
+                            </Link>
+                        </CNavItem>
+                        <CNavItem>
+                            <Link to="estadisticas/sucursal" className="nav-link">
+                                <CIcon customClassName="nav-icon" icon={cilMinus} />
+                                Sucursal
+                            </Link>
+                        </CNavItem>
+                    </CNavGroup>
+
                     <CNavItem>
-                        <Link to="estadisticas" className="nav-link">
-                            <CIcon customClassName="nav-icon" icon={cilChart} />
-                            Estadísticas
-                        </Link>
-                        <Link to="estadisticas/sucursal" className="nav-link">
-                            <CIcon customClassName="nav-icon" icon={cilChart} />
-                            Estadísticas Sucursal
+                        <Link to="pedidos" className="nav-link" >
+                            <CIcon customClassName="nav-icon" icon={cilNotes} />
+                            Pedidos
                         </Link>
                     </CNavItem>
                 </CSidebarNav>

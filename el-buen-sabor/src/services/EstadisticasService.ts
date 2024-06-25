@@ -4,8 +4,9 @@ import { base } from "./BackendClient";
 export class EstadisticasService {
   protected baseUrl: string = base + "estadisticas";
 
-  async getBestProductsRanking(idSucursal: number, desde: Date, hasta: Date): Promise<RankingProductos[]> {
-    const response = await fetch(`${this.baseUrl}/ranking/${idSucursal}?fechaDesde=${desde.toISOString().split('T')[0]}&fechaHasta=${hasta.toISOString().split('T')[0]}`, {
+  //get ranking por sucursal
+  async getRankingSucursal(idSucursal: number, desde: Date, hasta: Date): Promise<RankingProductos[]> {
+    const response = await fetch(`${this.baseUrl}/rankingSucursal/${idSucursal}?fechaDesde=${desde.toISOString().split('T')[0]}&fechaHasta=${hasta.toISOString().split('T')[0]}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -15,55 +16,7 @@ export class EstadisticasService {
     return newData as RankingProductos[];
   }
 
-  async getIngresosDiarios(desde: Date, hasta: Date): Promise<IngresosDiarios[]> {
-    const response = await fetch(`${this.baseUrl}/recaudacionesDiarias?fechaDesde=${desde}&fechaHasta=${hasta}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    const newData = await response.json();
-    return newData as IngresosDiarios[];
-  }
-
-  async getIngresosMensuales(desde: Date, hasta: Date): Promise<IngresosMensuales[]> {
-    const response = await fetch(`${this.baseUrl}/recaudacionesMensuales?fechaDesde=${desde}&fechaHasta=${hasta}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    const newData = await response.json();
-    return newData as IngresosMensuales[];
-  }
-
-  async getCostosGanancias(desde: Date, hasta: Date): Promise<CostoGanancia> {
-    const response = await fetch(`${this.baseUrl}/costosGanancias?fechaDesde=${desde}&fechaHasta=${hasta}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    const newData = await response.json();
-    return newData as CostoGanancia;
-  }
-
-  async getPedidosCliente(desde: Date, hasta: Date): Promise<PedidosCliente[]> {
-    const response = await fetch(`${this.baseUrl}/pedidosCliente?fechaDesde=${desde}&fechaHasta=${hasta}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    const newData = await response.json();
-    return newData as PedidosCliente[];
-  }
-
-  async generateExcel(idSucursal: number, desde: Date, hasta: Date) {
-    const urlServer: string = `${this.baseUrl}/excel/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`;
-    window.open(urlServer, "_blank");
-  }
-
+  //get ranking por empresa
   async getRankingEmpresas(idEmpresa: number,desde: Date, hasta: Date): Promise<RankingProductos[]> {
     const response = await fetch(`${this.baseUrl}/rankingEmpresa/${idEmpresa}?fechaDesde=${desde.toISOString().split('T')[0]}&fechaHasta=${hasta.toISOString().split('T')[0]}`, {
       method: "GET",
@@ -73,5 +26,113 @@ export class EstadisticasService {
     });
     const newData = await response.json();
     return newData as RankingProductos[];
+  }
+
+  //get ingresos diarios por sucursal
+  async getIngresosDiariosSucursal(idSucursal: number, desde: Date, hasta: Date): Promise<IngresosDiarios[]> {
+    const response = await fetch(`${this.baseUrl}/recaudacionesDiariasSucursal/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const newData = await response.json();
+    return newData as IngresosDiarios[];
+  }
+
+  //get ingresos diarios por empresa
+  async getIngresosDiariosEmpresa(idEmpresa: number, desde: Date, hasta: Date): Promise<IngresosDiarios[]> {
+    const response = await fetch(`${this.baseUrl}/recaudacionesDiariasEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const newData = await response.json();
+    return newData as IngresosDiarios[];
+  }
+
+  //get ingresos mensuales por sucursal
+  async getIngresosMensualesSucursal(idSucursal:number, desde: Date, hasta: Date): Promise<IngresosMensuales[]> {
+    const response = await fetch(`${this.baseUrl}/recaudacionesMensualesSucursal/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const newData = await response.json();
+    return newData as IngresosMensuales[];
+  }
+
+  //get ingresos mensuales por empresa
+  async getIngresosMensualesEmpresa(idEmpresa: number, desde: Date, hasta: Date): Promise<IngresosMensuales[]> {
+    const response = await fetch(`${this.baseUrl}/recaudacionesMensualesEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const newData = await response.json();
+    return newData as IngresosMensuales[];
+  }
+
+  //get ganancias por sucursal
+  async getCostosGananciasSucursal(idScursal: number, desde: Date, hasta: Date): Promise<CostoGanancia> {
+    const response = await fetch(`${this.baseUrl}/costosGanancias/${idScursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const newData = await response.json();
+    return newData as CostoGanancia;
+  }
+
+  //get ganancias por empresa
+  async getCostosGananciasEmpresa(idEmpresa: number, desde: Date, hasta: Date): Promise<CostoGanancia> {
+    const response = await fetch(`${this.baseUrl}/costosGananciasEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const newData = await response.json();
+    return newData as CostoGanancia;
+  }
+
+  //get cantidad de pedidos por clientes por sucursal
+  async getPedidosClienteSucursal(idSucursal: number, desde: Date, hasta: Date): Promise<PedidosCliente[]> {
+    const response = await fetch(`${this.baseUrl}/pedidosClienteSucursal/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const newData = await response.json();
+    return newData as PedidosCliente[];
+  }
+
+  //get cantidad de pedidos por clientes por empresa
+  async getPedidosClienteEmpresa(idEmpresa: number, desde: Date, hasta: Date): Promise<PedidosCliente[]> {
+    const response = await fetch(`${this.baseUrl}/pedidosClienteEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const newData = await response.json();
+    return newData as PedidosCliente[];
+  }
+
+  //generar Excel para sucursal
+  async generateExcelSucursal(idSucursal: number, desde: Date, hasta: Date) {
+    const urlServer: string = `${this.baseUrl}/excelSucursal/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`;
+    window.open(urlServer, "_blank");
+  }
+
+  //generar Excel para sucursal
+  async generateExcelEmpresa(idEmpresa: number, desde: Date, hasta: Date) {
+    const urlServer: string = `${this.baseUrl}/excelEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`;
+    window.open(urlServer, "_blank");
   }
 }
