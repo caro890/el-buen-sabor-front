@@ -35,17 +35,18 @@ const validationSchemaCreate = Yup.object().shape({
   esParaElaborar: Yup.boolean().required("Seleccione si es para elaborar o para vender"),
   codigo: Yup.string().required("Ingrese el código del insumo").matches(/^[I]/, 'El código debe empezar con una I mayúscula'),
   unidadMedida: unidadMedidaValidation,
-  categoria: categoriaValidation
+  categoria: categoriaValidation,
+  stockActual: Yup.number().required("Ingrese el stock actual").moreThan(-1, "El stock debe ser un valor positivo"),
+  stockMaximo: Yup.number().required("Ingrese el stock máximo").moreThan(0, "El stock máximo debe ser mayor a 0")
+    .min(Yup.ref("stockMinimo"), "El stock máximo debe ser mayor al stock Mínimo"),
+  stockMinimo: Yup.number().required("Ingrese el stock mínimo").moreThan(0, "El stock mínimo debe ser mayor a 0")
 });
 
 const validationSchemaEdit = Yup.object().shape({
   denominacion: Yup.string().required("Ingrese la denominación del insumo"),
   precioVenta: Yup.number().moreThan(-1, "El precio debe ser un valor positivo"),
   precioCompra: Yup.number().required("Ingrese el precio de compra").positive("El precio debe ser un valor positivo"),
-  stockActual: Yup.number().required("Ingrese el stock actual").moreThan(-1, "El stock debe ser un valor positivo"),
-  stockMaximo: Yup.number().required("Ingrese el stock máximo").moreThan(0, "El stock máximo debe ser mayor a 0")
-    .min(Yup.ref("stockMinimo"), "El stock máximo debe ser mayor al stock Mínimo"),
-  stockMinimo: Yup.number().required("Ingrese el stock mínimo").moreThan(0, "El stock mínimo debe ser mayor a 0"),
+ 
   esParaElaborar: Yup.boolean().required("Seleccione si es para elaborar o para vender"),
   codigo: Yup.string().required("Ingrese el código del insumo").matches(/^[I]/, 'El código debe empezar con una I mayúscula'),
   unidadMedida: unidadMedidaValidation,
@@ -126,17 +127,19 @@ export const InsumosForm = () => {
           codigo: values.codigo,
           habilitado: values.habilitado,
           esParaElaborar: values.esParaElaborar,
-          stockActual: formik.stockActual, 
-          stockMaximo: formik.stockMaximo, 
-          stockMinimo: formik.StockMinimo
+          stockMinimo: values.stockMinimo,
+          stockActual: values.stockActual, 
+          stockMaximo: values.stockMaximo
+          
         }
+        console.log(newCreate);
         newInsumo = await service.create(newCreate);
         console.log(newInsumo);
       }
 
       try {
-        img.uploadImages(newInsumo.id);
-        img.reset();
+       await img.uploadImages(newInsumo.id);
+       // img.reset();
       } catch (error) {
         //Mostrar mensaje de error si ocurre una exepcion
         Swal.fire({
@@ -240,6 +243,7 @@ export const InsumosForm = () => {
                   name="stockActual"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  value={formik.values.stockActual}
                 />
               </Col>
             </Form.Group>
@@ -256,6 +260,7 @@ export const InsumosForm = () => {
                   name="stockMinimo"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  value={formik.values.stockMinimo}
                 />
               </Col>
             </Form.Group>
@@ -272,6 +277,7 @@ export const InsumosForm = () => {
                   name="stockMaximo"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  value={formik.values.stockMaximo}
                 />
               </Col>
             </Form.Group>
