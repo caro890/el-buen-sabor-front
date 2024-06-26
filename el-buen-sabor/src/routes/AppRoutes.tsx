@@ -36,12 +36,17 @@ import { PedidosEnPreparacion } from "../components/CocineroConsole/PedidosEnPre
 import { PedidosNuevos } from "../components/CajeroConsole/PedidosNuevos.tsx"
 import { PedidosEntregaPendiente } from "../components/CajeroConsole/PedidosEntregaPendiente.tsx"
 import { ImageContextProvider } from "../context/ImagenContext.tsx"
+import Auth0ProviderWithNavigate from "../components/Auth0/Auth0ProviderWithNavigate.tsx"
+import { AuthenticationGuard } from "../components/Auth0/AuthenticationGuard.tsx"
+import CallbackPage from "../components/Auth0/CallbackPage.tsx"
+import { Home } from "../components/Auth0/Home.tsx"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
+    <Route path="/" element={<Auth0ProviderWithNavigate><RootLayout /></Auth0ProviderWithNavigate>}>
+      <Route index element={<Home/>}></Route>
       <Route path="admin-console">
-        <Route index element={<Empresas />}></Route>
+        <Route index element={<AuthenticationGuard component={Empresas}/>}></Route>
         <Route path="sucursales/:id" element={<Sucursales />}></Route>
       </Route>
 
@@ -50,6 +55,10 @@ const router = createBrowserRouter(
         <Route path="stock">
           <Route index element={<Stock/>} />
           <Route path="form/:id?" element={<StockForm/>} loader={stockLoader} />
+        </Route>
+        <Route path="productos">
+          <Route index element={<ProductosCrud />}/>
+          <Route path="form/:id?" element={<ImagesContextProvider><ProductoForm/></ImagesContextProvider>} loader={productoLoader} />
         </Route>
       </Route>
 
@@ -103,6 +112,8 @@ const router = createBrowserRouter(
           <Route index element={<Pedidos/>}/>
         </Route>
       </Route>
+
+      <Route path="/callback" element={<CallbackPage/>} />
     </Route>
   )
 )
@@ -111,7 +122,6 @@ export const AppRoutes = () => {
   return (
     <>
       <RouterProvider router={router}>
-
       </RouterProvider>
     </>
   )

@@ -3,7 +3,6 @@ import BasicSidebar from "../../components/AdminDashboard/SidebarMenu/BasicSideb
 import '../../styles/AdminDashboard.css'
 import { useEffect } from "react";
 import { useAppSelector } from "../../hooks/redux";
-import { Navbar } from "../../components/NavBar/Navbar";
 
 export const DashboardLayout = () => {
   //obtengo la empresa actual del estado global
@@ -21,7 +20,6 @@ export const DashboardLayout = () => {
 
   return (
     <div>
-        <Navbar />
         <BasicSidebar/>    
         
         <div className="page-wrapper">
