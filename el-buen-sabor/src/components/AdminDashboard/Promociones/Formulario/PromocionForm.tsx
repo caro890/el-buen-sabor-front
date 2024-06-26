@@ -87,11 +87,11 @@ export const PromocionForm = () => {
     if(idSucursal) {
       //con el servicio de Articulo insumo obtengo todos los insumos para elaborar
       let serviceInsumo = new ArticuloInsumoService();
-      let listaInsumos = await serviceInsumo.getAllParaVender(idSucursal) as Articulo[];
+      let listaInsumos = await serviceInsumo.getAllParaVender(idEmpresa) as Articulo[];
 
       //con el servicio de Articulo manufacturado obtengo los manufactuados
       let serviceManufacturado = new ArticuloManufacturadoService();
-      let listaManufacturados = await serviceManufacturado.getAllBySucursalId(idSucursal) as Articulo[];
+      let listaManufacturados = await serviceManufacturado.getAllBySucursalId(idEmpresa) as Articulo[];
 
       let listaArticulos: Articulo[] = listaInsumos.concat(listaManufacturados);
       
@@ -262,7 +262,7 @@ export const PromocionForm = () => {
 
       try {
         img.uploadImages(response.id);
-        img.reset();
+        //img.reset();
       } catch (error) {
         //Mostrar mensaje de error si ocurre una exepcion
         Swal.fire({

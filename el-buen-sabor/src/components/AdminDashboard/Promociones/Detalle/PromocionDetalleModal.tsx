@@ -15,12 +15,13 @@ export const PromocionDetalleModal : FC<IPropsPromocionDetalleModal> = ({
     open,
     handleClose
 }) => {
-  const item = useAppSelector((state) => state.tableDataReducer.elementActive);
+  const item =useAppSelector((state) => state.tableDataReducer.elementActive);
+  console.log(item);
 
   return (
     <Modal show={open} onHide={handleClose} centered size="lg">
         <Modal.Header closeButton>
-            {item!=undefined &&
+            {item?.denominacion &&
                 <Modal.Title  className={styles.title}> 
                     <p className={styles.title}>{item.denominacion}</p> 
                     {item.habilitado ? 
@@ -63,7 +64,7 @@ export const PromocionDetalleModal : FC<IPropsPromocionDetalleModal> = ({
                             return (
                                 <Row key={index}>
                                     <Col>
-                                        {detalle.cantidad} {detalle.articulo.unidadMedida.denominacion} de {detalle.articulo.denominacion}
+                                        {detalle.cantidad} {console.log(detalle.articulo)} de {detalle.articulo.denominacion}
                                     </Col>
                                 </Row>
                             )

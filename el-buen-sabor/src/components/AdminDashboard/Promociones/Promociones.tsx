@@ -111,11 +111,12 @@ export const Promociones = () => {
           columns={columnsTablePromociones}
           handleHabilitar={handleHabilitar}>
         </GenericTable>
-      </Container>
-      <PromocionDetalleModal
+        <PromocionDetalleModal
         open={showDetail} 
         handleClose={handleClose} 
       />
+      </Container>
+     
     </Box>
   )
 }
