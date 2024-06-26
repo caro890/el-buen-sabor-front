@@ -1,20 +1,34 @@
+import React, { FC, useState } from 'react'
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import { useAppSelector } from "../../../../hooks/redux";
-import { EstadisticasService } from "../../../../services/EstadisticasService"
-import { FC, useEffect, useState } from "react";
-import { RankingProductos } from "../../../../types/Estadisticas";
-import Chart from "react-google-charts";
+import { EstadisticasService } from '../../../../services/EstadisticasService';
+import { useFormik } from 'formik';
+import * as Yup from "yup"
+import { useAppSelector } from '../../../../hooks/redux';
 
+const validationSchema = Yup.object().shape({
+    fechaInicio: Yup
+      .date()
+      .required('La fecha de inicio es requerida'),
+    fechaFin: Yup
+      .date()
+      .required('La fecha de fin es requerida')
+      .when('fechaInicio', (fechaInicio, schema) => {
+        return fechaInicio
+          ? schema.min(fechaInicio, 'La fecha de fin debe ser posterior a la fecha de inicio')
+          : schema;
+      }),
+  });
+
+  
 interface IPropsRankingProductos {
     business: string
 }
 
-export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) => {
-  const service = new EstadisticasService();
-  const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
-  const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
+export  const  InformeExcel : FC<IPropsRankingProductos> = ({business}) => {
 
-  const [data, setData] = useState<any[]>([]);
+    const service = new EstadisticasService();
+    const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
+  const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
   const intialDateFrom = new Date();
   intialDateFrom.setMonth(0);
   intialDateFrom.setDate(1);
@@ -25,39 +39,20 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
   const [dateTo, setDateTo] = useState<Date>(initialDateTo);
   const [error, setError] = useState<boolean>(false);
 
-  useEffect(() => {
-    getData();
-  }, []);
-
   const getData = async () => {
     console.log("anda el boton antes")
     if(business=="sucursal"){
         console.log(idSucursal)
         if(idSucursal) {
             console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
-            let array: RankingProductos[] = await service.getRankingSucursal(idSucursal, dateFrom, dateTo);
-            let auxArray: any[] = [];
-
-            array.forEach((ranking: RankingProductos) => {
-                auxArray.push([ranking.denominacion, ranking.countVentas])
-            });
-            console.log(auxArray);
-            auxArray.unshift(["Producto", "Ventas"]);
-            setData(auxArray);
+             await service.generateExcelSucursal(idSucursal,dateFrom,dateTo);
+        
         }
     } else {
-        console.log("anda el boton empresa")
+       
         if(empresa) {
-            console.log("anda el boton")
-            let array: RankingProductos[] = await service.getRankingEmpresas(empresa.id, dateFrom, dateTo);
-            let auxArray: any[] = [];
-
-            array.forEach((ranking: RankingProductos) => {
-                auxArray.push([ranking.denominacion, ranking.countVentas])
-            });
-
-            auxArray.unshift(["Producto", "Ventas"]);
-            setData(auxArray);
+            console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
+             await service.generateExcelEmpresa(empresa.id,dateFrom,dateTo);
         }
     }
   };
@@ -72,6 +67,7 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
     console.log(newDate);
   };
 
+
   const handleClickButtonVer = () => {
     
     if(dateFrom > dateTo) {
@@ -81,9 +77,7 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
     
     getData();
   };
-
   return (
-    <div className="mb-5">
         <Container>
             <Row className="mb-2">
                 Productos más vendidos
@@ -115,26 +109,5 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
                 }
             </Row>
         </Container>
-        <div>
-                { data.length>1 &&
-                    <Chart 
-                        chartType="BarChart"
-                        width={"100%"}
-                        height={"400px"}
-                        data={data}
-                        options={{
-                            chartArea: { width: "50%" },
-                            hAxis: {
-                                title: "Cantidad Vendida",
-                                minValue: 0,
-                            },
-                            vAxis: {
-                                title: "Producto",
-                            }
-                        }}
-                    />
-                }
-        </div>
-    </div>
   )
 }

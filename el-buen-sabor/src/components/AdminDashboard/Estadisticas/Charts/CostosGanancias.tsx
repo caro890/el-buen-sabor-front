@@ -2,19 +2,20 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/redux";
 import { EstadisticasService } from "../../../../services/EstadisticasService"
 import { FC, useEffect, useState } from "react";
-import { RankingProductos } from "../../../../types/Estadisticas";
+import { CostoGanancia } from "../../../../types/Estadisticas";
 import Chart from "react-google-charts";
+
 
 interface IPropsRankingProductos {
     business: string
 }
 
-export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) => {
+export const CostosGanancias : FC<IPropsRankingProductos> = ({business}) => {
   const service = new EstadisticasService();
   const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
   const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
 
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>();
   const intialDateFrom = new Date();
   intialDateFrom.setMonth(0);
   intialDateFrom.setDate(1);
@@ -35,29 +36,22 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
         console.log(idSucursal)
         if(idSucursal) {
             console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
-            let array: RankingProductos[] = await service.getRankingSucursal(idSucursal, dateFrom, dateTo);
-            let auxArray: any[] = [];
-
-            array.forEach((ranking: RankingProductos) => {
-                auxArray.push([ranking.denominacion, ranking.countVentas])
-            });
-            console.log(auxArray);
-            auxArray.unshift(["Producto", "Ventas"]);
-            setData(auxArray);
+            let array: CostoGanancia = await service.getCostosGananciasSucursal(idSucursal, dateFrom, dateTo);
+            let newArray=[['resultados',array.resultado],['costos',array.costos],['ganancias',array.ganancias]]
+           
+console.log(array);
+           
+            setData(newArray);
         }
     } else {
         console.log("anda el boton empresa")
         if(empresa) {
             console.log("anda el boton")
-            let array: RankingProductos[] = await service.getRankingEmpresas(empresa.id, dateFrom, dateTo);
-            let auxArray: any[] = [];
-
-            array.forEach((ranking: RankingProductos) => {
-                auxArray.push([ranking.denominacion, ranking.countVentas])
-            });
-
-            auxArray.unshift(["Producto", "Ventas"]);
-            setData(auxArray);
+            let array: CostoGanancia = await service.getCostosGananciasEmpresa(empresa.id, dateFrom, dateTo);
+            
+            let newArray=[['resultados',array.resultado],['costos',array.costos],['ganancias',array.ganancias]]
+           
+            setData(newArray);
         }
     }
   };
@@ -116,24 +110,21 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
             </Row>
         </Container>
         <div>
-                { data.length>1 &&
-                    <Chart 
-                        chartType="BarChart"
-                        width={"100%"}
-                        height={"400px"}
-                        data={data}
-                        options={{
-                            chartArea: { width: "50%" },
-                            hAxis: {
-                                title: "Cantidad Vendida",
-                                minValue: 0,
-                            },
-                            vAxis: {
-                                title: "Producto",
-                            }
-                        }}
-                    />
-                }
+                { data &&
+                     <Chart 
+                         chartType="PieChart"
+                         width={"100%"}
+                         height={"400px"}
+                         data={[
+                            ['Estado', 'Valor'],
+                            ...data.map(({ variable, valor }) => [variable, valor]),
+                        ]}
+                          options = {{
+                             title: 'Distribución de Costos, Ganancias y Resultado'
+                           }}
+                       
+                     />
+               }
         </div>
     </div>
   )

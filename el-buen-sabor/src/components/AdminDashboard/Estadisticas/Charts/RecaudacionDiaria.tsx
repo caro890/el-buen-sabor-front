@@ -2,14 +2,14 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/redux";
 import { EstadisticasService } from "../../../../services/EstadisticasService"
 import { FC, useEffect, useState } from "react";
-import { RankingProductos } from "../../../../types/Estadisticas";
+import { IngresosDiarios } from "../../../../types/Estadisticas";
 import Chart from "react-google-charts";
 
 interface IPropsRankingProductos {
     business: string
 }
 
-export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) => {
+export const RecaudacionDiaria : FC<IPropsRankingProductos> = ({business}) => {
   const service = new EstadisticasService();
   const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
   const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
@@ -35,11 +35,11 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
         console.log(idSucursal)
         if(idSucursal) {
             console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
-            let array: RankingProductos[] = await service.getRankingSucursal(idSucursal, dateFrom, dateTo);
+            let array: IngresosDiarios[] = await service.getIngresosDiariosSucursal(idSucursal, dateFrom, dateTo);
             let auxArray: any[] = [];
 
-            array.forEach((ranking: RankingProductos) => {
-                auxArray.push([ranking.denominacion, ranking.countVentas])
+            array.forEach((ranking: IngresosDiarios) => {
+                auxArray.push([ranking.fecha, ranking.ingresos])
             });
             console.log(auxArray);
             auxArray.unshift(["Producto", "Ventas"]);
@@ -49,11 +49,11 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
         console.log("anda el boton empresa")
         if(empresa) {
             console.log("anda el boton")
-            let array: RankingProductos[] = await service.getRankingEmpresas(empresa.id, dateFrom, dateTo);
+            let array: IngresosDiarios[] = await service.getIngresosDiariosEmpresa(empresa.id, dateFrom, dateTo);
             let auxArray: any[] = [];
 
-            array.forEach((ranking: RankingProductos) => {
-                auxArray.push([ranking.denominacion, ranking.countVentas])
+            array.forEach((ranking: IngresosDiarios) => {
+                auxArray.push([ranking.fecha, ranking.ingresos])
             });
 
             auxArray.unshift(["Producto", "Ventas"]);
@@ -118,7 +118,7 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
         <div>
                 { data.length>1 &&
                     <Chart 
-                        chartType="BarChart"
+                        chartType="ColumnChart"
                         width={"100%"}
                         height={"400px"}
                         data={data}

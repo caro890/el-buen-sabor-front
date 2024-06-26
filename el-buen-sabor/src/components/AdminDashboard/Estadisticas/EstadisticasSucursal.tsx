@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { Sucursal } from "../../../types/Empresas/Sucursal";
 import { SucursalService } from "../../../services/SucursalService";
 import { setActiveSucursal } from "../../../redux/slices/EmpresaReducer";
+import { RecaudacionDiaria } from "./Charts/RecaudacionDiaria";
+import { RecaudacionMensual } from "./Charts/RecaudacionMensual";
+import { CostosGanancias } from "./Charts/CostosGanancias";
 
 export const EstadisticasSucursal = () => {
   const empresaActual = useAppSelector((state) => (state.empresaReducer.empresa));
@@ -45,6 +48,9 @@ export const EstadisticasSucursal = () => {
         }
         <Box>
           <RankingProductosModule business="sucursal"/>
+          <RecaudacionDiaria business="sucursal"/>
+          <RecaudacionMensual business="sucursal"/>
+          <CostosGanancias business="sucursal"/>
         </Box>
       </Container>
     </Box>
