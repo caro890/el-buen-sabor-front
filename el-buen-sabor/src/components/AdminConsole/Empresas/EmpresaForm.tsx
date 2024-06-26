@@ -4,8 +4,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import { Button, Form } from "react-bootstrap";
-import { useImage } from "../../../hooks/useImage";
-import { ModuloImagenes } from "../../ModuloImagenes copy/ModuloImagenes2 copy";
+import { ModuloUnaImagen } from "../../ModuloImagenes copy/ModuloUnaImagen";
+import { useOneImage } from "../../../hooks/useOneImage";
+import { imagenVacia } from "../../../types/TiposVacios";
 
 interface IPropsEmpresaForm {
     saveChanges: (emp: Empresa) => void;
@@ -19,7 +20,7 @@ const  validationSchema = Yup.object({
 });
 
 export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
-  const img = useImage();
+  const img = useOneImage();
 
   useEffect(() => {
     setImagesConfig();
@@ -27,8 +28,8 @@ export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
   
   const setImagesConfig = async () => {
     img.setObjUrl("images");
-    if(empresa.logo) img.addToShowImages([{id: 0, eliminado: false, url: empresa.logo, name:""}]);
-    else img.addToShowImages([]);
+    if(empresa.logo) img.addToShowImage({id: 0, eliminado: false, url: empresa.logo, name:""});
+    else img.addToShowImage(imagenVacia);
   };
 
   const formik = useFormik({
@@ -36,11 +37,16 @@ export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
 
     validationSchema: validationSchema,
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+        let newUrl: string = "";
         try {
-            img.uploadImages(values.id);
+            img.uploadOneImage().then((data) => {
+                console.log(data);
+                if(data) newUrl = data;
+            });
             //obtener imagen y agregarla a empleado(values)
-            img.reset();
+            values.logo = newUrl;
+            //img.reset();
         } catch (error) {
             //Mostrar mensaje de error si ocurre una exepcion
             Swal.fire({
@@ -103,7 +109,7 @@ export const EmpresaForm : FC<IPropsEmpresaForm> = ({saveChanges, empresa}) => {
             </Form.Group>
             <Form.Group className="mb-2" controlId="logo">
                 <Form.Label>Logo: </Form.Label>
-                <ModuloImagenes></ModuloImagenes>
+                <ModuloUnaImagen/>
             </Form.Group>
             <Button type="submit" className="save-button" >GUARDAR</Button>
         </Form>

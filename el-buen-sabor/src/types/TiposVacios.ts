@@ -9,8 +9,9 @@ import { Localidad } from "./Domicilio/Localidad";
 import { UnidadMedida } from "./Articulos/UnidadMedida";
 import { Categoria } from "./Articulos/Categoria";
 import { Promocion, TipoPromocion } from "./Articulos/Promocion";
-import { ArticuloInsumo, ArticuloInsumoShort } from "./Articulos/ArticuloInsumo";
+import { ArticuloInsumo, ArticuloInsumoCreate, ArticuloInsumoShort } from "./Articulos/ArticuloInsumo";
 import { StockShort } from "./Articulos/Stock";
+import { IImagen, ImageFile } from "./Articulos/ImagenArticulo";
 
 export const paisVacio: Pais = {
     id: 0,
@@ -112,6 +113,23 @@ export const insumoVacio: ArticuloInsumo = {
     stocksInsumo: []
 }
 
+export const insumoCreateVacio: ArticuloInsumoCreate = {
+    id: 0,
+    eliminado: false,
+    denominacion: "",
+    precioVenta: 0,
+    precioCompra: 0,
+    esParaElaborar: false,
+    codigo: "",
+    habilitado: true,
+    imagenes: [],
+    idUnidadMedida: 0,
+    idCategoria: 0,
+    stockMinimo: 0,
+    stockActual: 0, 
+    stockMaximo: 0
+}
+
 export const promocionVacia: Promocion = {
     id: 0,
     eliminado: false,
@@ -147,4 +165,20 @@ export const stockShortVacio: StockShort = {
     stockMinimo: 0,
     articuloInsumo: insumoShortVacio,
     sucursal: sucursalShortVacia
+}
+
+export const imageFileVacio: ImageFile = {
+    imagen: {
+        id: 0,
+        eliminado: false,
+        url: "",
+        name: ""
+    }
+}
+
+export const imagenVacia: IImagen = {
+    id: 0,
+    eliminado: false,
+    url: "",
+    name: ""
 }

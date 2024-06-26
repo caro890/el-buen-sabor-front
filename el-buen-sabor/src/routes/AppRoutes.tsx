@@ -35,6 +35,7 @@ import { PedidosEnCamino } from "../components/DeliveryConsole/PedidosEnCamino.t
 import { PedidosEnPreparacion } from "../components/CocineroConsole/PedidosEnPreparacion.tsx"
 import { PedidosNuevos } from "../components/CajeroConsole/PedidosNuevos.tsx"
 import { PedidosEntregaPendiente } from "../components/CajeroConsole/PedidosEntregaPendiente.tsx"
+import { ImageContextProvider } from "../context/ImagenContext.tsx"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -80,7 +81,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="empleados" >
           <Route index element={<Empleados />} />
-          <Route path="form/:id?" element={<ImagesContextProvider><EmpleadoForm/></ImagesContextProvider>} loader={empleadoLoader} />
+          <Route path="form/:id?" element={<ImageContextProvider><EmpleadoForm/></ImageContextProvider>} loader={empleadoLoader} />
         </Route>
         <Route path="promociones">
           <Route index element={<Promociones/>} />

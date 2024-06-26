@@ -8,17 +8,18 @@ import { useFormik } from "formik";
 import * as Yup from "yup"
 import Swal from "sweetalert2";
 import styles from "../../../../styles/ProductForm.module.css"
-import { empleadoVacio } from "../../../../types/TiposVacios";
+import { empleadoVacio, imagenVacia } from "../../../../types/TiposVacios";
 import { BotonVolver } from "../../../Botones/BotonVolver";
 import { useAppSelector } from "../../../../hooks/redux";
 import { Sucursal } from "../../../../types/Empresas/Sucursal";
-import { useImage } from "../../../../hooks/useImage";
 import { useEffect } from "react";
-import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2 copy";
+import { ModuloUnaImagen } from "../../../ModuloImagenes copy/ModuloUnaImagen";
+import { useOneImage } from "../../../../hooks/useOneImage";
+import { IImagen } from "../../../../types/Articulos/ImagenArticulo";
 
 export const EmpleadoForm = () => {
   const navigate = useNavigate();   //hook para navegar entre rutas
-  const img = useImage();
+  const img = useOneImage();
 
   const service: EmpleadoService = new EmpleadoService();   //servicio para interactuar con la api
   const empleadoSeleccionado = useLoaderData() as Empleado;   //datos elegidos de la tabla para rellenar el form
@@ -31,8 +32,8 @@ export const EmpleadoForm = () => {
 
   const setImagesConfig = async () => {
     img.setObjUrl("images");
-    if(empleadoSeleccionado.imagenPersona) img.addToShowImages([empleadoSeleccionado.imagenPersona]);
-    else img.addToShowImages([]);
+    if(empleadoSeleccionado.imagenPersona) img.addToShowImage(empleadoSeleccionado.imagenPersona);
+    else img.addToShowImage(imagenVacia);
   };
 
   //Esquemas de validacion para formik
@@ -62,25 +63,17 @@ export const EmpleadoForm = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       let newEmpleado = values;
-
-      if(sucursal!=null) {
-        let empleadoCreate: EmpleadoCreate = {
-          id: values.id,
-          eliminado: values.eliminado,
-          nombre: values.nombre,
-          apellido: values.apellido,
-          telefono: values.telefono,
-          imagenPersona: values.imagenPersona,
-          fechaNacimiento: values.fechaNacimiento,
-          usuario: values.usuario,
-          idSucursal: sucursal.id
-        }
-        newEmpleado = await service.create(empleadoCreate);
-      }
+      let newImage: IImagen = imagenVacia;
 
       try {
-        img.uploadImages(newEmpleado.id);
-        img.reset();
+        let newUrl: string = "";
+        img.uploadOneImage().then((data) => {
+          if(data) newUrl = data;
+        });
+
+        newImage.url = newUrl;
+        newImage.name = `${values.id}-${values.apellido}`;
+        //img.reset();
       } catch (error) {
         //Mostrar mensaje de error si ocurre una exepcion
         Swal.fire({
@@ -90,6 +83,27 @@ export const EmpleadoForm = () => {
         });
         console.log("Error: ", error);
         return;
+      }
+      let imagen: IImagen = imagenVacia;
+      if(newImage) {
+        imagen = newImage;
+      } else {
+        if(values.imagenPersona) imagen = values.imagenPersona;
+      }
+      
+      if(sucursal!=null) {
+        let empleadoCreate: EmpleadoCreate = {
+          id: values.id,
+          eliminado: values.eliminado,
+          nombre: values.nombre,
+          apellido: values.apellido,
+          telefono: values.telefono,
+          imagenPersona: imagen,
+          fechaNacimiento: values.fechaNacimiento,
+          usuario: values.usuario,
+          idSucursal: sucursal.id
+        }
+        newEmpleado = await service.create(empleadoCreate);
       }
 
       navigate(-1);
@@ -178,10 +192,10 @@ export const EmpleadoForm = () => {
           }
 
           <Typography variant="h6" gutterBottom>
-            Imágenes
+            Imagen
           </Typography>
 
-          <ModuloImagenes></ModuloImagenes>
+          <ModuloUnaImagen/>
 
           <Typography variant="h6" gutterBottom>
             Datos de Usuario

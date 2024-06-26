@@ -12,7 +12,7 @@ import { unidadesMedidaLoader } from "../../UnidadesMedida/UnidadesMedida";
 import styles from "../../../../styles/InsumosForm.module.css"
 import { useNavigate } from "react-router";
 import { CategoriaService } from "../../../../services/CatogoriaService";
-import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2 copy";
+import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes";
 import Swal from "sweetalert2";
 import { insumoVacio } from "../../../../types/TiposVacios";
 import { BotonVolver } from "../../../Botones/BotonVolver";
@@ -112,9 +112,7 @@ export const InsumosForm = () => {
     onSubmit: async (values) => {
       let newInsumo: ArticuloInsumo = insumoVacio;
       if(values.id!=0) {
-        console.log(values);
         newInsumo = await service.put(values.id, values);
-        console.log(newInsumo);
       } else {
         let newCreate: ArticuloInsumoCreate = {
           id: values.id,
@@ -132,9 +130,7 @@ export const InsumosForm = () => {
           stockMaximo: values.stockMaximo
           
         }
-        console.log(newCreate);
         newInsumo = await service.create(newCreate);
-        console.log(newInsumo);
       }
 
       try {

@@ -91,7 +91,6 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
                 let auxNew = newImages;
 
                 for(var [key] of Array.from(newImages.entries())) {
-                    console.log(key); // every key gets logged now
                     if(auxNew.get(key)==deleted.file) {
                         auxNew.delete(key);
                     }
@@ -111,7 +110,6 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
      const uploadImages = async (idObject: number) => {
          //Crear un objeto FormData y agregar los archivos seleccionados
          if(newImages.has("uploads")) {
-             console.log(newImages);
   
              //Mostrar un mensaje de carga mientras se suben los archivos
              Swal.fire({
@@ -126,9 +124,6 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
              try {
                //Realizar la peticion POST para subir los archivos
                let imgService = new ImagenesService(objUrl);
-
-                console.log("ID del Artículo:", idObject);
-                console.log("FormData a enviar:", newImages);
                 
                 const response = await imgService.upload(idObject, newImages);
                 if (!response.ok) {
@@ -152,10 +147,13 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
         let service = new ImagenesService(objUrl);
 
         toDeleteImages.forEach((img: ImageFile) => {
-            console.log(img);
+            console.log(img.imagen.url);
+            let regex = /\/([0-9a-f]{32})/;
+            let match2 = img.imagen.url.match(regex);
             //extraigo el ID publico de la URL de la imagen
             const match = extractPublicId(img.imagen.url);
             console.log(match[1])
+            if(match2) console.log(match2[1])
             if(match){
                 const publicId = match[1];
                 try {

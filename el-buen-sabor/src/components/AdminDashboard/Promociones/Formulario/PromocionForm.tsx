@@ -22,7 +22,7 @@ import { useAppSelector } from "../../../../hooks/redux";
 import { Sucursal } from "../../../../types/Empresas/Sucursal";
 import { SucursalService } from "../../../../services/SucursalService";
 import formatPrice from "../../../../types/formats/priceFormat";
-import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2 copy";
+import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes";
 import { useImage } from "../../../../hooks/useImage";
 
 export const PromocionForm = () => {
