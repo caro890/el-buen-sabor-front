@@ -100,22 +100,22 @@ export const Promociones = () => {
     <Box  component="main" sx={{ flexGrow: 1, my: 2}}>
       <Container>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
-            <Typography variant="h5" gutterBottom>
-                Promociones
-            </Typography>
-            <BotonNuevo/>
+          <Typography variant="h5" gutterBottom>
+            Promociones
+          </Typography>
+          <BotonNuevo/>
         </Box>
         <GenericTable<Promocion> 
-            handleDelete={handleDelete} 
-            handleSelect={handleSelect}
-            columns={columnsTablePromociones}
-            handleHabilitar={handleHabilitar}>
+          handleDelete={handleDelete} 
+          handleSelect={handleSelect}
+          columns={columnsTablePromociones}
+          handleHabilitar={handleHabilitar}>
         </GenericTable>
-        </Container>
-        <PromocionDetalleModal
-            open={showDetail} 
-            handleClose={handleClose} 
-        />
-</Box>
+      </Container>
+      <PromocionDetalleModal
+        open={showDetail} 
+        handleClose={handleClose} 
+      />
+    </Box>
   )
 }

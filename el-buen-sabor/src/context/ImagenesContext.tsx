@@ -149,7 +149,6 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
 
     //delete toDeleteImages from cloudinary
     const deleteImages = () => {
-        console.log("To Delete Images: " + toDeleteImages);
         let service = new ImagenesService(objUrl);
 
         toDeleteImages.forEach((img: ImageFile) => {

@@ -1,4 +1,5 @@
 import { EstadoPedido, PedidoDto } from "../types/Pedido/Pedido";
+import formatDate from "../types/formats/dateFormat";
 import { base } from "./BackendClient";
 
 export class PedidoService {
@@ -41,14 +42,25 @@ export class PedidoService {
 
     //cambiar el estado de un pedido
     async changeEstadoPedido(idPedido: number, estadoPedido: string) : Promise<boolean> {
-        const response = await fetch(`${this.baseUrl}/cambiaEstado/${idPedido}?estadoPedido=${estadoPedido}`);
+        const response = await fetch(`${this.baseUrl}/cambiaEstado/${idPedido}?estadoPedido=${estadoPedido}`,
+            {
+                method: "PUT",
+            }
+        );
         return response.ok;
     }
 
-    //obtener todos los pedidos por sucursal
+    //obtener todos los pedidos por sucursal y estado
     async getAllBySucursalIdAndState(idSucursal: number, estadoPedido: string): Promise<PedidoDto[]> {
         const response = await fetch(`${this.baseUrl}/getPorEstadoYSucursal/${idSucursal}?estadoPedido=${estadoPedido}`);
         const data = await response.json();
         return data as PedidoDto[];
     }    
+
+    //obtener todos los pedidos por sucursal en una fecha
+    async getAllBySucursal(idSucursal: number, desde: Date, hasta: Date): Promise<PedidoDto[]> {
+        const response = await fetch(`${this.baseUrl}/getPedidoSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`);
+        const data = await response.json();
+        return data as PedidoDto[];
+    } 
 }

@@ -22,14 +22,14 @@ export const ProductoDetailModal = ({
   return (
     <Modal show={open} onHide={handleClose} centered size="lg">
         <Modal.Header closeButton>
-            {item? <Modal.Title  className={styles.title}> 
+            {item!=undefined? <Modal.Title  className={styles.title}> 
                 <p className={styles.title}>{item.codigo}</p> 
                 <p className={styles.title}>{item.denominacion}</p> 
                 {item.habilitado ? <div className={styles.habilitadoBox}><p className={styles.habilitadoLabel}>HABILITADO</p></div> : 
                 <div className={styles.deshabilitadoBox}><p className={styles.deshabilitadoLabel}>DESHABILITADO</p></div>}</Modal.Title>: null}
         </Modal.Header>
         <Modal.Body>
-          {item?
+          {item!=undefined?
             <Container>
                 <Row className="mb-3">
                     <Col>

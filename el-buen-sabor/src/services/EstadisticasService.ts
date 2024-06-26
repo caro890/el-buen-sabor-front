@@ -1,4 +1,5 @@
 import { CostoGanancia, IngresosDiarios, IngresosMensuales, PedidosCliente, RankingProductos } from "../types/Estadisticas";
+import formatDate from "../types/formats/dateFormat";
 import { base } from "./BackendClient";
 
 export class EstadisticasService {
@@ -6,7 +7,7 @@ export class EstadisticasService {
 
   //get ranking por sucursal
   async getRankingSucursal(idSucursal: number, desde: Date, hasta: Date): Promise<RankingProductos[]> {
-    const response = await fetch(`${this.baseUrl}/rankingSucursal/${idSucursal}?fechaDesde=${desde.toISOString().split('T')[0]}&fechaHasta=${hasta.toISOString().split('T')[0]}`, {
+    const response = await fetch(`${this.baseUrl}/rankingSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -18,7 +19,7 @@ export class EstadisticasService {
 
   //get ranking por empresa
   async getRankingEmpresas(idEmpresa: number,desde: Date, hasta: Date): Promise<RankingProductos[]> {
-    const response = await fetch(`${this.baseUrl}/rankingEmpresa/${idEmpresa}?fechaDesde=${desde.toISOString().split('T')[0]}&fechaHasta=${hasta.toISOString().split('T')[0]}`, {
+    const response = await fetch(`${this.baseUrl}/rankingEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +31,7 @@ export class EstadisticasService {
 
   //get ingresos diarios por sucursal
   async getIngresosDiariosSucursal(idSucursal: number, desde: Date, hasta: Date): Promise<IngresosDiarios[]> {
-    const response = await fetch(`${this.baseUrl}/recaudacionesDiariasSucursal/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/recaudacionesDiariasSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +43,7 @@ export class EstadisticasService {
 
   //get ingresos diarios por empresa
   async getIngresosDiariosEmpresa(idEmpresa: number, desde: Date, hasta: Date): Promise<IngresosDiarios[]> {
-    const response = await fetch(`${this.baseUrl}/recaudacionesDiariasEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/recaudacionesDiariasEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +55,7 @@ export class EstadisticasService {
 
   //get ingresos mensuales por sucursal
   async getIngresosMensualesSucursal(idSucursal:number, desde: Date, hasta: Date): Promise<IngresosMensuales[]> {
-    const response = await fetch(`${this.baseUrl}/recaudacionesMensualesSucursal/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/recaudacionesMensualesSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -66,7 +67,7 @@ export class EstadisticasService {
 
   //get ingresos mensuales por empresa
   async getIngresosMensualesEmpresa(idEmpresa: number, desde: Date, hasta: Date): Promise<IngresosMensuales[]> {
-    const response = await fetch(`${this.baseUrl}/recaudacionesMensualesEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/recaudacionesMensualesEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +79,7 @@ export class EstadisticasService {
 
   //get ganancias por sucursal
   async getCostosGananciasSucursal(idScursal: number, desde: Date, hasta: Date): Promise<CostoGanancia> {
-    const response = await fetch(`${this.baseUrl}/costosGanancias/${idScursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/costosGanancias/${idScursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +91,7 @@ export class EstadisticasService {
 
   //get ganancias por empresa
   async getCostosGananciasEmpresa(idEmpresa: number, desde: Date, hasta: Date): Promise<CostoGanancia> {
-    const response = await fetch(`${this.baseUrl}/costosGananciasEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/costosGananciasEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -102,7 +103,7 @@ export class EstadisticasService {
 
   //get cantidad de pedidos por clientes por sucursal
   async getPedidosClienteSucursal(idSucursal: number, desde: Date, hasta: Date): Promise<PedidosCliente[]> {
-    const response = await fetch(`${this.baseUrl}/pedidosClienteSucursal/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/pedidosClienteSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -114,7 +115,7 @@ export class EstadisticasService {
 
   //get cantidad de pedidos por clientes por empresa
   async getPedidosClienteEmpresa(idEmpresa: number, desde: Date, hasta: Date): Promise<PedidosCliente[]> {
-    const response = await fetch(`${this.baseUrl}/pedidosClienteEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`, {
+    const response = await fetch(`${this.baseUrl}/pedidosClienteEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -126,13 +127,13 @@ export class EstadisticasService {
 
   //generar Excel para sucursal
   async generateExcelSucursal(idSucursal: number, desde: Date, hasta: Date) {
-    const urlServer: string = `${this.baseUrl}/excelSucursal/${idSucursal}?fechaDesde=${desde}&fechaHasta=${hasta}`;
+    const urlServer: string = `${this.baseUrl}/excelSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`;
     window.open(urlServer, "_blank");
   }
 
   //generar Excel para sucursal
   async generateExcelEmpresa(idEmpresa: number, desde: Date, hasta: Date) {
-    const urlServer: string = `${this.baseUrl}/excelEmpresa/${idEmpresa}?fechaDesde=${desde}&fechaHasta=${hasta}`;
+    const urlServer: string = `${this.baseUrl}/excelEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`;
     window.open(urlServer, "_blank");
   }
 }

@@ -20,7 +20,7 @@ export const PromocionDetalleModal : FC<IPropsPromocionDetalleModal> = ({
   return (
     <Modal show={open} onHide={handleClose} centered size="lg">
         <Modal.Header closeButton>
-            {item? 
+            {item!=undefined &&
                 <Modal.Title  className={styles.title}> 
                     <p className={styles.title}>{item.denominacion}</p> 
                     {item.habilitado ? 
@@ -33,10 +33,10 @@ export const PromocionDetalleModal : FC<IPropsPromocionDetalleModal> = ({
                         </div>
                     }
                 </Modal.Title>
-            : null}
+            }
         </Modal.Header>
         <Modal.Body>
-          {item?
+          {item!=undefined &&
             <Container>
                 <Row className="mb-3">
                     <Col>
@@ -59,7 +59,7 @@ export const PromocionDetalleModal : FC<IPropsPromocionDetalleModal> = ({
                         <Row>
                             <b>Articulos</b>
                         </Row>
-                        {item.promocionDetalles?.map((detalle: PromocionDetalle, index: number) => {
+                        {item?.promocionDetalles?.map((detalle: PromocionDetalle, index: number) => {
                             return (
                                 <Row key={index}>
                                     <Col>
@@ -71,7 +71,7 @@ export const PromocionDetalleModal : FC<IPropsPromocionDetalleModal> = ({
                     </Container>
                 </Row>
             </Container>
-          : null } 
+          } 
         </Modal.Body>
     </Modal>
   )

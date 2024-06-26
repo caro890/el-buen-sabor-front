@@ -548,7 +548,7 @@ export const promocionLoader: LoaderFunction = async ({params}) => {
       let service = new PromocionService();
       let promocion: Promocion | undefined = await service.getById(Number(id));
       if(promocion) return promocion;
-      else return null;
+      else return promocionVacia;
     } else {
       return promocionVacia;
     }

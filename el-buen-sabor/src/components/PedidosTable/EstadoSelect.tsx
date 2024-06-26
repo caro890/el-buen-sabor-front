@@ -25,8 +25,9 @@ export const EstadoSelect : FC<IPropsEstadoSelect> = ({
   }, []);
 
   return (
-    <Form.Select value={itemActual.estado.toString()} onChange={(e) => handleChangeEstado(itemActual.id, e.target.value)}>
-        {
+    <Form.Select onChange={(e) => handleChangeEstado(itemActual.id, e.target.value)}>
+        <option value={itemActual.estado}>{itemActual.estado.toString()}</option>
+        { estados!=undefined &&
             estados.map((estado: EstadoPedido, index: number) => 
                 <option key={index} value={estado.toString()}>{estado.toString()}</option>
             )

@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../hooks/redux"
+import { useAppDispatch, useAppSelector } from "../../hooks/redux"
 import { PedidoService } from "../../services/PedidoService";
 import { PedidoDto } from "../../types/Pedido/Pedido";
 import { PedidosTable } from "../PedidosTable/PedidosTable";
 import { Container, Typography, Box } from "@mui/material";
+import { removeElementActive } from "../../redux/slices/TablaDataReducer";
+import { PedidoDetalle } from "../AdminDashboard/Pedidos/Detalle/PedidoDetalle";
 
 export const PedidosEnPreparacion = () => {
+  const dispatch = useAppDispatch();
   const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
   const service = new PedidoService();
   const [pedidos, setPedidos] = useState<PedidoDto[]>([]);
+  const [showDetalle, setShowDetalle] = useState<boolean>(false);
 
   useEffect(() => {
     getPedidos();
@@ -22,6 +26,15 @@ export const PedidosEnPreparacion = () => {
     }
   };
 
+  const handleSelection = () => {
+    setShowDetalle(true);
+  }
+
+  const handleCloseDetalle = () => {
+    dispatch(removeElementActive());
+    setShowDetalle(false);
+  }
+
   return (
     <Container>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
@@ -30,8 +43,13 @@ export const PedidosEnPreparacion = () => {
             </Typography>
         </Box>
         <PedidosTable
-            pedidos={pedidos}
-            getPedidos={getPedidos}
+          pedidos={pedidos}
+          getPedidos={getPedidos}
+          handleSelection={handleSelection}
+        />
+        <PedidoDetalle
+          open={showDetalle}
+          handleClose={handleCloseDetalle}
         />
     </Container>
   )
