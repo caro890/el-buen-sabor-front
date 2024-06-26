@@ -23,9 +23,12 @@ import { Sucursal } from "../../../../types/Empresas/Sucursal";
 import { SucursalService } from "../../../../services/SucursalService";
 import formatPrice from "../../../../types/formats/priceFormat";
 import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2 copy";
+import { useImage } from "../../../../hooks/useImage";
 
 export const PromocionForm = () => {
   const navigate = useNavigate();
+  const img = useImage();
+
   const service = new PromocionService();
   const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
   const idEmpresa = useAppSelector((state) => (state.empresaReducer.empresa?.id));
@@ -54,6 +57,8 @@ export const PromocionForm = () => {
       });
       setIdSucursales(ids);
     }
+
+    setImagesConfig();
   }, []);
 
   //traigo todas las sucursales de la empresa
@@ -70,6 +75,12 @@ export const PromocionForm = () => {
   useEffect(() => {
     actualizarArticulos();
   }, [detalles]);
+
+  const setImagesConfig = async () => {
+    img.setObjUrl("promociones");
+    if(promocionSeleccionada.imagenes) img.addToShowImages(promocionSeleccionada.imagenes);
+    else img.addToShowImages([]);
+  };
 
   //funcion para actualizar los articulos que se van a mostrar en la ventana modal
   const actualizarArticulos = async () => {
@@ -247,11 +258,23 @@ export const PromocionForm = () => {
         idsSucursales: idSucursales
       }
 
-      console.log(newPromocion);
+      let response = await service.create(newPromocion);
 
-      service.create(newPromocion).then(() => 
-        navigate(-1)
-      );
+      try {
+        img.uploadImages(response.id);
+        img.reset();
+      } catch (error) {
+        //Mostrar mensaje de error si ocurre una exepcion
+        Swal.fire({
+          title: "Error",
+          text: "Algo falló al intentar subir las imágenes",
+          icon: "error"
+        });
+        console.log("Error: ", error);
+        return;
+      }
+
+      navigate(-1)
     }
   });
 

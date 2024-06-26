@@ -10,10 +10,7 @@ export class ImagenesService {
     async delete(image: {id: number, publicId: string}) {
         var url: string = this.baseUrl + "/deleteImg" + `?publicId=${image.publicId}&id=${image.id}` ;
         const response = await fetch(url, {
-            "method": "POST",
-            "headers": {
-                "Content-Type": 'multipart/form-data'
-            },
+            "method": "POST"
         })
         if (!response.ok) {
             throw new Error("Error al eliminar la imagen");

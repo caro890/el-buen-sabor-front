@@ -14,6 +14,7 @@ import { EmpresaForm } from "./EmpresaForm";
 import { useAppDispatch } from "../../../hooks/redux";
 import { setEmpresa } from "../../../redux/slices/EmpresaReducer";
 import { empresaVacia } from "../../../types/TiposVacios";
+import { ImagesContextProvider } from "../../../context/ImagenesContext";
 
 export const Empresas = () => {
   //estado para manejar la lista de empresas
@@ -150,7 +151,7 @@ export const Empresas = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EmpresaForm saveChanges={saveEmpresa} empresa={empresaForm} />
+          <ImagesContextProvider><EmpresaForm saveChanges={saveEmpresa} empresa={empresaForm} /></ImagesContextProvider>
         </Modal.Body>
       </Modal>
     </div>

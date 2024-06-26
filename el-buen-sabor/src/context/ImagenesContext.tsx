@@ -1,71 +1,56 @@
 import { ReactNode, createContext, useState } from "react";
 import { IImagen, ImageFile } from "../types/Articulos/ImagenArticulo";
-import Swal, { SweetAlertIcon } from "sweetalert2";
+import Swal from "sweetalert2";
 import { ImagenesService } from "../services/ImagenesService";
 import { extractPublicId } from "cloudinary-build-url";
 
-const showModal = (title: string, text: string, icon: SweetAlertIcon) => {
-    Swal.fire({
-        title: title,
-        text: text,
-        icon: icon,
-        customClass: {
-            container: "my-swal",
-        },
-    });
-};
-
 interface ImagesContextType {
     setObjUrl: (url: string) => void, 
-    setExistingImages: (array: IImagen[]) => void,
     toShowImages: ImageFile[],
-    addToShowImages: () => void, 
+    addToShowImages: (array: IImagen[]) => void, 
     setSelectedFiles: (files: FileList | null) => void, 
     addImages: () => void, 
     deleteImage: (image: ImageFile) => void, 
-    uploadImages: (idObject: number) => void
+    uploadImages: (idObject: number) => void,
+    reset: () => void
 }
 
 export const ImagesContext = createContext<ImagesContextType>({
     setObjUrl: () => {}, 
-    setExistingImages: () => {},
     toShowImages: [],
     addToShowImages: () => {}, 
     setSelectedFiles: () => {}, 
     addImages: () => {}, 
     deleteImage: () => {}, 
-    uploadImages: () => {}
+    uploadImages: () => {},
+    reset: () => {}
 });
 
 export function ImagesContextProvider({ children } : { children: ReactNode }) {
     const[toShowImages, setToShowImages] = useState<ImageFile[]>([]);
-    const[existingImages, setExistingImages] = useState<IImagen[]>([]);
-    const [newImages, setNewImages] = useState<File[]>([]);
+    const [newImages, setNewImages] = useState<FormData>(new FormData());
     const [toDeleteImages, setToDeleteImages] = useState<ImageFile[]>([]);
     const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
     const [objUrl, setObjUrl] = useState<string>("");
     
     //change the states
     //transform existingImages into ImageFile and add them to toShowImages
-    const addToShowImages = () => {
+    const addToShowImages = (array: IImagen[]) => {
         let auxArray: ImageFile[] = [];
-        existingImages.forEach((img: IImagen) => {
+        array.forEach((img: IImagen) => {
             let newImage: ImageFile = {
                 imagen: img
             }
             auxArray.push(newImage);
         });
         setToShowImages(auxArray);
-        
-        console.log("Object URL: "+objUrl);
-        console.log("Existing images: "+existingImages);
     };
 
     //transform selctedFiles into ImageFile and add it to toShowImages, add files to newImages
     const addImages = () => {
         if(selectedFiles){
             let auxToShow: ImageFile[] = toShowImages.slice();
-            let auxNew: File[] = newImages.slice();
+            let auxNew: FormData = newImages;
 
             Array.from(selectedFiles).forEach((f: File) => {
                 var newName = f.name;
@@ -84,14 +69,11 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
                 }
     
                 auxToShow.push(newImageFile);
-                auxNew.push(f);
+                auxNew.append("uploads", f);
             });
             setToShowImages(auxToShow);
             setNewImages(auxNew);
         }
-
-        console.log("To Show Image: " + toShowImages);
-        console.log("Selected Files: " + selectedFiles);
     };
 
     //remove from toShowImages, if it has a file we remove it from newImages if not add to toDeleteImages
@@ -105,112 +87,76 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
         setToShowImages(auxToShow);
 
         if(deleted.file){
-            if(newImages.length!=0){
-                let auxNew = Array.from(newImages).slice();
+            if(newImages.has("uploads")){
+                let auxNew = newImages;
 
-                auxNew = auxNew.filter( ( file ) => {
-                    return file != deleted.file;
-                });
-
+                for(var [key] of Array.from(newImages.entries())) {
+                    console.log(key); // every key gets logged now
+                    if(auxNew.get(key)==deleted.file) {
+                        auxNew.delete(key);
+                    }
+                }
+                
                 setNewImages(auxNew);
             }
         } else {
-            setToDeleteImages(prev => [...prev, deleted]);
+            let auxToDelete = toDeleteImages.slice();
+            auxToDelete.push(deleted);
+            setToDeleteImages(auxToDelete);
         }
     };  
 
     //change the db
     //save newImages into cloudinary and the db, setNewImages with the full images
-    // const uploadImages = async (idObject: number) => {
-    //     //Crear un objeto FormData y agregar los archivos seleccionados
-    //     if(newImages) {
-    //         console.log(newImages);
-    //         const formData = new FormData();
-    //         newImages.forEach((file: File) => {
-    //           formData.append("uploads", file);
-    //         });
+     const uploadImages = async (idObject: number) => {
+         //Crear un objeto FormData y agregar los archivos seleccionados
+         if(newImages.has("uploads")) {
+             console.log(newImages);
   
-    //         //Mostrar un mensaje de carga mientras se suben los archivos
-    //         Swal.fire({
-    //           title: "Guardando imagénes...",
-    //           text: "Espere mientras se guardan las imágenes",
-    //           allowOutsideClick: false,
-    //           didOpen: () => {
-    //             Swal.showLoading();
-    //           }
-    //         });
+             //Mostrar un mensaje de carga mientras se suben los archivos
+             Swal.fire({
+               title: "Guardando imagénes...",
+               text: "Espere mientras se guardan las imágenes",
+               allowOutsideClick: false,
+               didOpen: () => {
+                 Swal.showLoading();
+               }
+             });
   
-    //         try {
-    //           //Realizar la peticion POST para subir los archivos
-    //           var imgService = new ImagenesService(objUrl);
-    //           console.log("ID del Artículo:", idObject);
-    //         console.log("FormData a enviar:", formData);
-    //           await imgService.upload(idObject, formData);
-    //           deleteImages();
+             try {
+               //Realizar la peticion POST para subir los archivos
+               let imgService = new ImagenesService(objUrl);
 
-    //           //cerrar el mensaje de espera
-    //           Swal.close();
-    //         } catch ( error ) {
-    //           Swal.close();
-    //           throw new Error();
-    //         }
-  
-    //         reset();    //limpiar el estado de archivos para subir despues de la subida
-    //     }
-    // };
-
-    const uploadImages = async (idObject: number) => {
-        if (!selectedFiles) {
-            return showModal("No hay imágenes seleccionadas", "Selecciona al menos una imagen", "warning");;
-        }
-        const formData = new FormData();
-        Array.from(selectedFiles).forEach((file) => {
-            formData.append("uploads", file);
-        });
-
-       
-
-        Swal.fire({
-            title: "Subiendo imágenes...",
-            text: "Espere mientras se suben los archivos.",
-            customClass: {
-                container: 'my-swal',
-            },
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-                const modal = Swal.getPopup();
-                if (modal) {
-                    modal.classList.add('my-swal');
+                console.log("ID del Artículo:", idObject);
+                console.log("FormData a enviar:", newImages);
+                
+                const response = await imgService.upload(idObject, newImages);
+                if (!response.ok) {
+                    return;
                 }
-            },
-        });
 
-        try {
-            //const token = await getToken();
-            var imgService = new ImagenesService(objUrl);
-            
-            const response = await imgService.upload(idObject, formData);
-            if (!response.ok) {
-                throw new Error('Error al subir las imágenes');
-            }
-
-            showModal("Éxito", "Imágenes subidas correctamente", "success");
-        } catch (error) {
-            showModal("Error", "Algo falló al subir las imágenes, inténtalo de nuevo.", "error");
-            console.error("Error al subir las imágenes:", error);
+               //cerrar el mensaje de espera
+               Swal.close();
+             } catch ( error ) {
+               Swal.close();
+               throw new Error();
+             }
         }
-        setSelectedFiles(null);
-    };
+        if(toDeleteImages.length!=0){
+            deleteImages();
+        }
+     };
 
     //delete toDeleteImages from cloudinary
     const deleteImages = () => {
         console.log("To Delete Images: " + toDeleteImages);
         let service = new ImagenesService(objUrl);
+
         toDeleteImages.forEach((img: ImageFile) => {
+            console.log(img);
             //extraigo el ID publico de la URL de la imagen
             const match = extractPublicId(img.imagen.url);
-
+            console.log(match[1])
             if(match){
                 const publicId = match[1];
                 try {
@@ -225,8 +171,7 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
 
     //empty the states
     const reset = () => {
-        setExistingImages([]);
-        setNewImages([]);
+        setNewImages(new FormData());
         setToShowImages([]);
         setToDeleteImages([]);
         setSelectedFiles(new FileList());
@@ -234,7 +179,7 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
     };
 
     return (
-        <ImagesContext.Provider value={{toShowImages, setObjUrl, setExistingImages, addToShowImages, setSelectedFiles, addImages, deleteImage, uploadImages}}>
+        <ImagesContext.Provider value={{toShowImages, setObjUrl, addToShowImages, setSelectedFiles, addImages, deleteImage, uploadImages, reset}}>
             { children }
         </ImagesContext.Provider>
     );

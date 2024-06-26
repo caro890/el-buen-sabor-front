@@ -2,21 +2,38 @@ import { Typography } from "@mui/material"
 import { Button, Form, Row, Col } from "react-bootstrap"
 import { LoaderFunction, useLoaderData, useNavigate } from "react-router"
 import { EmpleadoService } from "../../../../services/EmpleadoService"
-import { Empleado, EmpleadoCreate, Rol } from "../../../../types/Empresas/Empleado";
+import { Empleado, EmpleadoCreate } from "../../../../types/Empresas/Empleado";
+import { Rol } from "../../../../types/Usuario";
 import { useFormik } from "formik";
 import * as Yup from "yup"
+import Swal from "sweetalert2";
 import styles from "../../../../styles/ProductForm.module.css"
 import { empleadoVacio } from "../../../../types/TiposVacios";
 import { BotonVolver } from "../../../Botones/BotonVolver";
 import { useAppSelector } from "../../../../hooks/redux";
 import { Sucursal } from "../../../../types/Empresas/Sucursal";
+import { useImage } from "../../../../hooks/useImage";
+import { useEffect } from "react";
+import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2 copy";
 
 export const EmpleadoForm = () => {
   const navigate = useNavigate();   //hook para navegar entre rutas
+  const img = useImage();
+
   const service: EmpleadoService = new EmpleadoService();   //servicio para interactuar con la api
   const empleadoSeleccionado = useLoaderData() as Empleado;   //datos elegidos de la tabla para rellenar el form
   //sucursal actual
   const sucursal: Sucursal | null = useAppSelector((state) => (state.sucursalReducer.sucursal));
+
+  useEffect(() => {
+    setImagesConfig();
+  }, [])
+
+  const setImagesConfig = async () => {
+    img.setObjUrl("images");
+    if(empleadoSeleccionado.imagenPersona) img.addToShowImages([empleadoSeleccionado.imagenPersona]);
+    else img.addToShowImages([]);
+  };
 
   //Esquemas de validacion para formik
   const EMAIL_REGX: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
@@ -59,6 +76,20 @@ export const EmpleadoForm = () => {
           idSucursal: sucursal.id
         }
         newEmpleado = await service.create(empleadoCreate);
+      }
+
+      try {
+        img.uploadImages(newEmpleado.id);
+        img.reset();
+      } catch (error) {
+        //Mostrar mensaje de error si ocurre una exepcion
+        Swal.fire({
+          title: "Error",
+          text: "Algo falló al intentar subir las imágenes",
+          icon: "error"
+        });
+        console.log("Error: ", error);
+        return;
       }
 
       navigate(-1);
@@ -145,6 +176,12 @@ export const EmpleadoForm = () => {
             formik.touched.fechaNacimiento && formik.errors.fechaNacimiento ?
             (<p className="text-danger"> {formik.errors.fechaNacimiento} </p>) : null
           }
+
+          <Typography variant="h6" gutterBottom>
+            Imágenes
+          </Typography>
+
+          <ModuloImagenes></ModuloImagenes>
 
           <Typography variant="h6" gutterBottom>
             Datos de Usuario

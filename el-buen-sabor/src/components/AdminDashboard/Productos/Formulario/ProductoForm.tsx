@@ -92,7 +92,6 @@ export const ProductoForm = () => {
   useEffect(() => {
     setProducto(productoSeleccionado);
     setDetalles(productoSeleccionado.articuloManufacturadoDetalles);
-    //if(productoSeleccionado.imagenes) setImagenes(productoSeleccionado.imagenes);
   }, []);
 
   //cargo los insumos según los que ya estén en el producto
@@ -102,9 +101,8 @@ export const ProductoForm = () => {
 
   const setImagesConfig = async () => {
     img.setObjUrl("articulosManufacturados");
-    if(productoSeleccionado.imagenes) img.setExistingImages(productoSeleccionado.imagenes);
-    else img.setExistingImages([]);
-    img.addToShowImages();
+    if(productoSeleccionado.imagenes) img.addToShowImages(productoSeleccionado.imagenes);
+    else img.addToShowImages([]);
   };
 
   //funcion para actualizar los insumos que se van a mostrar en la ventana modal
@@ -167,6 +165,7 @@ export const ProductoForm = () => {
 
       try {
         img.uploadImages(newProducto.id);
+        img.reset();
       } catch (error) {
         //Mostrar mensaje de error si ocurre una exepcion
         Swal.fire({

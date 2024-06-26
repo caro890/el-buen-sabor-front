@@ -5,6 +5,6 @@ export interface Empresa extends IBase{
     nombre: string,
     razonSocial: string,
     cuit: number,
-    logo: string,
+    logo?: string,
     sucursales: Sucursal[]
 }

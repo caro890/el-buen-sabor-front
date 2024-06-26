@@ -1,5 +1,6 @@
 import { Sucursal, SucursalShort } from "./Empresas/Sucursal"
-import { Empleado, Rol, Usuario } from "./Empresas/Empleado";
+import { Empleado } from "./Empresas/Empleado";
+import { Rol, Usuario } from "./Usuario";
 import { Empresa } from "./Empresas/Empresa";
 import { Domicilio } from "./Domicilio/Domicilio";
 import { Pais } from "./Domicilio/Pais";

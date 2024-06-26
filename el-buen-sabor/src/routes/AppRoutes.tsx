@@ -80,15 +80,15 @@ const router = createBrowserRouter(
         </Route>
         <Route path="empleados" >
           <Route index element={<Empleados />} />
-          <Route path="form/:id?" element={<EmpleadoForm/>} loader={empleadoLoader} />
+          <Route path="form/:id?" element={<ImagesContextProvider><EmpleadoForm/></ImagesContextProvider>} loader={empleadoLoader} />
         </Route>
         <Route path="promociones">
           <Route index element={<Promociones/>} />
-          <Route path="form/:id?" element={<PromocionForm />} loader={promocionLoader} />
+          <Route path="form/:id?" element={<ImagesContextProvider><PromocionForm /></ImagesContextProvider>} loader={promocionLoader} />
         </Route>
         <Route path="insumos">
           <Route index element={<InsumosCrud />}/>
-          <Route path="form/:id?" element={<InsumosForm />} loader={insumoLoader} />
+          <Route path="form/:id?" element={<ImagesContextProvider><InsumosForm /></ImagesContextProvider>} loader={insumoLoader} />
         </Route>
         <Route path="stock">
           <Route index element={<Stock/>} />

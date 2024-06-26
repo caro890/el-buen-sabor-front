@@ -12,12 +12,12 @@ import { unidadesMedidaLoader } from "../../UnidadesMedida/UnidadesMedida";
 import styles from "../../../../styles/InsumosForm.module.css"
 import { useNavigate } from "react-router";
 import { CategoriaService } from "../../../../services/CatogoriaService";
-//import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2";
-//import Swal from "sweetalert2";
-//import { ImagenesService } from "../../../../services/ImagenesService";
+import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes2 copy";
+import Swal from "sweetalert2";
 import { insumoVacio } from "../../../../types/TiposVacios";
 import { BotonVolver } from "../../../Botones/BotonVolver";
 import { useAppSelector } from "../../../../hooks/redux";
+import { useImage } from "../../../../hooks/useImage";
 
 //esquemas de validacion para formik
 const unidadMedidaValidation = Yup.object().shape({
@@ -54,6 +54,7 @@ const validationSchemaEdit = Yup.object().shape({
 
 export const InsumosForm = () => {
   const navigate = useNavigate();
+  const img = useImage();
 
   //obtengo el insumo cargado por el loader
   const insumoSeleccionado = useLoaderData() as ArticuloInsumo;
@@ -69,9 +70,6 @@ export const InsumosForm = () => {
   //estado para las categorias
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
-  //estado para almacenar los archivos
-  //const [filesToUpload, setFilesToUpload] = useState<File[] | null>(null);
-
   //servicio de articulo insumos
   const service = new ArticuloInsumoService();
   //servicio de categoria
@@ -83,7 +81,6 @@ export const InsumosForm = () => {
   useEffect(() => {
     setInsumo(insumoSeleccionado);
     if(insumoSeleccionado.id!=0) setValidationSchema(validationSchemaEdit);
-    //if(insumoSeleccionado.imagenes) setImagenes(insumoSeleccionado.imagenes);
   }, []);
 
   //cargo las unidades de medida y las categorias
@@ -97,16 +94,25 @@ export const InsumosForm = () => {
         setCategorias(data)
       )
     }
+
+    setImagesConfig();
   }, []);
+
+  const setImagesConfig = async () => {
+    img.setObjUrl("articulosInsumos");
+    if(insumoSeleccionado.imagenes) img.addToShowImages(insumoSeleccionado.imagenes);
+    else img.addToShowImages([]);
+  };
 
   //configuro formik
   const formik: any = useFormik({
     initialValues: insumoSeleccionado,  
     validationSchema: validationSchema, 
     onSubmit: async (values) => {
+      let newInsumo: ArticuloInsumo = insumoVacio;
       if(values.id!=0) {
         console.log(values);
-        let newInsumo: ArticuloInsumo = await service.put(values.id, values);
+        newInsumo = await service.put(values.id, values);
         console.log(newInsumo);
       } else {
         let newCreate: ArticuloInsumoCreate = {
@@ -124,12 +130,13 @@ export const InsumosForm = () => {
           stockMaximo: formik.stockMaximo, 
           stockMinimo: formik.StockMinimo
         }
-        let newInsumo: ArticuloInsumo = await service.create(newCreate);
+        newInsumo = await service.create(newCreate);
         console.log(newInsumo);
       }
 
-      /*try {
-        await uploadImages(newInsumo.id);
+      try {
+        img.uploadImages(newInsumo.id);
+        img.reset();
       } catch (error) {
         //Mostrar mensaje de error si ocurre una exepcion
         Swal.fire({
@@ -139,48 +146,11 @@ export const InsumosForm = () => {
         });
         console.log("Error: ", error);
         return;
-      }*/
+      }
       
       navigate(-1);
     }
   });
-
-  //Funcion asincronica para subir archivos al servidor
-  /*const uploadImages = async (insumoId: number) => {
-    //Crear un objeto FormData y agregar los archivos seleccionados
-    if(filesToUpload) {
-      const formData = new FormData();
-      filesToUpload.forEach((file: File) => {
-        formData.append("uploads", file);
-      });
-
-      //Mostrar un mensaje de carga mientras se suben los archivos
-      Swal.fire({
-        title: "Guardando imagénes...",
-        text: "Espere mientras se guardan las imágenes",
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
-
-      try {
-        //Realizar la peticion POST para subir los archivos
-        var imgService = new ImagenesService();
-        await imgService.upload(insumoId, formData);
-
-        //cerrar el mensaje de espera
-        Swal.close();
-
-      } catch ( error ) {
-        Swal.close();
-
-        throw new Error();
-      }
-
-      setFilesToUpload(null); //limpiar el estado de archivos para subir despues de la subida
-    }
-  };*/
 
   return (
     <div className={styles.mainBox}>
@@ -368,12 +338,12 @@ export const InsumosForm = () => {
             </Col>
           </Form.Group>
 
-          {/*<Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Imágenes
           </Typography>
 
-          <ModuloImagenes files={filesToUpload} setFiles={setFilesToUpload} imagenes={insumoSeleccionado.imagenes || []} ></ModuloImagenes>
-*/}
+          <ModuloImagenes></ModuloImagenes>
+
           <Button type="submit">GUARDAR</Button>
         </Form>
       </div>
