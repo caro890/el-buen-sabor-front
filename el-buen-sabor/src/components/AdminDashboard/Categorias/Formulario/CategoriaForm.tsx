@@ -26,20 +26,11 @@ export const CategoriaForm = () => {
   const [sucursales, setSucursales] = useState<Sucursal[]>([]);
   const [sucursalesSelected, setSucursalesSelected] = useState<Sucursal[]>([]);
 
-
-  const [filteredData, setFilteredData] = useState<Sucursal[]>([]);
-
-
   const [esInsumo, setEsInsumo] = useState<boolean>(false);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const empresa = useAppSelector((state) => state.empresaReducer.empresa);
-
-
-  useEffect(() => {
-    setFilteredData(sucursales);
-  }, [sucursales]);
 
   useEffect(() => {
     if (id) {
@@ -91,13 +82,6 @@ export const CategoriaForm = () => {
     loadCategorias();
   }, []);
 
-  const handleChangeDenominacion = (value: string) => {
-    const results = sucursales.filter(
-      option => (option.nombre?.toString().toUpperCase().includes(value.toUpperCase()))
-    );
-    setFilteredData(results);
-  };
-
   const handleCheckButtonChange = (item: Sucursal, checked: boolean) => {
     var aux: Sucursal[] = sucursalesSelected.slice();
     var f = 0;
@@ -112,8 +96,6 @@ export const CategoriaForm = () => {
     }
     setSucursalesSelected(aux);
   };
-
-
 
   const handleCategoriaPadreChange = (event: { target: { value: any; }; }) => {
     const selectedCategoriaPadreId = event.target.value;
@@ -226,17 +208,8 @@ export const CategoriaForm = () => {
             Sucursales
           </Form.Label>
 
-          {filteredData ?
-            <Container className="search-container mb-3">
-              <Form.Control
-                className="search"
-                aria-label="nombre"
-                placeholder="Nombre"
-                onChange={(e: { target: { value: string; }; }) => { handleChangeDenominacion(e.target.value) }} />
-            </Container>
-            : null}
           <Container className="grid-container">
-            {filteredData ? filteredData.map((option: Sucursal, index: number) => (
+            {sucursales ? sucursales.map((option: Sucursal, index: number) => (
               <Row key={index}>
                 <Col md="auto">
                   <Form.Check radioGroup="seleccionados"
