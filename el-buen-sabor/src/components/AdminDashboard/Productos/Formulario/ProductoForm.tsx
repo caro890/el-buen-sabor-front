@@ -164,8 +164,8 @@ export const ProductoForm = () => {
       }
 
       try {
-        img.uploadImages(newProducto.id);
-        img.reset();
+        await img.uploadImages(newProducto.id);
+        //img.reset();
       } catch (error) {
         //Mostrar mensaje de error si ocurre una exepcion
         Swal.fire({

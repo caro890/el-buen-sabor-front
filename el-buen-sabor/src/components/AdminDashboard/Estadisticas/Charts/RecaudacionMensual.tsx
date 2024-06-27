@@ -2,7 +2,7 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/redux";
 import { EstadisticasService } from "../../../../services/EstadisticasService"
 import { FC, useEffect, useState } from "react";
-import { IngresosDiarios, IngresosMensuales } from "../../../../types/Estadisticas";
+import { IngresosMensuales } from "../../../../types/Estadisticas";
 import Chart from "react-google-charts";
 
 interface IPropsRankingProductos {
@@ -86,7 +86,7 @@ export const RecaudacionMensual : FC<IPropsRankingProductos> = ({business}) => {
     <div className="mb-5">
         <Container>
             <Row className="mb-2">
-                Productos más vendidos
+                Recaudaciones Mensuales
             </Row>
             <Row>
                 <Col>

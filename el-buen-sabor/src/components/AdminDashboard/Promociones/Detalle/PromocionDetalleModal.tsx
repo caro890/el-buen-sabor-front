@@ -64,7 +64,7 @@ export const PromocionDetalleModal : FC<IPropsPromocionDetalleModal> = ({
                             return (
                                 <Row key={index}>
                                     <Col>
-                                        {detalle.cantidad} {console.log(detalle.articulo)} de {detalle.articulo.denominacion}
+                                        {detalle.cantidad} de {detalle.articulo.denominacion}
                                     </Col>
                                 </Row>
                             )

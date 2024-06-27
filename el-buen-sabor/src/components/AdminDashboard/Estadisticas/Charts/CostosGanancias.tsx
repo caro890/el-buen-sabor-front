@@ -80,7 +80,7 @@ console.log(array);
     <div className="mb-5">
         <Container>
             <Row className="mb-2">
-                Productos más vendidos
+                Costos y ganancias
             </Row>
             <Row>
                 <Col>

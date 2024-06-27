@@ -1,25 +1,8 @@
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { EstadisticasService } from '../../../../services/EstadisticasService';
-import { useFormik } from 'formik';
-import * as Yup from "yup"
 import { useAppSelector } from '../../../../hooks/redux';
 
-const validationSchema = Yup.object().shape({
-    fechaInicio: Yup
-      .date()
-      .required('La fecha de inicio es requerida'),
-    fechaFin: Yup
-      .date()
-      .required('La fecha de fin es requerida')
-      .when('fechaInicio', (fechaInicio, schema) => {
-        return fechaInicio
-          ? schema.min(fechaInicio, 'La fecha de fin debe ser posterior a la fecha de inicio')
-          : schema;
-      }),
-  });
-
-  
 interface IPropsRankingProductos {
     business: string
 }
@@ -80,7 +63,7 @@ export  const  InformeExcel : FC<IPropsRankingProductos> = ({business}) => {
   return (
         <Container>
             <Row className="mb-2">
-                Productos más vendidos
+                Informe Excel
             </Row>
             <Row>
                 <Col>

@@ -30,7 +30,7 @@ export const PromocionForm = () => {
   const img = useImage();
 
   const service = new PromocionService();
-  const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
+  //const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
   const idEmpresa = useAppSelector((state) => (state.empresaReducer.empresa?.id));
   const promocionSeleccionada = useLoaderData() as Promocion; //promocion seleccionada para editar
 
@@ -84,7 +84,7 @@ export const PromocionForm = () => {
 
   //funcion para actualizar los articulos que se van a mostrar en la ventana modal
   const actualizarArticulos = async () => {
-    if(idSucursal) {
+    if(idEmpresa) {
       //con el servicio de Articulo insumo obtengo todos los insumos para elaborar
       let serviceInsumo = new ArticuloInsumoService();
       let listaInsumos = await serviceInsumo.getAllParaVender(idEmpresa) as Articulo[];

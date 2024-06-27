@@ -24,4 +24,18 @@ export class ArticuloManufacturadoService extends BackendClient<ArticuloManufact
     const data = await response.json();
     return data as ArticuloManufacturado[];
   }
+
+  //crear nuevo con stock para todas sucursales
+  async create(nuevo: ArticuloManufacturado) {
+    let url = this.baseUrl + "/create";
+    const response = await fetch(url, {
+      "method": "POST",
+      "headers": {
+      "Content-Type": 'application/json'
+      },
+      "body": JSON.stringify(nuevo)
+    });
+    const data = await response.json();
+    return data as ArticuloManufacturado;
+  }
 }

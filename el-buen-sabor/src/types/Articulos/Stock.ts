@@ -1,6 +1,6 @@
 import { IBase } from "../Base";
-import { SucursalShort, Sucursal } from "../Empresas/Sucursal";
-import { ArticuloInsumoShort, ArticuloInsumo } from "./ArticuloInsumo";
+import { SucursalShort } from "../Empresas/Sucursal";
+import { ArticuloInsumoShort } from "./ArticuloInsumo";
 
 export interface Stock extends IBase {
     stockActual: number,

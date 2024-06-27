@@ -86,7 +86,7 @@ export const RecaudacionDiaria : FC<IPropsRankingProductos> = ({business}) => {
     <div className="mb-5">
         <Container>
             <Row className="mb-2">
-                Productos más vendidos
+                Recaudaciones diarias
             </Row>
             <Row>
                 <Col>

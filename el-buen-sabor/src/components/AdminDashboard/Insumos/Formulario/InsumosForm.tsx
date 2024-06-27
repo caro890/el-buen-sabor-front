@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Form, Row, Col, Button  } from "react-bootstrap";
 import { LoaderFunction, useLoaderData } from "react-router"
-import { ArticuloInsumo, ArticuloInsumoCreate } from "../../../../types/Articulos/ArticuloInsumo";
+import { ArticuloInsumo, ArticuloInsumoCreate, ArticuloInsumoMezclado } from "../../../../types/Articulos/ArticuloInsumo";
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router";
 import { CategoriaService } from "../../../../services/CatogoriaService";
 import { ModuloImagenes } from "../../../ModuloImagenes copy/ModuloImagenes";
 import Swal from "sweetalert2";
-import { insumoVacio } from "../../../../types/TiposVacios";
+import { insumoMezcladoVacio, insumoVacio } from "../../../../types/TiposVacios";
 import { BotonVolver } from "../../../Botones/BotonVolver";
 import { useAppSelector } from "../../../../hooks/redux";
 import { useImage } from "../../../../hooks/useImage";
@@ -58,12 +58,12 @@ export const InsumosForm = () => {
   const img = useImage();
 
   //obtengo el insumo cargado por el loader
-  const insumoSeleccionado = useLoaderData() as ArticuloInsumo;
+  const insumoSeleccionado = useLoaderData() as ArticuloInsumoMezclado;
 
   const [validationSchema, setValidationSchema] = useState<Yup.Schema>(validationSchemaCreate);
 
   //estado para manejar el insumo a crear o editado
-  const [insumo, setInsumo] = useState<ArticuloInsumo>(insumoVacio);
+  const [insumo, setInsumo] = useState<ArticuloInsumoMezclado>(insumoMezcladoVacio);
 
   //estado para las unidades de medida
   const [unidades, setUnidades] = useState<UnidadMedida[]>([]);
@@ -112,25 +112,42 @@ export const InsumosForm = () => {
     onSubmit: async (values) => {
       let newInsumo: ArticuloInsumo = insumoVacio;
       if(values.id!=0) {
-        newInsumo = await service.put(values.id, values);
-      } else {
-        let newCreate: ArticuloInsumoCreate = {
-          id: values.id,
-          eliminado: values.eliminado,
-          denominacion: values.denominacion,
-          precioVenta: values.precioVenta,
-          precioCompra: values.precioCompra,
-          idUnidadMedida: values.unidadMedida.id,
-          idCategoria: values.categoria.id,
-          codigo: values.codigo,
-          habilitado: values.habilitado,
-          esParaElaborar: values.esParaElaborar,
-          stockMinimo: values.stockMinimo,
-          stockActual: values.stockActual, 
-          stockMaximo: values.stockMaximo
-          
+        if(values.unidadMedida && values.categoria &&values.stocksInsumo) {
+          let newUpdate: ArticuloInsumo = {
+            id: values.id,
+            eliminado: values.eliminado,
+            denominacion: values.denominacion,
+            precioVenta: values.precioVenta,
+            precioCompra: values.precioCompra,
+            esParaElaborar: values.esParaElaborar,
+            codigo: values.codigo,
+            habilitado: values.habilitado,
+            imagenes: values.imagenes,
+            unidadMedida: values.unidadMedida,
+            categoria: values.categoria,
+            stocksInsumo: values.stocksInsumo
+          }
+          newInsumo = await service.put(values.id, newUpdate);
         }
-        newInsumo = await service.create(newCreate);
+      } else {
+        if(values.idUnidadMedida && values.idCategoria && values.stockActual && values.stockMaximo && values.stockMinimo){
+          let newCreate: ArticuloInsumoCreate = {
+            id: values.id,
+            eliminado: values.eliminado,
+            denominacion: values.denominacion,
+            precioVenta: values.precioVenta,
+            precioCompra: values.precioCompra,
+            idUnidadMedida: values.idUnidadMedida,
+            idCategoria: values.idUnidadMedida,
+            codigo: values.codigo,
+            habilitado: values.habilitado,
+            esParaElaborar: values.esParaElaborar,
+            stockMinimo: values.stockMinimo,
+            stockActual: values.stockActual, 
+            stockMaximo: values.stockMaximo          
+          }
+          newInsumo = await service.create(newCreate);
+        }
       }
 
       try {
@@ -363,8 +380,22 @@ export const insumoLoader: LoaderFunction = async ({params}) => {
 
   if(id) {  //si recibo una id de la url, cargo el insumo desde la api
     var res = await service.getById(Number(id));
-    return res;
+    const insumoMezcladoNew = {
+      id: res?.id,
+      eliminado: res?.eliminado,
+      denominacion: res?.denominacion,
+      precioVenta: res?.precioCompra,
+      precioCompra: res?.precioCompra,
+      esParaElaborar: res?.esParaElaborar,
+      codigo: res?.codigo,
+      habilitado: res?.habilitado,
+      imagenes: res?.imagenes,
+      unidadMedida: res?.unidadMedida,
+      categoria: res?.categoria,
+      stocksInsumo: res?.stocksInsumo
+    }
+    return insumoMezcladoNew;
   } else {  //sino devuelvo el insumo vacio
-    return insumoVacio;
+    return insumoMezcladoVacio;
   }
 };

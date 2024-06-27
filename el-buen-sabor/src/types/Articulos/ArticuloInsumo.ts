@@ -1,6 +1,9 @@
 import { IBase } from "../Base";
 import { Articulo, ArticuloCreate } from "./Articulo";
-import { StockShort } from "./Stock";
+import { Categoria } from "./Categoria";
+import { IImagen } from "./ImagenArticulo";
+import { Stock, StockShort } from "./Stock";
+import { UnidadMedida } from "./UnidadMedida";
 
 export interface IArticuloInsumo extends IBase {
     precioCompra: number,
@@ -24,4 +27,24 @@ export interface ArticuloInsumoCreate extends ArticuloCreate {
     stockMaximo: number,
     stockMinimo: number,
     esParaElaborar: boolean
+}
+
+export interface ArticuloInsumoMezclado {
+    id: number,
+    eliminado: boolean,
+    denominacion: string,
+    precioVenta: number,
+    precioCompra: number,
+    esParaElaborar: boolean,
+    codigo: string,
+    habilitado: boolean,
+    imagenes: IImagen[],
+    idUnidadMedida?: number,
+    idCategoria?: number,
+    stockMinimo?: number,
+    stockActual?: number, 
+    stockMaximo?: number,
+    unidadMedida?: UnidadMedida,
+    categoria?: Categoria,
+    stocksInsumo?: Stock[]
 }
