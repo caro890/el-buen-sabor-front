@@ -8,7 +8,7 @@ import { Navbar } from "../../components/NavBar/Navbar";
 import { jwtDecode } from "jwt-decode";
 
 const RootLayout = () => {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +19,7 @@ const RootLayout = () => {
   }, []);
 
   const redirectToPage = async () => {
+    console.log("calling method")
     try {
       const token = await getAccessTokenSilently({
         authorizationParams: {
@@ -30,7 +31,8 @@ const RootLayout = () => {
       console.log(token);
       let decodedToken;
       if(token) decodedToken = jwtDecode(token);
-      console.log(decodedToken);
+      console.log(JSON.stringify(decodedToken));
+      console.log(user?.subs);
       let roles = "";
       if(decodedToken) roles = decodedToken['https://my-app.example.com/roles'];
 

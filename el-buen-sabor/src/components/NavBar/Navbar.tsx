@@ -11,7 +11,7 @@ export const Navbar = () => {
   return (
     <Box className="navbar border-bottom d-flex flex-row">
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar sx={{ display: "flex", flexDirection: "row", flexGrow: 1, justifyContent: "space-between"}}>
           <Typography
             variant="h6"
             noWrap
@@ -20,7 +20,6 @@ export const Navbar = () => {
           >
             {empresaSelected?.nombre}
           </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1, justifyContent: "space-evenly"}}>
             {
               isAuthenticated ? (
                 <LogoutButton/>
@@ -28,7 +27,6 @@ export const Navbar = () => {
                 <LoginButton/>
               )
             }
-          </Box>
         </Toolbar>
       </AppBar>
     </Box>
