@@ -46,11 +46,11 @@ const router = createBrowserRouter(
     <Route path="/" element={<Auth0ProviderWithNavigate><RootLayout /></Auth0ProviderWithNavigate>}>
       <Route index element={<Home/>}></Route>
       <Route path="admin-console">
-        <Route index element={<AuthenticationGuard component={Empresas}/>}></Route>
-        <Route path="sucursales/:id" element={<Sucursales />}></Route>
+        <Route index element={<AuthenticationGuard rolAutorizado={["ADMIN"]} component={Empresas}/>}></Route>
+        <Route path="sucursales/:id" element={<AuthenticationGuard rolAutorizado={["ADMIN", "GERENTE"]} component={Sucursales}/>}></Route>
       </Route>
 
-      <Route path="cocinero-console" element={<CocineroLayout/>}>
+      <Route path="cocinero-console" element={<AuthenticationGuard rolAutorizado={["COCINERO", "GERENTE"]} component={CocineroLayout}/>}>
         <Route index  element={<PedidosEnPreparacion/>}/>
         <Route path="stock">
           <Route index element={<Stock/>} />
@@ -62,16 +62,16 @@ const router = createBrowserRouter(
         </Route>
       </Route>
 
-      <Route path="cajero-console" element={<CajeroLayout/>}>
+      <Route path="cajero-console" element={<AuthenticationGuard rolAutorizado={["CAJERO", "GERENTE"]} component={CajeroLayout}/>}>
         <Route index element={<PedidosNuevos/>} />
         <Route path="entrega_pendiente" element={<PedidosEntregaPendiente/>}/>
       </Route>
 
-      <Route path="delivery-console" element={<DeliveryLayout/>}>
+      <Route path="delivery-console" element={<AuthenticationGuard rolAutorizado={["DELIVERY", "GERENTE"]} component={DeliveryLayout}/>}>
         <Route index  element={<PedidosEnCamino/>}/>
       </Route>
 
-      <Route path="dashboard" element={<DashboardLayout />} >
+      <Route path="dashboard" element={<AuthenticationGuard rolAutorizado={["ADMIN", "GERENTE"]} component={DashboardLayout}/>} >
         <Route index element={<Inicio />} />
         <Route path="sucursales">
           <Route index element={<SucursalCrud />} />

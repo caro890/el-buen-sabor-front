@@ -59,16 +59,29 @@ export const PedidosTable : FC<IPropsPedidosTable> = ({
           deactivateRow(idPedido);
           await service.changeEstadoPedido(idPedido, estado);
           getPedidos();
+          activateRow(idPedido);
         }
       })
     }  
 
     const deactivateRow = (id: number) => {
       let row = document.getElementById(String(id));
-      row?.setAttribute("style", "cursor: not-allowed; background-color: #e7eaee, color: ");
+      row?.setAttribute("style", "cursor: not-allowed; background-color: #e7eaee");
       let select = document.getElementById(`select-${id}`);
       select?.setAttribute("disabled", "true");
       select?.setAttribute("style", "cursor: not-allowed");
+    }
+
+    const activateRow = (id: number) => {
+      try {
+        let row = document.getElementById(String(id));
+        row?.setAttribute("style", "cursor: default; background-color: white");
+        let select = document.getElementById(`select-${id}`);
+        select?.setAttribute("disabled", "false");
+        select?.setAttribute("style", "cursor: default");
+      } catch(error) {
+        console.log(error);
+      }
     }
 
     const getNextEstados = async (idPedido: number) => {

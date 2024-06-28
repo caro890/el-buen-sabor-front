@@ -11,6 +11,13 @@ export class EmpleadoService extends BackendClient<Empleado> {
         return data as Empleado[];
     }
 
+    //get one by auth0id
+    async getUserByAuth0Id(auth0Id: string): Promise<Empleado>{
+      const response = await fetch(`${this.baseUrl}/getByAuth0ID/${auth0Id}`);
+      const data = await response.json();
+      return data as Empleado;
+    }
+    
     //crear empleado para sucursal
     async create(nuevo: EmpleadoCreate) {
         let url = this.baseUrl + "/createEmpleado";
