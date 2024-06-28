@@ -1,4 +1,4 @@
-import { Navbar } from "../../components/NavBar/Navbar";
+
 import { Outlet } from "react-router";
 import { useAppDispatch } from "../../hooks/redux";
 import { useEffect } from "react";
@@ -17,7 +17,6 @@ export const DeliveryLayout = () => {
   
   return (
     <div>
-        <Navbar/>    
         
         <div>
           <Outlet/>

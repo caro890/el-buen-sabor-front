@@ -6,7 +6,6 @@ import { Navbar } from "../../components/NavBar/Navbar";
 export const DashboardLayout = () => {
   return (
     <div>
-        <Navbar />
         <BasicSidebar/>    
         
         <div className="page-wrapper">

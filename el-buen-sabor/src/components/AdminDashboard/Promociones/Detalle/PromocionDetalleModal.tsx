@@ -16,7 +16,6 @@ export const PromocionDetalleModal : FC<IPropsPromocionDetalleModal> = ({
     handleClose
 }) => {
   const item =useAppSelector((state) => state.tableDataReducer.elementActive);
-  console.log(item);
 
   return (
     <Modal show={open} onHide={handleClose} centered size="lg">

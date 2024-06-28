@@ -7,6 +7,7 @@ import { PedidoDto } from "../../types/Pedido/Pedido";
 import { EstadoSelect } from "./EstadoSelect";
 import { useAppDispatch } from "../../hooks/redux";
 import { setElementActive } from "../../redux/slices/TablaDataReducer";
+import Swal from "sweetalert2";
 
 interface IPropsPedidosTable {
   pedidos: PedidoDto[],
@@ -45,10 +46,30 @@ export const PedidosTable : FC<IPropsPedidosTable> = ({
     }, [pedidos]);
 
     const handleChangeEstado = async (idPedido: number, estado: string) => {
-      console.log(estado);
-      await service.changeEstadoPedido(idPedido, estado);
-      getPedidos();
+      Swal.fire({
+        title: `Cambiar estado a ${estado}`,
+        text: `¿Desea cambiar el estado del pedido ${idPedido} a ${estado}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonText: "Si, Cambiar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if(result.isConfirmed) {
+          deactivateRow(idPedido);
+          await service.changeEstadoPedido(idPedido, estado);
+          getPedidos();
+        }
+      })
     }  
+
+    const deactivateRow = (id: number) => {
+      let row = document.getElementById(String(id));
+      row?.setAttribute("style", "cursor: not-allowed; background-color: #e7eaee, color: ");
+      let select = document.getElementById(`select-${id}`);
+      select?.setAttribute("disabled", "true");
+      select?.setAttribute("style", "cursor: not-allowed");
+    }
 
     const getNextEstados = async (idPedido: number) => {
       return await service.getEstadosPosibles(idPedido);
@@ -92,9 +113,9 @@ export const PedidosTable : FC<IPropsPedidosTable> = ({
                 <TableBody>
                 {Array.isArray(rows) && rows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index: number) => {
+                    .map((row) => {
                         return(
-                            <TableRow hover role="checkbox" tabIndex={-1} key={index} >
+                            <TableRow hover role="checkbox" tabIndex={-1} key={row["id"]} id={String(row["id"])}>
                                 <TableCell align="center" onClick={() => handleRowSelection(row)}>
                                   {row["id"]}
                                 </TableCell>
