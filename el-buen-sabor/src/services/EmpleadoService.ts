@@ -18,7 +18,11 @@ export class EmpleadoService extends BackendClient<Empleado> {
 
     //get one by auth0id
     async getUserByAuth0Id(auth0Id: string): Promise<Empleado>{
-      const response = await fetch(`${this.baseUrl}/getByAuth0ID/${auth0Id}`);
+      const response = await fetch(`${this.baseUrl}/getByAuth0ID/${auth0Id}`, {
+        headers: {
+          "Authorization": `Bearer ${getToken()}`
+        }
+      });
       const data = await response.json();
       return data as Empleado;
     }
