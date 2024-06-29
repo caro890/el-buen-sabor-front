@@ -1,4 +1,5 @@
 import { base } from "./BackendClient";
+import { getToken } from "./TokenService";
 
 export class ImagenesService {
     baseUrl: string;
@@ -10,7 +11,10 @@ export class ImagenesService {
     async delete(image: {id: number, publicId: string}) {
         var url: string = this.baseUrl + "/deleteImg" + `?publicId=${image.publicId}&id=${image.id}` ;
         const response = await fetch(url, {
-            "method": "POST"
+            "method": "POST",
+            "headers": {
+                "Authorization": `Bearer ${getToken()}`,
+            }
         })
         if (!response.ok) {
             throw new Error("Error al eliminar la imagen");
@@ -22,7 +26,9 @@ export class ImagenesService {
         try {
             const response = await fetch(url, {
                 method: "POST",
-                
+                headers: {
+                    "Authorization": `Bearer ${getToken()}`,
+                },
                 body: formData,
             });
     
@@ -47,6 +53,9 @@ export class ImagenesService {
         try {
             const response = await fetch(url, {
                 method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${getToken()}`,
+                },
                 body: formData,
             });
     

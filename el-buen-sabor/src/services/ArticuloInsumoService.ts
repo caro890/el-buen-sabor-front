@@ -1,5 +1,6 @@
 import { ArticuloInsumo, ArticuloInsumoCreate } from "../types/Articulos/ArticuloInsumo";
 import { BackendClient, base } from "./BackendClient";
+import { getToken } from "./TokenService";
 
 export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
   baseUrl: string = base + "articulosInsumos"; 
@@ -11,7 +12,8 @@ export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
     const response = await fetch(url, {
       "method": method,
       "headers": {
-      "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        "Authorization": `Bearer ${getToken()}`
       }
     });
     if (!response.ok) {
@@ -28,7 +30,8 @@ export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
     const response = await fetch(url, {
       "method": method,
       "headers": {
-      "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        "Authorization": `Bearer ${getToken()}`
       }
     });
     if (!response.ok) {
@@ -40,7 +43,11 @@ export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
 
   //obtener todos por sucursal
   async getAllBySucursalId(id: number): Promise<ArticuloInsumo[]>{
-    const response = await fetch(`${this.baseUrl}/getInsumosPorSucursal/${id}`);
+    const response = await fetch(`${this.baseUrl}/getInsumosPorSucursal/${id}`,{
+      headers: {
+        "Authorization": `Bearer ${getToken()}`
+      }
+    });
     const data = await response.json();
     return data as ArticuloInsumo[];
   }
@@ -51,7 +58,8 @@ export class ArticuloInsumoService extends BackendClient<ArticuloInsumo> {
     const response = await fetch(url, {
       "method": "POST",
       "headers": {
-      "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        "Authorization": `Bearer ${getToken()}`
       },
       "body": JSON.stringify(nuevo)
     });

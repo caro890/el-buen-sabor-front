@@ -1,5 +1,6 @@
 import { ArticuloManufacturado } from "../types/Articulos/ArticuloManufacturado";
 import { BackendClient, base } from "./BackendClient";
+import { getToken } from "./TokenService";
 
 export class ArticuloManufacturadoService extends BackendClient<ArticuloManufacturado> {
     baseUrl: string = base + "articulosManufacturados"; 
@@ -10,7 +11,8 @@ export class ArticuloManufacturadoService extends BackendClient<ArticuloManufact
         const response = await fetch(url, {
           "method": method,
           "headers": {
-            "Content-Type": 'application/json'
+            "Content-Type": 'application/json',
+            "Authorization": `Bearer ${getToken()}`
           }
         });
         if (!response.ok) {
@@ -20,7 +22,11 @@ export class ArticuloManufacturadoService extends BackendClient<ArticuloManufact
     
   //obtener todos por sucursal
   async getAllBySucursalId(id: number): Promise<ArticuloManufacturado[]>{
-    const response = await fetch(`${this.baseUrl}/getManufacturadosPorSucursal/${id}`);
+    const response = await fetch(`${this.baseUrl}/getManufacturadosPorSucursal/${id}`,{
+      headers: {
+        "Authorization": `Bearer ${getToken()}`
+      }
+    });
     const data = await response.json();
     return data as ArticuloManufacturado[];
   }
@@ -31,7 +37,8 @@ export class ArticuloManufacturadoService extends BackendClient<ArticuloManufact
     const response = await fetch(url, {
       "method": "POST",
       "headers": {
-      "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        "Authorization": `Bearer ${getToken()}`
       },
       "body": JSON.stringify(nuevo)
     });

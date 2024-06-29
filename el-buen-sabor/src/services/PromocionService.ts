@@ -1,5 +1,6 @@
 import { Promocion, PromocionCreate } from "../types/Articulos/Promocion";
 import { BackendClient, base } from "./BackendClient";
+import { getToken } from "./TokenService";
 
 export class PromocionService extends BackendClient<Promocion> {
     protected baseUrl: string = base + "promociones";
@@ -10,7 +11,8 @@ export class PromocionService extends BackendClient<Promocion> {
         const response = await fetch(url, {
           "method": "PUT",
           "headers": {
-            "Content-Type": 'application/json'
+            "Content-Type": 'application/json',
+            "Authorization": `Bearer ${getToken()}`
           }
         });
         if (!response.ok) {
@@ -20,7 +22,11 @@ export class PromocionService extends BackendClient<Promocion> {
 
     //obtener todas por el id de sucursal
     async getAllBySucursalId(id: number): Promise<Promocion[]>{
-        const response = await fetch(`${this.baseUrl}/getPromocionPorSucursal/${id}`);
+        const response = await fetch(`${this.baseUrl}/getPromocionPorSucursal/${id}`, {
+          headers: {
+            "Authorization": `Bearer ${getToken()}`,
+          }
+        });
         const data = await response.json();
         return data as Promocion[];
     }
@@ -31,7 +37,8 @@ export class PromocionService extends BackendClient<Promocion> {
         const response = await fetch(url, {
           "method": "POST",
           "headers": {
-          "Content-Type": 'application/json'
+            "Content-Type": 'application/json',
+            "Authorization": `Bearer ${getToken()}`
           },
           "body": JSON.stringify(nuevo)
         });
@@ -42,6 +49,9 @@ export class PromocionService extends BackendClient<Promocion> {
     async darDeBaja(idPromo: number, idSucursal: number): Promise<void> {
       const response = await fetch(`${this.baseUrl}/baja/${idPromo}/${idSucursal}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${getToken()}`,
+        }
       });
       if (!response.ok) {
         throw new Error(`Error al eliminar el elemento con ID ${idPromo}`);

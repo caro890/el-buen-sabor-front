@@ -1,5 +1,5 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { getRol } from "../../services/LocalStorageService";
+import { getRol } from "../../services/TokenService";
 import { useNavigate } from "react-router";
 
 type Props = {

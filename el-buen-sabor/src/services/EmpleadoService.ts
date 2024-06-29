@@ -1,12 +1,17 @@
 import { Empleado, EmpleadoCreate } from "../types/Empresas/Empleado";
 import { BackendClient, base } from "./BackendClient";
+import { getToken } from "./TokenService";
 
 export class EmpleadoService extends BackendClient<Empleado> {
     protected baseUrl: string = base + "empleados";
 
     //obtener empleados por sucursal
     async getAllBySucursalId(id: number): Promise<Empleado[]>{
-        const response = await fetch(`${this.baseUrl}/empleadosPorSucursal/${id}`);
+        const response = await fetch(`${this.baseUrl}/empleadosPorSucursal/${id}`, {
+          headers: {
+            "Authorization": `Bearer ${getToken()}`
+          }
+        });
         const data = await response.json();
         return data as Empleado[];
     }
@@ -24,7 +29,8 @@ export class EmpleadoService extends BackendClient<Empleado> {
         const response = await fetch(url, {
           "method": "POST",
           "headers": {
-          "Content-Type": 'application/json'
+            "Content-Type": 'application/json',
+            "Authorization": `Bearer ${getToken()}`
           },
           "body": JSON.stringify(nuevo)
         });
@@ -37,6 +43,7 @@ export class EmpleadoService extends BackendClient<Empleado> {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${getToken()}`
           }
         });
         if(!response.ok) {

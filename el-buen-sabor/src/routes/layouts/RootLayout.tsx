@@ -5,7 +5,7 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Navbar } from "../../components/NavBar/Navbar";
-import { getRol, setToken } from "../../services/LocalStorageService";
+import { getRol, setToken } from "../../services/TokenService";
 import { EmpleadoService } from "../../services/EmpleadoService";
 import { Empleado } from "../../types/Empresas/Empleado";
 import { useAppDispatch } from "../../hooks/redux";

@@ -1,6 +1,7 @@
 import { Categoria, CategoriaCreate } from "../types/Articulos/Categoria";
 import { SucursalShort } from "../types/Empresas/Sucursal";
 import { BackendClient, base } from "./BackendClient";
+import { getToken } from "./TokenService";
 
 export class CategoriaService extends BackendClient<Categoria> {
     baseUrl: string = base + "categorias"; 
@@ -10,6 +11,7 @@ export class CategoriaService extends BackendClient<Categoria> {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${getToken()}`
         },
         body: JSON.stringify(data),
       });
@@ -22,6 +24,7 @@ export class CategoriaService extends BackendClient<Categoria> {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${getToken()}`
         }
       });
       if(!response.ok) {
@@ -30,19 +33,31 @@ export class CategoriaService extends BackendClient<Categoria> {
     }
 
   async getAllBySucursalId(id: number): Promise<Categoria[]> {
-    const response = await fetch(`${this.baseUrl}/allCategoriasPorSucursal/${id}`);
+    const response = await fetch(`${this.baseUrl}/allCategoriasPorSucursal/${id}`,{
+      headers: {
+        "Authorization": `Bearer ${getToken()}`
+      }
+    });
     const data = await response.json();
     return data as Categoria[];
   }    
 
   async getAllInsumoBySucursalId(id: number): Promise<Categoria[]> {
-    const response = await fetch(`${this.baseUrl}/categoriasInsumoPorSucursal/${id}`);
+    const response = await fetch(`${this.baseUrl}/categoriasInsumoPorSucursal/${id}`,{
+      headers: {
+        "Authorization": `Bearer ${getToken()}`
+      }
+    });
     const data = await response.json();
     return data as Categoria[];
   }    
 
   async getAllManufacturadoSucursalById(id: number): Promise<Categoria[]> {
-    const response = await fetch(`${this.baseUrl}/categoriasManufacturadoPorSucursal/${id}`);
+    const response = await fetch(`${this.baseUrl}/categoriasManufacturadoPorSucursal/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${getToken()}`
+      }
+    });
     const data = await response.json();
     return data as Categoria[];
   }

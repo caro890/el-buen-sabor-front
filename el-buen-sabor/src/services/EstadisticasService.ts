@@ -1,6 +1,7 @@
 import { CostoGanancia, IngresosDiarios, IngresosMensuales, PedidosCliente, RankingProductos } from "../types/Estadisticas";
 import formatDate from "../types/formats/dateFormat";
 import { base } from "./BackendClient";
+import { getToken } from "./TokenService";
 
 export class EstadisticasService {
   protected baseUrl: string = base + "estadisticas";
@@ -11,6 +12,7 @@ export class EstadisticasService {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`
       }
     });
     const newData = await response.json();
@@ -23,6 +25,7 @@ export class EstadisticasService {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`
       }
     });
     const newData = await response.json();
@@ -35,6 +38,7 @@ export class EstadisticasService {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`
       }
     });
     const newData = await response.json();
@@ -47,6 +51,7 @@ export class EstadisticasService {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`
       }
     });
     const newData = await response.json();
@@ -58,7 +63,8 @@ export class EstadisticasService {
     const response = await fetch(`${this.baseUrl}/recaudacionesMensualesSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`,
+        "Content-Type": "application/json"
       }
     });
     const newData = await response.json();
@@ -70,7 +76,8 @@ export class EstadisticasService {
     const response = await fetch(`${this.baseUrl}/recaudacionesMensualesEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`,
+        "Content-Type": "application/json"
       }
     });
     const newData = await response.json();
@@ -82,7 +89,8 @@ export class EstadisticasService {
     const response = await fetch(`${this.baseUrl}/costosGanancias/${idScursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`,
+        "Content-Type": "application/json"
       }
     });
     const newData = await response.json();
@@ -94,7 +102,8 @@ export class EstadisticasService {
     const response = await fetch(`${this.baseUrl}/costosGananciasEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`,
+        "Content-Type": "application/json"
       }
     });
     const newData = await response.json();
@@ -106,7 +115,8 @@ export class EstadisticasService {
     const response = await fetch(`${this.baseUrl}/pedidosClienteSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`,
+        "Content-Type": "application/json"
       }
     });
     const newData = await response.json();
@@ -118,7 +128,8 @@ export class EstadisticasService {
     const response = await fetch(`${this.baseUrl}/pedidosClienteEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`,
+        "Content-Type": "application/json"
       }
     });
     const newData = await response.json();
