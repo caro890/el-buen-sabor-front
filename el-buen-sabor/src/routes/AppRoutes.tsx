@@ -40,6 +40,10 @@ import Auth0ProviderWithNavigate from "../components/Auth0/Auth0ProviderWithNavi
 import { AuthenticationGuard } from "../components/Auth0/AuthenticationGuard.tsx"
 import CallbackPage from "../components/Auth0/CallbackPage.tsx"
 import { Home } from "../components/Auth0/Home.tsx"
+import { Suspense/*, lazy */} from "react"
+import { Loader } from "../components/Loader/Loader.tsx"
+
+//const Empresas = lazy(() => import("../components/AdminConsole/Empresas/"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -121,8 +125,10 @@ const router = createBrowserRouter(
 export const AppRoutes = () => {
   return (
     <>
+    <Suspense fallback={<Loader/>}>
       <RouterProvider router={router}>
       </RouterProvider>
+    </Suspense>
     </>
   )
 }
