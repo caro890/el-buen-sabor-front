@@ -5,8 +5,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "../Auth0/LoginButton";
 
 export const Navbar = () => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const empresaSelected = useAppSelector((state) => state.empresaReducer.empresa);
+  const sucursalSelected = useAppSelector((state) => state.sucursalReducer.sucursal);
 
   return (
     <Box className="navbar border-bottom d-flex flex-row">
@@ -18,11 +19,13 @@ export const Navbar = () => {
             component="div"
             sx={{ justifyContent: 'center' }}
           >
-            {empresaSelected?.nombre}
+            {empresaSelected?.nombre}&nbsp;-&nbsp;{sucursalSelected?.nombre}
           </Typography>
             {
               isAuthenticated ? (
-                <LogoutButton/>
+                <div style={{ display: "flex", flexDirection: "row", flexGrow: 1, justifyContent: "flex-end", alignItems: "center"}}>
+                  <div>{user?.name}</div>&nbsp;&nbsp;<LogoutButton/>
+                </div>
               ) : (
                 <LoginButton/>
               )

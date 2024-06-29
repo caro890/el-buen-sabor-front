@@ -8,6 +8,7 @@ import { setSucursal } from "../../redux/slices/SucursalReducer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Empleado } from "../../types/Empresas/Empleado";
 import { EmpleadoService } from "../../services/EmpleadoService";
+import { setEmpresa } from "../../redux/slices/EmpresaReducer";
 
 export const CocineroLayout = () => {
   const { user } = useAuth0();
@@ -19,7 +20,8 @@ export const CocineroLayout = () => {
     if(auth0Id) {
       service.getUserByAuth0Id(auth0Id).then((empleado: any) => {
         let emp = empleado as Empleado;
-        dispatch(setSucursal(emp.sucursal.id))
+        dispatch(setSucursal(emp.sucursal));
+        dispatch(setEmpresa(emp.sucursal.empresa));
       })
     }
   }, [])
