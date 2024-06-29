@@ -1,18 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import { RankingProductosModule } from "./Charts/RankingProductos";
 import { Container, Form } from "react-bootstrap";
-import { useAppSelector } from "../../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { useEffect, useState } from "react";
 import { Sucursal } from "../../../types/Empresas/Sucursal";
 import { SucursalService } from "../../../services/SucursalService";
-import { setActiveSucursal } from "../../../redux/slices/EmpresaReducer";
+import { setSucursal } from "../../../redux/slices/SucursalReducer";
 import { RecaudacionDiaria } from "./Charts/RecaudacionDiaria";
 import { RecaudacionMensual } from "./Charts/RecaudacionMensual";
 import { CostosGanancias } from "./Charts/CostosGanancias";
+import { InformeExcel } from "./Charts/InformeExcel";
 
 export const EstadisticasSucursal = () => {
   const empresaActual = useAppSelector((state) => (state.empresaReducer.empresa));
   const [sucursales, setSucursales] = useState<Sucursal[]>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if(empresaActual){
@@ -24,7 +26,7 @@ export const EstadisticasSucursal = () => {
   }, [empresaActual]);
 
   const handleSucursalSelection = (value: string) => {
-    setActiveSucursal(Number(value));
+    dispatch(setSucursal(Number(value)));
   };
 
   return (
@@ -40,7 +42,7 @@ export const EstadisticasSucursal = () => {
             <Form.Select onChange={(e) => handleSucursalSelection(e.target.value)}>
               { 
                 sucursales.map((sucursal: Sucursal) => 
-                  <option value={String(sucursal.id)}>{sucursal.nombre}</option>
+                  <option key={sucursal.id} value={String(sucursal.id)}>{sucursal.nombre}</option>
                 )
               }
             </Form.Select>
@@ -51,6 +53,7 @@ export const EstadisticasSucursal = () => {
           <RecaudacionDiaria business="sucursal"/>
           <RecaudacionMensual business="sucursal"/>
           <CostosGanancias business="sucursal"/>
+          <InformeExcel business="sucursal" />
         </Box>
       </Container>
     </Box>

@@ -139,12 +139,34 @@ export class EstadisticasService {
   //generar Excel para sucursal
   async generateExcelSucursal(idSucursal: number, desde: Date, hasta: Date) {
     const urlServer: string = `${this.baseUrl}/excelSucursal/${idSucursal}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`;
-    window.open(urlServer, "_blank");
+    const response = await fetch(urlServer, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`,
+        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      }
+    });
+    if(!response.ok){
+      throw new Error('Error fetching excel')
+    }
+    const data = await response.blob();
+    return data;
   }
 
   //generar Excel para sucursal
   async generateExcelEmpresa(idEmpresa: number, desde: Date, hasta: Date) {
     const urlServer: string = `${this.baseUrl}/excelEmpresa/${idEmpresa}?fechaDesde=${formatDate(desde)}&fechaHasta=${formatDate(hasta)}`;
-    window.open(urlServer, "_blank");
+    const response = await fetch(urlServer, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`,
+        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      }
+    });
+    if(!response.ok){
+      throw new Error('Error fetching excel')
+    }
+    const data = await response.blob();
+    return data;
   }
 }

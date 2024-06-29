@@ -30,25 +30,19 @@ export const RecaudacionMensual : FC<IPropsRankingProductos> = ({business}) => {
   }, []);
 
   const getData = async () => {
-    console.log("anda el boton antes")
     if(business=="sucursal"){
-        console.log(idSucursal)
         if(idSucursal) {
-            console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
             let array: IngresosMensuales[] = await service.getIngresosMensualesSucursal(idSucursal, dateFrom, dateTo);
             let auxArray: any[] = [];
 
             array.forEach((ranking: IngresosMensuales) => {
                 auxArray.push([ranking.mes, ranking.ingresos])
             });
-            console.log(auxArray);
-            auxArray.unshift(["Producto", "Ventas"]);
+            auxArray.unshift(["Mes", "Recaudaciones"]);
             setData(auxArray);
         }
     } else {
-        console.log("anda el boton empresa")
         if(empresa) {
-            console.log("anda el boton")
             let array: IngresosMensuales[] = await service.getIngresosMensualesEmpresa(empresa.id, dateFrom, dateTo);
             let auxArray: any[] = [];
 
@@ -56,7 +50,7 @@ export const RecaudacionMensual : FC<IPropsRankingProductos> = ({business}) => {
                 auxArray.push([ranking.mes, ranking.ingresos])
             });
 
-            auxArray.unshift(["Producto", "Ventas"]);
+            auxArray.unshift(["Mes", "Recaudaciones"]);
             setData(auxArray);
         }
     }
@@ -125,11 +119,11 @@ export const RecaudacionMensual : FC<IPropsRankingProductos> = ({business}) => {
                         options={{
                             chartArea: { width: "50%" },
                             hAxis: {
-                                title: "Cantidad Vendida",
+                                title: "Mes",
                                 minValue: 0,
                             },
                             vAxis: {
-                                title: "Producto",
+                                title: "Recaudaciones",
                             }
                         }}
                     />

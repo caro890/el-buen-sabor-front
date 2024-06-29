@@ -57,9 +57,10 @@ export const PedidosTable : FC<IPropsPedidosTable> = ({
       }).then(async (result) => {
         if(result.isConfirmed) {
           deactivateRow(idPedido);
-          await service.changeEstadoPedido(idPedido, estado);
-          getPedidos();
-          activateRow(idPedido);
+          service.changeEstadoPedido(idPedido, estado).then(() => {
+            getPedidos();
+            activateRow(idPedido);
+          });
         }
       })
     }  
@@ -77,7 +78,7 @@ export const PedidosTable : FC<IPropsPedidosTable> = ({
         let row = document.getElementById(String(id));
         row?.setAttribute("style", "cursor: default; background-color: white");
         let select = document.getElementById(`select-${id}`);
-        select?.setAttribute("disabled", "false");
+        select?.removeAttribute("disabled");
         select?.setAttribute("style", "cursor: default");
       } catch(error) {
         console.log(error);

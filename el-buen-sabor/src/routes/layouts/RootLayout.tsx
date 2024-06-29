@@ -5,7 +5,7 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Navbar } from "../../components/NavBar/Navbar";
-import { getRol, getToken, setToken } from "../../services/TokenService";
+import { getRol, setToken } from "../../services/TokenService";
 import { EmpleadoService } from "../../services/EmpleadoService";
 import { Empleado } from "../../types/Empresas/Empleado";
 import { useAppDispatch } from "../../hooks/redux";
@@ -18,15 +18,11 @@ const RootLayout = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("ejecutando root layout");
     redirectToPage();
-  }, []);
+  }, [isAuthenticated]);
 
   const redirectToPage = async () => {
-    console.log("Ejecutando método");
-    console.log(isAuthenticated);
     if(isAuthenticated) {
-      console.log("inside try catch");
       try {
         const token = await getAccessTokenSilently({
           authorizationParams: {
@@ -35,9 +31,7 @@ const RootLayout = () => {
         })
   
         setToken(token);
-        console.log(getToken());
         const roles = getRol();
-        console.log(getRol());
   
         if(roles!=null) {
           if(roles.includes('ADMIN')) {
@@ -45,7 +39,6 @@ const RootLayout = () => {
           } else if(roles.includes('GERENTE')) {
             const service = new EmpleadoService();
             const auth0Id = user?.sub;
-            console.log(auth0Id);
             if(auth0Id) {
               service.getUserByAuth0Id(auth0Id).then((empleado: any) => {
                 let emp = empleado as Empleado;

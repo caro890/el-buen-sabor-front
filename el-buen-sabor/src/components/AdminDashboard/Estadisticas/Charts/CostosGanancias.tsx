@@ -31,26 +31,16 @@ export const CostosGanancias : FC<IPropsRankingProductos> = ({business}) => {
   }, []);
 
   const getData = async () => {
-    console.log("anda el boton antes")
     if(business=="sucursal"){
-        console.log(idSucursal)
         if(idSucursal) {
-            console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
-            let array: CostoGanancia = await service.getCostosGananciasSucursal(idSucursal, dateFrom, dateTo);
-            let newArray=[['resultados',array.resultado],['costos',array.costos],['ganancias',array.ganancias]]
-           
-console.log(array);
-           
+            let obj: CostoGanancia = await service.getCostosGananciasSucursal(idSucursal, dateFrom, dateTo);
+            let newArray=[['', '$'], ['Resultados',obj.resultado],['Costos',obj.costos],['Ganancias',obj.ganancias]]
             setData(newArray);
         }
     } else {
-        console.log("anda el boton empresa")
         if(empresa) {
-            console.log("anda el boton")
             let array: CostoGanancia = await service.getCostosGananciasEmpresa(empresa.id, dateFrom, dateTo);
-            
-            let newArray=[['resultados',array.resultado],['costos',array.costos],['ganancias',array.ganancias]]
-           
+            let newArray=[['', '$'], ['Resultados',array.resultado],['Costos',array.costos],['Ganancias',array.ganancias]]
             setData(newArray);
         }
     }
@@ -112,19 +102,15 @@ console.log(array);
         <div>
                 { data &&
                      <Chart 
-                         chartType="PieChart"
-                         width={"100%"}
-                         height={"400px"}
-                         data={[
-                            ['Estado', 'Valor'],
-                            ...data.map(({ variable, valor }) => [variable, valor]),
-                        ]}
-                          options = {{
-                             title: 'Distribución de Costos, Ganancias y Resultado'
-                           }}
-                       
-                     />
-               }
+                        chartType="PieChart"
+                        width={"100%"}
+                        height={"400px"}
+                        data={data}
+                        options = {{
+                            title: 'Distribución de Costos, Ganancias y Resultado'
+                        }}                       
+                    />
+                }
         </div>
     </div>
   )

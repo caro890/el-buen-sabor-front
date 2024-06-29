@@ -1,16 +1,14 @@
 import { FC, useState } from 'react'
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import { EstadisticasService } from '../../../../services/EstadisticasService';
 import { useAppSelector } from '../../../../hooks/redux';
+import { getExcelEmpresa, getExcelSucursal } from '../../../../services/ExcelService';
 
 interface IPropsRankingProductos {
     business: string
 }
 
 export  const  InformeExcel : FC<IPropsRankingProductos> = ({business}) => {
-
-    const service = new EstadisticasService();
-    const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
+  const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
   const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
   const intialDateFrom = new Date();
   intialDateFrom.setMonth(0);
@@ -23,19 +21,15 @@ export  const  InformeExcel : FC<IPropsRankingProductos> = ({business}) => {
   const [error, setError] = useState<boolean>(false);
 
   const getData = async () => {
-    console.log("anda el boton antes")
     if(business=="sucursal"){
         console.log(idSucursal)
         if(idSucursal) {
-            console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
-             await service.generateExcelSucursal(idSucursal,dateFrom,dateTo);
-        
+            await getExcelSucursal(idSucursal,dateFrom,dateTo);
         }
     } else {
        
         if(empresa) {
-            console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
-             await service.generateExcelEmpresa(empresa.id,dateFrom,dateTo);
+            await getExcelEmpresa(empresa.id,dateFrom,dateTo);
         }
     }
   };
@@ -60,6 +54,7 @@ export  const  InformeExcel : FC<IPropsRankingProductos> = ({business}) => {
     
     getData();
   };
+
   return (
         <Container>
             <Row className="mb-2">
@@ -83,7 +78,7 @@ export  const  InformeExcel : FC<IPropsRankingProductos> = ({business}) => {
                     />
                 </Col>
                 <Col>
-                    <Button type="button" onClick={handleClickButtonVer}>VER</Button>
+                    <Button type="button" onClick={handleClickButtonVer}>DESCARGAR</Button>
                 </Col>
             </Row>
             <Row>

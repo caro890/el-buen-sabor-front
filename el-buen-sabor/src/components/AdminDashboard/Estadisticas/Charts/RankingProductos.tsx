@@ -30,25 +30,19 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
   }, []);
 
   const getData = async () => {
-    console.log("anda el boton antes")
     if(business=="sucursal"){
-        console.log(idSucursal)
         if(idSucursal) {
-            console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
             let array: RankingProductos[] = await service.getRankingSucursal(idSucursal, dateFrom, dateTo);
             let auxArray: any[] = [];
 
             array.forEach((ranking: RankingProductos) => {
                 auxArray.push([ranking.denominacion, ranking.countVentas])
             });
-            console.log(auxArray);
             auxArray.unshift(["Producto", "Ventas"]);
             setData(auxArray);
         }
     } else {
-        console.log("anda el boton empresa")
         if(empresa) {
-            console.log("anda el boton")
             let array: RankingProductos[] = await service.getRankingEmpresas(empresa.id, dateFrom, dateTo);
             let auxArray: any[] = [];
 

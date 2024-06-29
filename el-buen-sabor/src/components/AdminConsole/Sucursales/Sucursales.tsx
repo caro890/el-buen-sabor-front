@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material"
 import { SucursalesList } from "./SucursalesList"
-import { useAppSelector } from "../../../hooks/redux"
 import { useEffect } from "react"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useAppDispatch } from "../../../hooks/redux"
@@ -12,7 +11,6 @@ import { getRol } from "../../../services/TokenService"
 export const Sucursales = () => {
   const { user } = useAuth0();
   const dispatch = useAppDispatch();
-  const empresaSelected = useAppSelector((state) => state.empresaReducer.empresa);
 
   useEffect(() => {
     if(getRol()?.includes('GERENTE')){
@@ -31,7 +29,6 @@ export const Sucursales = () => {
     <div>
       <Box>
         <Typography variant="h5" gutterBottom>
-          {empresaSelected?.nombre} <br/>
           ¿Con qué sucursal quiere acceder?
         </Typography>
       </Box>

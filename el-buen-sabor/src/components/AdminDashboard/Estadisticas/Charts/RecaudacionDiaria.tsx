@@ -30,25 +30,20 @@ export const RecaudacionDiaria : FC<IPropsRankingProductos> = ({business}) => {
   }, []);
 
   const getData = async () => {
-    console.log("anda el boton antes")
     if(business=="sucursal"){
-        console.log(idSucursal)
         if(idSucursal) {
-            console.log("anda el boton sucursal"+ idSucursal+" "+dateFrom+" "+dateTo)
             let array: IngresosDiarios[] = await service.getIngresosDiariosSucursal(idSucursal, dateFrom, dateTo);
             let auxArray: any[] = [];
 
             array.forEach((ranking: IngresosDiarios) => {
                 auxArray.push([ranking.fecha, ranking.ingresos])
             });
-            console.log(auxArray);
-            auxArray.unshift(["Producto", "Ventas"]);
+            
+            auxArray.unshift(["Fecha", "Recaudaciones"]);
             setData(auxArray);
         }
     } else {
-        console.log("anda el boton empresa")
         if(empresa) {
-            console.log("anda el boton")
             let array: IngresosDiarios[] = await service.getIngresosDiariosEmpresa(empresa.id, dateFrom, dateTo);
             let auxArray: any[] = [];
 
@@ -56,7 +51,7 @@ export const RecaudacionDiaria : FC<IPropsRankingProductos> = ({business}) => {
                 auxArray.push([ranking.fecha, ranking.ingresos])
             });
 
-            auxArray.unshift(["Producto", "Ventas"]);
+            auxArray.unshift(["Fecha", "Recaudaciones"]);
             setData(auxArray);
         }
     }
@@ -125,11 +120,11 @@ export const RecaudacionDiaria : FC<IPropsRankingProductos> = ({business}) => {
                         options={{
                             chartArea: { width: "50%" },
                             hAxis: {
-                                title: "Cantidad Vendida",
+                                title: "Fecha",
                                 minValue: 0,
                             },
                             vAxis: {
-                                title: "Producto",
+                                title: "Recaudaciones",
                             }
                         }}
                     />
