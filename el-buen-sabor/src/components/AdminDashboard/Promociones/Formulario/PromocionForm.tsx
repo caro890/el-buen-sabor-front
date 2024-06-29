@@ -233,6 +233,19 @@ export const PromocionForm = () => {
         return;
       }
 
+      let tot = 0;
+      detalles.forEach((d: PromocionDetalle) => {
+        tot = d.cantidad*d.articulo.precioVenta + tot;
+      });
+      if(tot<=values.precioPromocional){
+        Swal.fire({
+          title: "Precio promocional mayor o igual a precio regular",
+          text: "El precio promocional es mayor o igual al precio regular de los articulos cargados",
+          icon: "warning"
+        })
+        return;
+      }
+
       let newTipoPromocion: TipoPromocion;
       if(tipoPromo){
         newTipoPromocion = TipoPromocion.HAPPY_HOUR;
