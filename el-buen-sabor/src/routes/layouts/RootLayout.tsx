@@ -42,9 +42,10 @@ const RootLayout = () => {
             if(auth0Id) {
               service.getUserByAuth0Id(auth0Id).then((empleado: any) => {
                 let emp = empleado as Empleado;
-                dispatch(setSucursal(emp.sucursal.id));
-                dispatch(setEmpresa(emp.sucursal.empresa.id));
-                navigate("admin-console/sucursales/"+emp.sucursal.empresa.id);
+                dispatch(setSucursal(emp.sucursal));
+                dispatch(setEmpresa(emp.sucursal.empresa));
+                console.log(emp.sucursal.empresa.id);
+                navigate(`admin-console/sucursales/${emp.sucursal.empresa.id}`);
               })
             }
           } else if(roles.includes('COCINERO')) {
