@@ -160,7 +160,7 @@ export const ProductoForm = () => {
       if(values.id!=0) {
         newProducto = await service.put(values.id, values);
       } else {
-        newProducto = await service.post(values);
+        newProducto = await service.create(values);
       }
 
       try {
