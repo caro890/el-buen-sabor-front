@@ -157,12 +157,21 @@ export const ProductoForm = () => {
       
       var newProducto: ArticuloManufacturado = new ArticuloManufacturado();
 
+      try{
       if(values.id!=0) {
         newProducto = await service.put(values.id, values);
       } else {
         newProducto = await service.post(values);
       }
+    }catch(error){
+      Swal.fire({
+        title: "Error",
+        text:"Algo salio mal",
+        icon: "error"
+      });
 
+      console.log(error)
+    }
       try {
         await img.uploadImages(newProducto.id);
         //img.reset();
