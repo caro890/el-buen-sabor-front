@@ -27,7 +27,7 @@ export const RecaudacionMensual : FC<IPropsRankingProductos> = ({business}) => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [idSucursal || empresa]);
 
   const getData = async () => {
     if(business=="sucursal"){
