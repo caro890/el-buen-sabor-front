@@ -50,6 +50,7 @@ export const GenericTable = <T extends Base>({
   const dataTable = useAppSelector((state) => state.tableDataReducer.dataTable);
 
   useEffect(() => {
+    console.log(dataTable);
     setRows(dataTable);
   }, [dataTable]);
 

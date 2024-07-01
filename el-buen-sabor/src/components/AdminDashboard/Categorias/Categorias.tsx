@@ -8,17 +8,14 @@ import { GenericTable } from "../../GenericTable/GenericTable";
 import { Categoria } from "../../../types/Articulos/Categoria";
 import { BotonNuevo } from "../../Botones/BotonNuevo";
 import { SucursalShort } from "../../../types/Empresas/Sucursal";
-//import { LoaderFunction, useLoaderData } from "react-router";
 
 export const CategoriasCrud = () => {
-  //const loaderData = useLoaderData() as Categoria[];
   const dispatch = useAppDispatch();
   const service: CategoriaService = new CategoriaService();
   const sucursal = useAppSelector((state) => (state.sucursalReducer.sucursal));
 
   useEffect(() => {
     getCategorias();
-    //dispatch(setDataTable(loaderData));
   }, []);
 
   const columnsTableCategorias = [
@@ -99,17 +96,3 @@ export const CategoriasCrud = () => {
     </Box>
   )
 }
-
-/*export const loadCategorias: LoaderFunction = async () => {
-  let service: CategoriaService = new CategoriaService();
-  //let idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
-  localStorage.setItem("idSucursal", "1");
-  let idSucursal: number = Number(localStorage.getItem("idSucursal"));
-  let response: Categoria[] = [];
-
-  if (idSucursal){
-    response = await service.getAllBySucursalId(idSucursal);
-  }
-
-  return response;
-}*/

@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../../../hooks/redux";
 import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
 import { UnidadMedida } from "../../../types/Articulos/UnidadMedida";
-import { useLoaderData } from "react-router";
 import { setDataTable, removeElementActive } from "../../../redux/slices/TablaDataReducer";
 import Swal from "sweetalert2";
 import { Box, Typography } from "@mui/material";
@@ -11,12 +10,11 @@ import { BotonNuevo } from "../../Botones/BotonNuevo";
 import { Container } from "react-bootstrap";
 
 export const UnidadesMedidaCrud = () => {
-    const unidadesMedida = useLoaderData() as UnidadMedida[];
     const dispatch = useAppDispatch();
     const service: UnidadMedidaService = new UnidadMedidaService();
 
     useEffect(() => {
-        dispatch(setDataTable(unidadesMedida));
+        getUnidadesMedida();
     }, []);
 
     const columnsTableUnidadesMedida = [
@@ -81,8 +79,6 @@ export const UnidadesMedidaCrud = () => {
     )
 }
 
-
-//loader function
 export const unidadesMedidaLoader = async () => {
     const service: UnidadMedidaService = new UnidadMedidaService();
     return service.getAll();

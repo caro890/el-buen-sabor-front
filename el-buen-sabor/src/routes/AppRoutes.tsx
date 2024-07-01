@@ -7,7 +7,7 @@ import {
 import RootLayout from "./layouts/RootLayout"
 import { DashboardLayout } from "./layouts/DashboardLayout"
 import { ProductosCrud } from "../components/AdminDashboard/Productos/Productos.tsx"
-import { CategoriasCrud/*, loadCategorias*/ } from "../components/AdminDashboard/Categorias/Categorias.tsx"
+import { CategoriasCrud } from "../components/AdminDashboard/Categorias/Categorias.tsx"
 import { InsumosCrud } from "../components/AdminDashboard/Insumos/Insumos.tsx"
 import { InsumosForm, insumoLoader } from "../components/AdminDashboard/Insumos/Formulario/InsumosForm.tsx"
 import { Sucursales } from "../components/AdminConsole/Sucursales/Sucursales"
@@ -15,7 +15,7 @@ import { Empresas } from "../components/AdminConsole/Empresas/Empresas"
 import { SucursalCrud } from "../components/AdminDashboard/Sucursales/Sucursales.tsx"
 import { Inicio } from "../components/AdminDashboard/Inicio/Inicio"
 import { Empleados } from "../components/AdminDashboard/Empleados/Empleados"
-import { UnidadesMedidaCrud, unidadesMedidaLoader } from "../components/AdminDashboard/UnidadesMedida/UnidadesMedida.tsx"
+import { UnidadesMedidaCrud } from "../components/AdminDashboard/UnidadesMedida/UnidadesMedida.tsx"
 import { CategoriaForm } from "../components/AdminDashboard/Categorias/Formulario/CategoriaForm"
 import { UnidadMedidaForm } from "../components/AdminDashboard/UnidadesMedida/Formulario/UnidadMedidaForm.tsx"
 import { ProductoForm, productoLoader } from "../components/AdminDashboard/Productos/Formulario/ProductoForm.tsx"
@@ -85,11 +85,11 @@ const router = createBrowserRouter(
           <Route path="form/:id?" element={<ImagesContextProvider><ProductoForm/></ImagesContextProvider>} loader={productoLoader} />
         </Route>
         <Route path="categorias">
-          <Route index element={<CategoriasCrud />} /*loader={loadCategorias}*//>
+          <Route index element={<CategoriasCrud />}/>
           <Route path="form/:id?" element={<CategoriaForm />} />
         </Route>
         <Route path="unidadesMedida">
-          <Route index element={<UnidadesMedidaCrud />} loader={unidadesMedidaLoader} />
+          <Route index element={<UnidadesMedidaCrud />}/>
           <Route path="form/:id?" element={<UnidadMedidaForm />} />
         </Route>
         <Route path="empleados" >
