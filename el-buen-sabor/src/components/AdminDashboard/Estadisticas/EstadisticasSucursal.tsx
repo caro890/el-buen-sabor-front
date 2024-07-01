@@ -26,7 +26,8 @@ export const EstadisticasSucursal = () => {
   }, [empresaActual]);
 
   const handleSucursalSelection = (value: string) => {
-    dispatch(setSucursal(Number(value)));
+    console.log(sucursales.find((sucursal)=>sucursal.id==Number(value)))
+    dispatch(setSucursal(sucursales.find((sucursal)=>sucursal.id==Number(value))));
   };
 
   return (

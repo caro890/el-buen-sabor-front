@@ -14,6 +14,7 @@ export const CostosGanancias : FC<IPropsRankingProductos> = ({business}) => {
   const service = new EstadisticasService();
   const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
   const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
+  console.log(idSucursal);
 
   const [data, setData] = useState<any[]>();
   const intialDateFrom = new Date();

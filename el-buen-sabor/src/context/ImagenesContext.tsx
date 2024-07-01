@@ -143,27 +143,58 @@ export function ImagesContextProvider({ children } : { children: ReactNode }) {
      };
 
     //delete toDeleteImages from cloudinary
+    // const deleteImages = () => {
+    //     let service = new ImagenesService(objUrl);
+
+    //     toDeleteImages.forEach((img: ImageFile) => {
+    //         console.log(img.imagen.url);
+    //         let regex = /\/([0-9a-f]{32})/;
+    //         let match2 = img.imagen.url.match(regex);
+    //         console.log(match2)
+    //         //extraigo el ID publico de la URL de la imagen
+    //         const match = extractPublicId(img.imagen.url);
+    //         console.log(match[1])
+    //         if(match2) console.log(match2[1])
+    //         if(match){
+    //             const publicId = match[1];
+    //             try {
+    //                 //Realizar la peticion post para eliminar la imagen
+    //               //  service.delete({id: img.imagen.id, publicId: publicId});
+    //             } catch (error) {
+    //                 throw new Error();
+    //             }
+    //         }
+    //     });
+    // };
+
     const deleteImages = () => {
         let service = new ImagenesService(objUrl);
-
+    
         toDeleteImages.forEach((img: ImageFile) => {
             console.log(img.imagen.url);
-            let regex = /\/([0-9a-f]{32})/;
-            let match2 = img.imagen.url.match(regex);
-            //extraigo el ID publico de la URL de la imagen
-            const match = extractPublicId(img.imagen.url);
-            console.log(match[1])
-            if(match2) console.log(match2[1])
-            if(match){
+    
+            // Extraigo el ID público de la URL de la imagen
+            const match = extraerPublicId(img.imagen.url);
+            console.log(match);
+    
+            if (match && match[1]) {
                 const publicId = match[1];
+                console.log(match[1])
                 try {
-                    //Realizar la peticion post para eliminar la imagen
-                    service.delete({id: img.imagen.id, publicId: publicId});
+                    // Realizar la petición POST para eliminar la imagen
+                     service.delete({ id: img.imagen.id, publicId: publicId });
                 } catch (error) {
-                    throw new Error();
+                    console.error("Error al eliminar la imagen:", error);
                 }
+            } else {
+                console.error("No se pudo extraer el publicId de la URL:", img.imagen.url);
             }
         });
+    };
+
+    const extraerPublicId = (url: string): RegExpMatchArray | null => {
+        const regex = /\/upload\/(.+?)$/;
+        return url.match(regex);
     };
 
     //empty the states
