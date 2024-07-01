@@ -7,7 +7,7 @@ interface IPropsEstadoSelect {
         id: number,
         estado: EstadoPedido
     },
-    handleChangeEstado: (id: number, estado: string) => void,
+    handleChangeEstado: (id: number, estado: string, estadoActual: string) => void,
     nextEstados: Promise<EstadoPedido[]>
 }
 
@@ -25,11 +25,11 @@ export const EstadoSelect : FC<IPropsEstadoSelect> = ({
   }, []);
 
   return (
-    <Form.Select id={"select-"+String(itemActual.id)} onChange={(e) => handleChangeEstado(itemActual.id, e.target.value)}>
-        <option value={itemActual.estado}>{itemActual.estado.toString()}</option>
+    <Form.Select id={"select-"+String(itemActual.id)} onChange={(e) => handleChangeEstado(itemActual.id, e.target.value, itemActual.estado.toString())}>
+        <option id={itemActual.estado.toString()+"-"+String(itemActual.id)} value={itemActual.estado}>{itemActual.estado.toString()}</option>
         { estados!=undefined &&
             estados.map((estado: EstadoPedido, index: number) => 
-                <option key={index} value={estado.toString()}>{estado.toString()}</option>
+                <option id={estado.toString()+"-"+String(itemActual.id)} key={index} value={estado.toString()}>{estado.toString()}</option>
             )
         }
     </Form.Select>

@@ -2,7 +2,6 @@ import { ReactNode, createContext, useState } from "react";
 import { IImagen, ImageFile } from "../types/Articulos/ImagenArticulo";
 import Swal from "sweetalert2";
 import { ImagenesService } from "../services/ImagenesService";
-import { extractPublicId } from "cloudinary-build-url";
 
 interface ImagesContextType {
     setObjUrl: (url: string) => void, 
