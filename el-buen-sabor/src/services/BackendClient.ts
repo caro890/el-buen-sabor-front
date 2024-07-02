@@ -56,7 +56,7 @@ export abstract class BackendClient<T> extends AbstractBackendClient<T> {
   }
 
   async delete(id: number): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/${id}`, {
+    const response = await fetch(`${this.baseUrl}/baja/${id}`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${getToken()}`
