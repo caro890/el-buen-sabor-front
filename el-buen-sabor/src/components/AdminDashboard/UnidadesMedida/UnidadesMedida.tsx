@@ -85,5 +85,5 @@ export const UnidadesMedidaCrud = () => {
 //loader function
 export const unidadesMedidaLoader = async () => {
     const service: UnidadMedidaService = new UnidadMedidaService();
-    return service.getAll();
+    return await service.getAll();
 }
