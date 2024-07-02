@@ -27,7 +27,7 @@ export const RankingProductosModule : FC<IPropsRankingProductos> = ({business}) 
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [idSucursal || empresa]);
 
   const getData = async () => {
     if(business=="sucursal"){

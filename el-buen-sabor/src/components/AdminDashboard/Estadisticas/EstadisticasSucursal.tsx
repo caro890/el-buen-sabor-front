@@ -54,7 +54,7 @@ export const EstadisticasSucursal = () => {
           <RecaudacionDiaria business="sucursal"/>
           <RecaudacionMensual business="sucursal"/>
           <CostosGanancias business="sucursal"/>
-          <InformeExcel business="sucursal" />
+          <InformeExcel business="sucursal"/>
         </Box>
       </Container>
     </Box>

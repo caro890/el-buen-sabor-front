@@ -45,7 +45,7 @@ export const PedidosTable : FC<IPropsPedidosTable> = ({
       setRows(pedidos);
     }, [pedidos]);
 
-    const handleChangeEstado = async (idPedido: number, estado: string) => {
+    const handleChangeEstado = async (idPedido: number, estado: string, estadoActual: string) => {
       Swal.fire({
         title: `Cambiar estado a ${estado}`,
         text: `¿Desea cambiar el estado del pedido ${idPedido} a ${estado}?`,
@@ -61,9 +61,17 @@ export const PedidosTable : FC<IPropsPedidosTable> = ({
             getPedidos();
             activateRow(idPedido);
           });
+        } else if(result.isDismissed){
+          resetEstado(idPedido, estadoActual);
         }
       })
     }  
+
+    const resetEstado = (id: number, estadoActual: string) => {
+      let option = document.getElementById(`${estadoActual}-${id}`);
+      option?.setAttribute("selected", "true");
+      option?.removeAttribute("selected");
+    }
 
     const deactivateRow = (id: number) => {
       let row = document.getElementById(String(id));
