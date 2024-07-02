@@ -14,9 +14,9 @@ export const CostosGanancias : FC<IPropsRankingProductos> = ({business}) => {
   const service = new EstadisticasService();
   const empresa = useAppSelector((state)=> (state.empresaReducer.empresa));
   const idSucursal = useAppSelector((state) => (state.sucursalReducer.sucursal?.id));
-  console.log(idSucursal);
+  
 
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>();
   const intialDateFrom = new Date();
   intialDateFrom.setMonth(0);
   intialDateFrom.setDate(1);
@@ -29,7 +29,7 @@ export const CostosGanancias : FC<IPropsRankingProductos> = ({business}) => {
 
   useEffect(() => {
     getData();
-  }, [idSucursal || empresa]);
+  }, []);
 
   const getData = async () => {
     if(business=="sucursal"){
@@ -101,12 +101,15 @@ export const CostosGanancias : FC<IPropsRankingProductos> = ({business}) => {
             </Row>
         </Container>
         <div>
-                { data.length>1 &&
+                { data &&
                      <Chart 
                         chartType="PieChart"
                         width={"100%"}
                         height={"400px"}
-                        data={data}                  
+                        data={data}
+                        options = {{
+                            title: 'Distribución de Costos, Ganancias y Resultado'
+                        }}                       
                     />
                 }
         </div>

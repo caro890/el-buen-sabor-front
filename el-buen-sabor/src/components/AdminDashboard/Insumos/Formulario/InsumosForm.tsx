@@ -130,15 +130,16 @@ export const InsumosForm = () => {
           newInsumo = await service.put(values.id, newUpdate);
         }
       } else {
-        if(values.idUnidadMedida && values.idCategoria && values.stockActual && values.stockMaximo && values.stockMinimo){
+        console.log("entre aca")
+        if(values.unidadMedida && values.categoria && values.stockActual && values.stockMaximo && values.stockMinimo){
           let newCreate: ArticuloInsumoCreate = {
             id: values.id,
             eliminado: values.eliminado,
             denominacion: values.denominacion,
             precioVenta: values.precioVenta,
             precioCompra: values.precioCompra,
-            idUnidadMedida: values.idUnidadMedida,
-            idCategoria: values.idUnidadMedida,
+            idUnidadMedida: values.unidadMedida.id,
+            idCategoria: values.categoria.id,
             codigo: values.codigo,
             habilitado: values.habilitado,
             esParaElaborar: values.esParaElaborar,
@@ -146,6 +147,7 @@ export const InsumosForm = () => {
             stockActual: values.stockActual, 
             stockMaximo: values.stockMaximo          
           }
+          console.log(newCreate);
           newInsumo = await service.create(newCreate);
         }
       }
