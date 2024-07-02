@@ -4,14 +4,14 @@ import { useEffect, useState } from "react"
 import { useFormik } from "formik"
 import { LoaderFunction, useLoaderData, useNavigate } from "react-router"
 import { ArticuloManufacturadoService } from "../../../../services/ArticuloManufacturadoService"
-import { ArticuloManufacturado } from "../../../../types/Articulos/ArticuloManufacturado"
+import { ArticuloManufacturado, ArticuloManufacturadoCreate } from "../../../../types/Articulos/ArticuloManufacturado"
 import { UnidadMedida } from "../../../../types/Articulos/UnidadMedida"
 import { Categoria } from "../../../../types/Articulos/Categoria"
 import { unidadesMedidaLoader } from "../../UnidadesMedida/UnidadesMedida"
 import { CategoriaService } from "../../../../services/CatogoriaService"
 import { ArticuloInsumo } from "../../../../types/Articulos/ArticuloInsumo"
 import { ArticuloInsumoService } from "../../../../services/ArticuloInsumoService"
-import { ArticuloManufacturadoDetalle } from "../../../../types/Articulos/ArticuloManufacturadoDetalle"
+import { ArticuloManufacturadoDetalle, ArticuloManufacturadoDetalleCreate } from "../../../../types/Articulos/ArticuloManufacturadoDetalle"
 import * as Yup from "yup"
 import { ModalInsumos } from "../InsumosModal/ModalInsumos"
 import styles from "../../../../styles/ProductForm.module.css"
@@ -144,6 +144,14 @@ export const ProductoForm = () => {
         return;
       }
       var arrayAux: ArticuloManufacturadoDetalle[] = detalles.slice();
+      var arrayCreate: ArticuloManufacturadoDetalleCreate[]= detalles.map((detalle:ArticuloManufacturadoDetalle)=>{
+        return {cantidad:detalle.cantidad,
+        idArticuloInsumo:detalle.articuloInsumo.id,
+        id:detalle.id,
+        eliminado:detalle.eliminado
+        }
+      })
+      console.log(arrayCreate)
       var found = arrayAux.some(function (element) {
         return element.cantidad === 0;
       });
@@ -156,12 +164,29 @@ export const ProductoForm = () => {
       values.articuloManufacturadoDetalles = detalles;
       
       var newProducto: ArticuloManufacturado = new ArticuloManufacturado();
-
+      console.log(values)
       try{
       if(values.id!=0) {
         newProducto = await service.put(values.id, values);
       } else {
-        newProducto = await service.create(values);
+        
+        console.log(values)
+        let nuevoProducto:ArticuloManufacturadoCreate={
+          denominacion:values.denominacion,
+          precioVenta:values.precioVenta,
+          idUnidadMedida:values.unidadMedida.id,
+          idCategoria: values.categoria.id,
+          codigo: values.codigo,
+          habilitado: values.habilitado,
+          descripcion: values.descripcion,
+          tiempoEstimadoMinutos:values.tiempoEstimadoMinutos,
+          preparacion:values.preparacion,
+          articuloManufacturadoDetalles:arrayCreate,
+          id:0,
+          eliminado:false
+        }
+        console.log(nuevoProducto)
+        newProducto = await service.create(nuevoProducto);
       }
     }catch(error){
       Swal.fire({

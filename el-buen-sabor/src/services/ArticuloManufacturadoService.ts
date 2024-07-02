@@ -1,4 +1,4 @@
-import { ArticuloManufacturado } from "../types/Articulos/ArticuloManufacturado";
+import { ArticuloManufacturado, ArticuloManufacturadoCreate } from "../types/Articulos/ArticuloManufacturado";
 import { BackendClient, base } from "./BackendClient";
 import { getToken } from "./TokenService";
 
@@ -32,7 +32,7 @@ export class ArticuloManufacturadoService extends BackendClient<ArticuloManufact
   }
 
   //crear nuevo con stock para todas sucursales
-  async create(nuevo: ArticuloManufacturado) {
+  async create(nuevo: ArticuloManufacturadoCreate) {
     let url = this.baseUrl + "/create";
     const response = await fetch(url, {
       "method": "POST",
